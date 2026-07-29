@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Z.B &amp; Sons — Paper Import &amp; Godown Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+  :root{
+    --ink:#16233A;
+    --ink-soft:#2C3E58;
+    --paper:#EEF0E4;
+    --paper-deep:#E4E6D6;
+    --card:#FBFAF3;
+    --brass:#B08D57;
+    --brass-deep:#8C6E3F;
+    --stamp-red:#A5382B;
+    --stamp-green:#3F6B4A;
+    --line:#C9C2AC;
+    --muted:#6B6656;
+    --shadow:0 1px 0 rgba(22,35,58,0.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    min-height:100vh;
+    background-image:
+      linear-gradient(var(--paper-deep) 1px, transparent 1px);
+    background-size: 100% 34px;
+  }
+  h1,h2,h3,.display{ font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  a{color:var(--brass-deep);}
+  button{font-family:'IBM Plex Sans',sans-serif; cursor:pointer;}
+  input,select,textarea{font-family:'IBM Plex Sans',sans-serif;}
+  ::selection{ background:var(--brass); color:#fff; }
+
+  /* ---------- Login screen ---------- */
+  .login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .login-card{ background:var(--card); border:1px solid var(--line); border-radius:4px; padding:40px 44px; max-width:420px; width:100%; box-shadow:0 2px 18px rgba(22,35,58,0.08); position:relative; }
+  .login-stamp{ position:absolute; top:-18px; right:-18px; width:64px; height:64px; border-radius:50%; border:2px dashed var(--stamp-red); display:flex; align-items:center; justify-content:center; transform:rotate(-14deg); color:var(--stamp-red); font-size:9px; font-weight:600; text-align:center; letter-spacing:0.06em; }
+  .login-title{ font-size:26px; margin:0 0 4px; color:var(--ink); }
+  .login-sub{ color:var(--muted); font-size:13px; margin:0 0 26px; }
+  .tabbtns{ display:flex; gap:6px; margin-bottom:20px; border-bottom:1px solid var(--line); }
+  .tabbtn{ flex:1; padding:10px 0; background:none; border:none; font-size:13px; color:var(--muted); border-bottom:2px solid transparent; }
+  .tabbtn.active{ color:var(--ink); border-bottom-color:var(--brass); font-weight:600; }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:12px; color:var(--muted); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.05em; }
+  .field input, .field select, .field textarea{
+    width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:3px; background:#fff; font-size:14px; color:var(--ink);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--brass); box-shadow:0 0 0 2px rgba(176,141,87,0.18); }
+  .btn{ padding:10px 18px; border-radius:3px; border:1px solid var(--ink); background:var(--ink); color:#fff; font-size:13px; font-weight:500; letter-spacing:0.02em; }
+  .btn:hover{ background:var(--ink-soft); }
+  .btn.wide{ width:100%; }
+  .btn.outline{ background:transparent; color:var(--ink); border-color:var(--ink); }
+  .btn.outline:hover{ background:rgba(22,35,58,0.06); }
+  .btn.brass{ background:var(--brass); border-color:var(--brass-deep); }
+  .btn.brass:hover{ background:var(--brass-deep); }
+  .btn.danger{ background:transparent; border-color:var(--stamp-red); color:var(--stamp-red); }
+  .btn.danger:hover{ background:rgba(165,56,43,0.08); }
+  .btn.small{ padding:5px 10px; font-size:12px; }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; }
+  .errmsg{ color:var(--stamp-red); font-size:12.5px; margin:-4px 0 12px; }
+
+  /* ---------- App shell ---------- */
+  .shell{ min-height:100vh; }
+  .topbar{ background:var(--ink); color:#EFEAD8; padding:14px 26px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:20; box-shadow:0 2px 10px rgba(0,0,0,0.15); }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:34px; height:34px; border-radius:50%; border:1.5px dashed var(--brass); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-weight:600; font-size:14px; color:var(--brass); }
+  .brand-name{ font-family:'Fraunces',serif; font-size:17px; font-weight:600; }
+  .brand-sub{ font-size:10.5px; color:#B7B09A; letter-spacing:0.06em; text-transform:uppercase; }
+  .who{ display:flex; align-items:center; gap:14px; font-size:13px; }
+  .role-pill{ padding:3px 10px; border-radius:20px; font-size:11px; letter-spacing:0.04em; text-transform:uppercase; border:1px solid var(--brass); color:var(--brass); }
+
+  .nav{ display:flex; gap:2px; background:var(--ink-soft); padding:0 20px; overflow-x:auto; }
+  .navbtn{ background:none; border:none; color:#CBD0D8; padding:11px 16px; font-size:13px; border-bottom:3px solid transparent; white-space:nowrap; }
+  .navbtn.active{ color:#fff; border-bottom-color:var(--brass); font-weight:500; }
+  .navbtn:hover{ color:#fff; }
+
+  .content{ max-width:1180px; margin:0 auto; padding:28px 26px 80px; }
+  .pagehead{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+  .pagehead h2{ font-size:22px; margin:0; }
+  .pagehead .sub{ color:var(--muted); font-size:13px; margin-top:2px; }
+
+  .grid{ display:grid; gap:16px; }
+  .grid-4{ grid-template-columns:repeat(4,1fr); }
+  .grid-3{ grid-template-columns:repeat(3,1fr); }
+  .grid-2{ grid-template-columns:repeat(2,1fr); }
+  @media(max-width:900px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:600px){ .grid-4,.grid-3,.grid-2{grid-template-columns:1fr;} }
+
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:4px; padding:18px 20px; box-shadow:var(--shadow); }
+  .stat-label{ font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:0 0 8px; }
+  .stat-value{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; color:var(--ink); }
+  .stat-value.neg{ color:var(--stamp-red); }
+  .stat-value.pos{ color:var(--stamp-green); }
+
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  thead th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); padding:8px 10px; border-bottom:1.5px dotted var(--line); font-weight:600; }
+  tbody td{ padding:10px 10px; border-bottom:1px solid #E9E5D6; vertical-align:middle; }
+  tbody tr:hover{ background:rgba(176,141,87,0.06); }
+  .num{ font-family:'IBM Plex Mono',monospace; text-align:right; }
+  .tablewrap{ background:var(--card); border:1px solid var(--line); border-radius:4px; overflow-x:auto; }
+
+  .stamp{ display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; letter-spacing:0.03em; border:1px solid; text-transform:uppercase; }
+  .stamp-dot{ width:6px; height:6px; border-radius:50%; }
+  .st-0{ color:#8A6D1E; border-color:#C8A23A; background:#FBF3DC; } .st-0 .stamp-dot{background:#C8A23A;}
+  .st-1{ color:#1D5C8A; border-color:#3A85C8; background:#E4EFF8; } .st-1 .stamp-dot{background:#3A85C8;}
+  .st-2{ color:#6A3F9E; border-color:#8C5FC9; background:#EFE7FA; } .st-2 .stamp-dot{background:#8C5FC9;}
+  .st-3{ color:#8A5A1E; border-color:#C8843A; background:#FBEEDC; } .st-3 .stamp-dot{background:#C8843A;}
+  .st-4{ color:#A5382B; border-color:#C86156; background:#FBE2DF; } .st-4 .stamp-dot{background:#C86156;}
+  .st-5{ color:#3F6B4A; border-color:#5F9A6E; background:#E4F0E7; } .st-5 .stamp-dot{background:#5F9A6E;}
+
+  .section-title{ font-size:13px; text-transform:uppercase; letter-spacing:0.06em; color:var(--muted); margin:26px 0 10px; padding-bottom:6px; border-bottom:1.5px dotted var(--line); }
+  .row-actions{ display:flex; gap:6px; }
+  .empty{ text-align:center; padding:50px 20px; color:var(--muted); }
+  .empty i{ font-size:13px; }
+
+  .modal-bg{ position:fixed; inset:0; background:rgba(22,35,58,0.55); display:flex; align-items:flex-start; justify-content:center; padding:40px 16px; overflow-y:auto; z-index:100; }
+  .modal{ background:var(--card); border-radius:5px; max-width:640px; width:100%; padding:26px 28px; box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+  .modal h3{ margin:0 0 18px; font-size:19px; }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+  .close-x{ float:right; background:none; border:none; font-size:20px; color:var(--muted); }
+
+  .costsheet{ background:#fff; border:1px solid var(--line); border-radius:4px; padding:22px 26px; }
+  .costsheet-row{ display:flex; justify-content:space-between; padding:7px 0; border-bottom:1px dashed #DDD6C2; font-size:14px; }
+  .costsheet-row.total{ border-bottom:none; border-top:2px solid var(--ink); margin-top:6px; padding-top:12px; font-weight:600; font-size:16px; }
+  .costsheet-row .lbl{ color:var(--ink-soft); }
+  .costsheet-row .val{ font-family:'IBM Plex Mono',monospace; }
+
+  .stepper{ display:flex; align-items:center; gap:0; margin:6px 0 20px; flex-wrap:wrap; }
+  .step{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--muted); }
+  .step-dot{ width:22px; height:22px; border-radius:50%; border:1.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:10px; background:#fff; }
+  .step.done .step-dot{ background:var(--stamp-green); border-color:var(--stamp-green); color:#fff; }
+  .step.current .step-dot{ background:var(--brass); border-color:var(--brass-deep); color:#fff; }
+  .step-connector{ width:26px; height:1.5px; background:var(--line); margin:0 4px; }
+
+  .toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:10px 20px; border-radius:4px; font-size:13px; z-index:200; box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+
+  ::-webkit-scrollbar{ height:8px; width:8px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================= FIREBASE CONFIG =============================
+   Yahan apni Firebase project ki config daalein.
+   (Firebase Console > Project Settings > Your apps > SDK setup and configuration)
+   ============================================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "zb-sons-xxxx.firebaseapp.com",
+  projectId: "zb-sons-xxxx",
+  storageBucket: "zb-sons-xxxx.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abc123"
+};
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const DOC_REF = db.collection('zbsons').doc('main');
+
+/* ============================= DATA LAYER ============================= */
+let DATA = null;
+let SESSION = JSON.parse(sessionStorage.getItem('ptl_session') || 'null');
+let VIEW = { tab:'dashboard', loginTab:'admin' };
+let SUPPRESS_NEXT_SNAPSHOT = false;
+
+const STATUSES = ['LC Open','LC Transmitted','Shipment Arrived','GD Filed','Duty &amp; Taxes Paid','Released to Godown'];
+const STATUS_PLAIN = ['LC Open','LC Transmitted','Shipment Arrived','GD Filed','Duty & Taxes Paid','Released to Godown'];
+
+function defaultData(){
+  return {
+    admins:[{u:'admin', p:'admin123'}],
+    viewerPassword:'view123',
+    bankAccounts:[{id:'bank_1', name:'Main Bank Account', balance:0}],
+    shipments:[],
+    inventory:[],
+    parties:[],
+    sales:[],
+    payments:[],
+    bankTx:[],
+    seq:1000
+  };
+}
+
+function newId(prefix){ DATA.seq += 1; return prefix + '_' + DATA.seq + '_' + Math.random().toString(36).slice(2,6); }
+
+async function loadData(){
+  try{
+    const snap = await DOC_REF.get();
+    if(snap.exists && snap.data().payload){ DATA = JSON.parse(snap.data().payload); }
+    else { DATA = defaultData(); await persist(); }
+  }catch(e){
+    console.error('Firestore load failed', e);
+    DATA = defaultData();
+    document.getElementById('app').innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;color:var(--stamp-red);font-family:IBM Plex Sans,sans-serif;">Cloud database se connect nahi ho saka.<br>Firebase config aur internet connection check karein.</div>';
+    throw e;
+  }
+  DOC_REF.onSnapshot((snap)=>{
+    if(snap.metadata.hasPendingWrites) return;
+    if(!snap.exists || !snap.data().payload) return;
+    DATA = JSON.parse(snap.data().payload);
+    if(SESSION) render();
+  });
+}
+async function persist(){
+  try{ await DOC_REF.set({ payload: JSON.stringify(DATA), updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); }
+  catch(e){ console.error('Firestore save failed', e); toast('Save nahi ho saka — internet check karein', true); }
+}
+function saveSession(){ sessionStorage.setItem('ptl_session', JSON.stringify(SESSION)); }
+
+/* ============================= HELPERS ============================= */
+function isAdmin(){ return SESSION && SESSION.role === 'admin'; }
+function fmt(n){ n = Number(n)||0; return n.toLocaleString('en-PK', {maximumFractionDigits:0}); }
+function fmt2(n){ n = Number(n)||0; return n.toLocaleString('en-PK', {maximumFractionDigits:2, minimumFractionDigits:0}); }
+function today(){ return new Date().toISOString().slice(0,10); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+let toastTimer=null;
+function toast(msg, isErr){
+  const el = document.createElement('div');
+  el.className='toast'; el.textContent = msg;
+  if(isErr) el.style.background = 'var(--stamp-red)';
+  document.body.appendChild(el);
+  clearTimeout(toastTimer);
+  setTimeout(()=>el.remove(), 2600);
+}
+function guardAdmin(){
+  if(!isAdmin()){ toast('Sirf Admin ye kaam kar sakta hai', true); return false; }
+  return true;
+}
+
+/* -------- costing calc for a shipment -------- */
+function computeCosting(sh){
+  const lcValuePKR = (Number(sh.lcValueUsd)||0) * (Number(sh.exchangeRate)||0);
+  const duty = Number(sh.dutyAmount)||0;
+  const tax = Number(sh.taxAmount)||0;
+  const clearing = Number(sh.clearingCharges)||0;
+  const transport = Number(sh.transportCharges)||0;
+  const other = Number(sh.otherCharges)||0;
+  const total = lcValuePKR + duty + tax + clearing + transport + other;
+  const qty = Number(sh.qtyTons)||0;
+  const perTon = qty>0 ? total/qty : 0;
+  return { lcValuePKR, duty, tax, clearing, transport, other, total, perTon, qty };
+}
+
+function partyBalance(partyId){
+  const p = DATA.parties.find(x=>x.id===partyId);
+  return p ? Number(p.balance)||0 : 0;
+}
+
+function bankTotal(){
+  return DATA.bankAccounts.reduce((s,b)=>s+(Number(b.balance)||0),0);
+}
+
+function inventoryValue(){
+  return DATA.inventory.reduce((s,l)=>s + (Number(l.qtyAvailable)||0) * (Number(l.costPerTon)||0), 0);
+}
+function totalReceivable(){
+  return DATA.parties.reduce((s,p)=>s + Math.max(0, Number(p.balance)||0), 0);
+}
+
+/* ============================= RENDER ROOT ============================= */
+function render(){
+  const app = document.getElementById('app');
+  if(!SESSION){ app.innerHTML = renderLogin(); attachLoginHandlers(); return; }
+  app.innerHTML = renderShell();
+  attachShellHandlers();
+}
+
+/* ============================= LOGIN ============================= */
+function renderLogin(){
+  const t = VIEW.loginTab;
+  return `
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-stamp">CUSTOMS<br>CLEARED</div>
+      <h1 class="login-title">Z.B &amp; Sons</h1>
+      <p class="login-sub">Paper Import • Godown • Sales — apne kaam ka pura hisaab, cloud per.</p>
+      <div class="tabbtns">
+        <button class="tabbtn ${t==='admin'?'active':''}" data-logintab="admin">Admin</button>
+        <button class="tabbtn ${t==='viewer'?'active':''}" data-logintab="viewer">Viewer (Only View)</button>
+      </div>
+      ${ t==='admin' ? `
+        <div class="field"><label>Username</label><input id="lg-u" type="text" placeholder="admin"></div>
+        <div class="field"><label>Password</label><input id="lg-p" type="password" placeholder="••••••••"></div>
+        <div class="errmsg" id="lg-err" style="display:none;"></div>
+        <button class="btn wide" id="lg-submit-admin">Login as Admin</button>
+      ` : `
+        <div class="field"><label>Viewer Password</label><input id="lg-vp" type="password" placeholder="••••••••"></div>
+        <div class="errmsg" id="lg-err" style="display:none;"></div>
+        <button class="btn wide outline" id="lg-submit-viewer">Continue as Viewer</button>
+      `}
+      <p style="font-size:11px; color:var(--muted); margin-top:18px; line-height:1.6;">
+        Note: yeh security sirf app ki settings tak mehdood hai — is browser-based app mein data server per encrypt nahi hota, is liye login sirf edit/view control ke liye hai.
+      </p>
+    </div>
+  </div>`;
+}
+function attachLoginHandlers(){
+  document.querySelectorAll('[data-logintab]').forEach(b=>{
+    b.onclick = ()=>{ VIEW.loginTab = b.dataset.logintab; render(); };
+  });
+  const err = document.getElementById('lg-err');
+  const showErr = (m)=>{ err.textContent=m; err.style.display='block'; };
+  const submitAdmin = document.getElementById('lg-submit-admin');
+  if(submitAdmin) submitAdmin.onclick = ()=>{
+    const u = document.getElementById('lg-u').value.trim();
+    const p = document.getElementById('lg-p').value;
+    const found = DATA.admins.find(a=>a.u===u && a.p===p);
+    if(found){ SESSION={role:'admin', name:u}; saveSession(); VIEW.tab='dashboard'; render(); }
+    else showErr('Username ya password ghalat hai.');
+  };
+  const submitViewer = document.getElementById('lg-submit-viewer');
+  if(submitViewer) submitViewer.onclick = ()=>{
+    const vp = document.getElementById('lg-vp').value;
+    if(vp === DATA.viewerPassword){ SESSION={role:'viewer', name:'Viewer'}; saveSession(); VIEW.tab='dashboard'; render(); }
+    else showErr('Viewer password ghalat hai.');
+  };
+}
+
+/* ============================= SHELL ============================= */
+function renderShell(){
+  const tabs = [
+    ['dashboard','Dashboard'],
+    ['shipments','Shipments'],
+    ['inventory','Godown Inventory'],
+    ['sales','Sales'],
+    ['parties','Parties / Ledger'],
+    ['bank','Bank'],
+    ['trial','Trial Sheet'],
+  ];
+  if(isAdmin()) tabs.push(['settings','Settings']);
+  return `
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark">ZB</div>
+        <div><div class="brand-name">Z.B &amp; Sons</div><div class="brand-sub">Paper Import &amp; Godown Manager</div></div>
+      </div>
+      <div class="who">
+        <span class="role-pill">${SESSION.role==='admin'?'Admin':'Viewer'}</span>
+        <span>${esc(SESSION.name)}</span>
+        <button class="btn small outline" id="logout-btn">Logout</button>
+      </div>
+    </div>
+    <div class="nav">
+      ${tabs.map(([id,label])=>`<button class="navbtn ${VIEW.tab===id?'active':''}" data-tab="${id}">${label}</button>`).join('')}
+    </div>
+    <div class="content" id="content">${renderTab()}</div>
+    <div style="text-align:center; padding:18px 20px 30px; font-size:11px; color:var(--muted); letter-spacing:0.03em;">Z.B &amp; Sons — App by: Raghib Mendha</div>
+  </div>`;
+}
+function attachShellHandlers(){
+  document.getElementById('logout-btn').onclick = ()=>{ SESSION=null; sessionStorage.removeItem('ptl_session'); render(); };
+  document.querySelectorAll('[data-tab]').forEach(b=>{
+    b.onclick = ()=>{ VIEW.tab=b.dataset.tab; VIEW.detailId=null; render(); };
+  });
+  wireTabHandlers();
+}
+
+function renderTab(){
+  switch(VIEW.tab){
+    case 'dashboard': return renderDashboard();
+    case 'shipments': return VIEW.detailId ? renderShipmentDetail(VIEW.detailId) : renderShipments();
+    case 'inventory': return renderInventory();
+    case 'sales': return renderSales();
+    case 'parties': return VIEW.detailId ? renderPartyDetail(VIEW.detailId) : renderParties();
+    case 'bank': return renderBank();
+    case 'trial': return renderTrial();
+    case 'settings': return isAdmin() ? renderSettings() : '<div class="empty">Access denied</div>';
+    default: return '';
+  }
+}
+function refreshContent(){ document.getElementById('content').innerHTML = renderTab(); wireTabHandlers(); }
+
+function wireTabHandlers(){
+  switch(VIEW.tab){
+    case 'dashboard': wireDashboard(); break;
+    case 'shipments': VIEW.detailId ? wireShipmentDetail() : wireShipments(); break;
+    case 'inventory': wireInventory(); break;
+    case 'sales': wireSales(); break;
+    case 'parties': VIEW.detailId ? wirePartyDetail() : wireParties(); break;
+    case 'bank': wireBank(); break;
+    case 'trial': wireTrial(); break;
+    case 'settings': wireSettings(); break;
+  }
+}
+
+/* ============================= DASHBOARD ============================= */
+function renderDashboard(){
+  const activeShipments = DATA.shipments.filter(s=>s.status!=='Released to Godown').length;
+  const recentSales = [...DATA.sales].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,6);
+  const recentShipments = [...DATA.shipments].sort((a,b)=>(b.updatedAt||'').localeCompare(a.updatedAt||'')).slice(0,6);
+  return `
+  <div class="pagehead"><div><h2>Dashboard</h2><div class="sub">Kaam ka overall khaka — aaj tak ki position</div></div></div>
+  <div class="grid grid-4">
+    <div class="card"><p class="stat-label">Bank Balance</p><p class="stat-value pos mono">Rs ${fmt(bankTotal())}</p></div>
+    <div class="card"><p class="stat-label">Party Receivable</p><p class="stat-value mono">Rs ${fmt(totalReceivable())}</p></div>
+    <div class="card"><p class="stat-label">Godown Inventory Value</p><p class="stat-value mono">Rs ${fmt(inventoryValue())}</p></div>
+    <div class="card"><p class="stat-label">Shipments in Pipeline</p><p class="stat-value mono">${activeShipments}</p></div>
+  </div>
+
+  <div class="section-title">Recent Shipments</div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Ref No</th><th>Item</th><th>Status</th><th>Qty (Tons)</th></tr></thead>
+      <tbody>
+        ${recentShipments.length ? recentShipments.map(s=>`
+          <tr>
+            <td class="mono">${esc(s.refNo)}</td>
+            <td>${esc(s.itemDescription)}</td>
+            <td>${statusStamp(s.status)}</td>
+            <td class="num">${fmt(s.qtyTons)}</td>
+          </tr>`).join('') : `<tr><td colspan="4" class="empty">Abhi koi shipment book nahi hui.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Recent Sales</div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Date</th><th>Party</th><th>Item / Lot</th><th>Qty (Tons)</th><th>Rate</th><th>Amount</th></tr></thead>
+      <tbody>
+        ${recentSales.length ? recentSales.map(s=>{
+          const p = DATA.parties.find(x=>x.id===s.partyId);
+          const lot = DATA.inventory.find(l=>l.id===s.lotId);
+          return `<tr>
+            <td class="mono">${esc(s.date)}</td>
+            <td>${esc(p?p.name:'—')}</td>
+            <td>${esc(lot?lot.refNo:'—')}</td>
+            <td class="num">${fmt(s.qtyTons)}</td>
+            <td class="num">${fmt(s.rate)}</td>
+            <td class="num">${fmt(s.amount)}</td>
+          </tr>`;
+        }).join('') : `<tr><td colspan="6" class="empty">Abhi koi sale nahi hui.</td></tr>`}
+      </tbody>
+    </table>
+  </div>`;
+}
+function wireDashboard(){}
+
+/* ============================= STATUS STAMP ============================= */
+function statusStamp(status){
+  const idx = STATUS_PLAIN.indexOf(status);
+  return `<span class="stamp st-${idx<0?0:idx}"><span class="stamp-dot"></span>${esc(status)}</span>`;
+}
+
+/* ============================= SHIPMENTS ============================= */
+function renderShipments(){
+  const list = [...DATA.shipments].sort((a,b)=>(b.createdAt||'').localeCompare(a.createdAt||''));
+  return `
+  <div class="pagehead">
+    <div><h2>Shipments</h2><div class="sub">LC booking se le kar Godown release tak — poori tracking</div></div>
+    ${isAdmin() ? `<button class="btn brass" id="new-shipment-btn">+ Nai Shipment Book Karein</button>` : ''}
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Ref No</th><th>Supplier</th><th>Item</th><th>Qty (Tons)</th><th>LC No</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        ${list.length ? list.map(s=>`
+          <tr>
+            <td class="mono">${esc(s.refNo)}</td>
+            <td>${esc(s.supplierName)}</td>
+            <td>${esc(s.itemDescription)}</td>
+            <td class="num">${fmt(s.qtyTons)}</td>
+            <td class="mono">${esc(s.lcNo||'—')}</td>
+            <td>${statusStamp(s.status)}</td>
+            <td><button class="btn small outline" data-open="${s.id}">Kholein</button></td>
+          </tr>`).join('') : `<tr><td colspan="7" class="empty">Abhi koi shipment book nahi hui. ${isAdmin()?'Upar "+ Nai Shipment" se shuru karein.':''}</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  ${VIEW.showModal==='new-shipment' ? shipmentFormModal() : ''}`;
+}
+function wireShipments(){
+  const b = document.getElementById('new-shipment-btn');
+  if(b) b.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='new-shipment'; refreshContent(); };
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.onclick = ()=>{ VIEW.detailId = el.dataset.open; refreshContent(); };
+  });
+  wireShipmentModal();
+}
+function shipmentFormModal(){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Nai Shipment Book Karein</h3>
+      <div class="grid grid-2">
+        <div class="field"><label>Reference No</label><input id="f-refNo" placeholder="e.g. SHP-001"></div>
+        <div class="field"><label>Supplier Name</label><input id="f-supplier"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Item Description</label><input id="f-item" placeholder="e.g. Woodfree Paper 80gsm"></div>
+        <div class="field"><label>Quantity (Tons)</label><input id="f-qty" type="number" step="0.01"></div>
+        <div class="field"><label>LC No</label><input id="f-lcno"></div>
+        <div class="field"><label>LC Open Date</label><input id="f-lcopen" type="date" value="${today()}"></div>
+        <div class="field"><label>LC Value (USD)</label><input id="f-lcvalue" type="number" step="0.01"></div>
+        <div class="field"><label>Exchange Rate (PKR/USD)</label><input id="f-exrate" type="number" step="0.01"></div>
+        <div class="field"><label>Expected Arrival (ETA)</label><input id="f-eta" type="date"></div>
+        <div class="field"><label>Notes</label><input id="f-notes"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Shipment Book Karein</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wireShipmentModal(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  document.getElementById('modal-save').onclick = async ()=>{
+    const refNo = document.getElementById('f-refNo').value.trim() || ('SHP-' + (DATA.shipments.length+1));
+    const sh = {
+      id:newId('ship'), refNo,
+      supplierName: document.getElementById('f-supplier').value.trim(),
+      itemDescription: document.getElementById('f-item').value.trim(),
+      qtyTons: Number(document.getElementById('f-qty').value)||0,
+      lcNo: document.getElementById('f-lcno').value.trim(),
+      lcOpenDate: document.getElementById('f-lcopen').value,
+      lcTransmitDate:'',
+      lcValueUsd: Number(document.getElementById('f-lcvalue').value)||0,
+      exchangeRate: Number(document.getElementById('f-exrate').value)||0,
+      eta: document.getElementById('f-eta').value,
+      notes: document.getElementById('f-notes').value.trim(),
+      gdNo:'', gdDate:'',
+      dutyAmount:0, taxAmount:0, clearingCharges:0, transportCharges:0, otherCharges:0,
+      status:'LC Open',
+      inventoryAdded:false,
+      releaseDate:'',
+      createdAt:new Date().toISOString(), updatedAt:new Date().toISOString()
+    };
+    DATA.shipments.push(sh);
+    await persist();
+    VIEW.showModal=null;
+    VIEW.detailId = sh.id;
+    refreshContent();
+    toast('Shipment book ho gayi.');
+  };
+}
+
+/* ---- shipment detail (status stepper, GD/duty fields, costing sheet) ---- */
+function renderShipmentDetail(id){
+  const s = DATA.shipments.find(x=>x.id===id);
+  if(!s) return `<div class="empty">Shipment nahi mili.</div>`;
+  const idx = STATUS_PLAIN.indexOf(s.status);
+  const costing = computeCosting(s);
+  return `
+  <button class="btn small outline" id="back-to-list" style="margin-bottom:16px;">&larr; Shipments List</button>
+  <div class="pagehead">
+    <div><h2>${esc(s.refNo)} <span style="font-size:14px; color:var(--muted); font-weight:400;">— ${esc(s.itemDescription)}</span></h2>
+    <div class="sub">Supplier: ${esc(s.supplierName)||'—'} · Qty: ${fmt(s.qtyTons)} Tons</div></div>
+    ${isAdmin() ? `<div class="row-actions">
+      <button class="btn small outline" id="edit-shipment-btn">Edit Details</button>
+      <button class="btn small danger" id="delete-shipment-btn">Delete</button>
+    </div>` : ''}
+  </div>
+
+  <div class="stepper">
+    ${STATUS_PLAIN.map((st,i)=>`
+      <div class="step ${i<idx?'done':''} ${i===idx?'current':''}">
+        <div class="step-dot">${i<idx?'✓':(i+1)}</div>
+        <span>${st}</span>
+      </div>
+      ${i<STATUS_PLAIN.length-1 ? '<div class="step-connector"></div>' : ''}
+    `).join('')}
+  </div>
+
+  ${isAdmin() && idx < STATUS_PLAIN.length-1 ? `
+    <div style="margin-bottom:22px;">
+      <button class="btn brass" id="advance-status-btn">
+        Mark as: "${STATUS_PLAIN[idx+1]}" ${idx+1===STATUS_PLAIN.length-1 ? '(Godown mein add hoga + Costing Sheet banegi)' : ''}
+      </button>
+    </div>` : ''}
+
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="section-title" style="margin-top:0;">Shipment / LC Details</div>
+      <table>
+        <tbody>
+          <tr><td class="mono" style="color:var(--muted);">LC No</td><td>${esc(s.lcNo)||'—'}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">LC Open Date</td><td>${esc(s.lcOpenDate)||'—'}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">LC Transmit Date</td><td>${esc(s.lcTransmitDate)||'—'}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">LC Value (USD)</td><td class="num">$ ${fmt2(s.lcValueUsd)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">Exchange Rate</td><td class="num">${fmt2(s.exchangeRate)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">ETA</td><td>${esc(s.eta)||'—'}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">GD No</td><td>${esc(s.gdNo)||'—'}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">GD Date</td><td>${esc(s.gdDate)||'—'}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin-top:0;">Duty, Tax &amp; Charges (PKR)</div>
+      <table>
+        <tbody>
+          <tr><td class="mono" style="color:var(--muted);">Customs Duty</td><td class="num">${fmt(s.dutyAmount)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">Taxes</td><td class="num">${fmt(s.taxAmount)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">Clearing Agent Charges</td><td class="num">${fmt(s.clearingCharges)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">Transport Charges</td><td class="num">${fmt(s.transportCharges)}</td></tr>
+          <tr><td class="mono" style="color:var(--muted);">Other Charges</td><td class="num">${fmt(s.otherCharges)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-title">Costing Sheet ${idx>=3? '(GD file hone ke baad se update ho rahi hai)':'(GD file hone par activate hogi)'}</div>
+  <div class="costsheet">
+    <div class="costsheet-row"><span class="lbl">LC Value (${fmt2(s.lcValueUsd)} USD × ${fmt2(s.exchangeRate)})</span><span class="val">Rs ${fmt(costing.lcValuePKR)}</span></div>
+    <div class="costsheet-row"><span class="lbl">Customs Duty</span><span class="val">Rs ${fmt(costing.duty)}</span></div>
+    <div class="costsheet-row"><span class="lbl">Taxes</span><span class="val">Rs ${fmt(costing.tax)}</span></div>
+    <div class="costsheet-row"><span class="lbl">Clearing Agent Charges</span><span class="val">Rs ${fmt(costing.clearing)}</span></div>
+    <div class="costsheet-row"><span class="lbl">Transport Charges</span><span class="val">Rs ${fmt(costing.transport)}</span></div>
+    <div class="costsheet-row"><span class="lbl">Other Charges</span><span class="val">Rs ${fmt(costing.other)}</span></div>
+    <div class="costsheet-row total"><span class="lbl">Total Landed Cost</span><span class="val">Rs ${fmt(costing.total)}</span></div>
+    <div class="costsheet-row total" style="border-top:none; font-size:14px;"><span class="lbl">Cost per Ton (${fmt(costing.qty)} Tons)</span><span class="val">Rs ${fmt2(costing.perTon)}</span></div>
+  </div>
+
+  ${s.inventoryAdded ? `<p style="font-size:12.5px; color:var(--stamp-green); margin-top:10px;">✓ Godown Inventory mein add ho chuki hai (${esc(s.releaseDate)}).</p>` : ''}
+
+  ${VIEW.showModal==='edit-shipment' ? editShipmentModal(s) : ''}
+  `;
+}
+function wireShipmentDetail(){
+  document.getElementById('back-to-list').onclick = ()=>{ VIEW.detailId=null; refreshContent(); };
+  const adv = document.getElementById('advance-status-btn');
+  if(adv) adv.onclick = async ()=>{
+    if(!guardAdmin()) return;
+    const s = DATA.shipments.find(x=>x.id===VIEW.detailId);
+    const idx = STATUS_PLAIN.indexOf(s.status);
+    const nextStatus = STATUS_PLAIN[idx+1];
+    if(nextStatus === 'LC Transmitted') s.lcTransmitDate = today();
+    if(nextStatus === 'GD Filed' && !s.gdDate) s.gdDate = today();
+    s.status = nextStatus;
+    s.updatedAt = new Date().toISOString();
+    if(nextStatus === 'Released to Godown' && !s.inventoryAdded){
+      const costing = computeCosting(s);
+      const lot = {
+        id:newId('lot'), shipmentId:s.id, refNo:s.refNo, item:s.itemDescription,
+        qtyReceived:s.qtyTons, qtyAvailable:s.qtyTons, costPerTon: costing.perTon,
+        dateReleased: today()
+      };
+      DATA.inventory.push(lot);
+      s.inventoryAdded = true;
+      s.releaseDate = today();
+      toast('Shipment release ho gayi — Godown Inventory mein add + Costing Sheet ready.');
+    } else {
+      toast('Status update ho gaya: ' + nextStatus);
+    }
+    await persist();
+    refreshContent();
+  };
+  const editBtn = document.getElementById('edit-shipment-btn');
+  if(editBtn) editBtn.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='edit-shipment'; refreshContent(); };
+  const delBtn = document.getElementById('delete-shipment-btn');
+  if(delBtn) delBtn.onclick = async ()=>{
+    if(!guardAdmin()) return;
+    const s = DATA.shipments.find(x=>x.id===VIEW.detailId);
+    if(s.inventoryAdded){ toast('Yeh shipment Godown mein add ho chuki hai, delete nahi ho sakti.', true); return; }
+    if(!confirm('Kya aap is shipment ko delete karna chahte hain?')) return;
+    DATA.shipments = DATA.shipments.filter(x=>x.id!==s.id);
+    await persist();
+    VIEW.detailId=null;
+    refreshContent();
+    toast('Shipment delete ho gayi.');
+  };
+  wireEditShipmentModal();
+}
+function editShipmentModal(s){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Shipment Details Edit Karein</h3>
+      <div class="grid grid-2">
+        <div class="field"><label>Reference No</label><input id="e-refNo" value="${esc(s.refNo)}"></div>
+        <div class="field"><label>Supplier Name</label><input id="e-supplier" value="${esc(s.supplierName)}"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Item Description</label><input id="e-item" value="${esc(s.itemDescription)}"></div>
+        <div class="field"><label>Quantity (Tons)</label><input id="e-qty" type="number" step="0.01" value="${s.qtyTons}"></div>
+        <div class="field"><label>LC No</label><input id="e-lcno" value="${esc(s.lcNo)}"></div>
+        <div class="field"><label>LC Value (USD)</label><input id="e-lcvalue" type="number" step="0.01" value="${s.lcValueUsd}"></div>
+        <div class="field"><label>Exchange Rate (PKR/USD)</label><input id="e-exrate" type="number" step="0.01" value="${s.exchangeRate}"></div>
+        <div class="field"><label>GD No</label><input id="e-gdno" value="${esc(s.gdNo)}"></div>
+        <div class="field"><label>GD Date</label><input id="e-gddate" type="date" value="${s.gdDate}"></div>
+        <div class="field"><label>Customs Duty (PKR)</label><input id="e-duty" type="number" step="0.01" value="${s.dutyAmount}"></div>
+        <div class="field"><label>Taxes (PKR)</label><input id="e-tax" type="number" step="0.01" value="${s.taxAmount}"></div>
+        <div class="field"><label>Clearing Agent Charges</label><input id="e-clearing" type="number" step="0.01" value="${s.clearingCharges}"></div>
+        <div class="field"><label>Transport Charges</label><input id="e-transport" type="number" step="0.01" value="${s.transportCharges}"></div>
+        <div class="field"><label>Other Charges</label><input id="e-other" type="number" step="0.01" value="${s.otherCharges}"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Notes</label><input id="e-notes" value="${esc(s.notes)}"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Save Changes</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wireEditShipmentModal(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  document.getElementById('modal-save').onclick = async ()=>{
+    const s = DATA.shipments.find(x=>x.id===VIEW.detailId);
+    s.refNo = document.getElementById('e-refNo').value.trim();
+    s.supplierName = document.getElementById('e-supplier').value.trim();
+    s.itemDescription = document.getElementById('e-item').value.trim();
+    s.qtyTons = Number(document.getElementById('e-qty').value)||0;
+    s.lcNo = document.getElementById('e-lcno').value.trim();
+    s.lcValueUsd = Number(document.getElementById('e-lcvalue').value)||0;
+    s.exchangeRate = Number(document.getElementById('e-exrate').value)||0;
+    s.gdNo = document.getElementById('e-gdno').value.trim();
+    s.gdDate = document.getElementById('e-gddate').value;
+    s.dutyAmount = Number(document.getElementById('e-duty').value)||0;
+    s.taxAmount = Number(document.getElementById('e-tax').value)||0;
+    s.clearingCharges = Number(document.getElementById('e-clearing').value)||0;
+    s.transportCharges = Number(document.getElementById('e-transport').value)||0;
+    s.otherCharges = Number(document.getElementById('e-other').value)||0;
+    s.notes = document.getElementById('e-notes').value.trim();
+    s.updatedAt = new Date().toISOString();
+    if(s.inventoryAdded){
+      const lot = DATA.inventory.find(l=>l.shipmentId===s.id);
+      if(lot){ const c = computeCosting(s); lot.costPerTon = c.perTon; lot.item = s.itemDescription; }
+    }
+    await persist();
+    VIEW.showModal=null;
+    refreshContent();
+    toast('Shipment update ho gayi.');
+  };
+}
+
+/* ============================= INVENTORY ============================= */
+function renderInventory(){
+  const list = [...DATA.inventory].sort((a,b)=>(b.dateReleased||'').localeCompare(a.dateReleased||''));
+  const totalVal = inventoryValue();
+  return `
+  <div class="pagehead"><div><h2>Godown Inventory</h2><div class="sub">Har lot shipment se link hai — sale hote hi qty khud kam hoti hai</div></div></div>
+  <div class="grid grid-3" style="margin-bottom:20px;">
+    <div class="card"><p class="stat-label">Total Lots</p><p class="stat-value mono">${list.length}</p></div>
+    <div class="card"><p class="stat-label">Total Available Qty</p><p class="stat-value mono">${fmt(list.reduce((s,l)=>s+(Number(l.qtyAvailable)||0),0))} Tons</p></div>
+    <div class="card"><p class="stat-label">Inventory Value</p><p class="stat-value mono">Rs ${fmt(totalVal)}</p></div>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Lot / Shipment Ref</th><th>Item</th><th>Qty Received</th><th>Qty Available</th><th>Cost / Ton</th><th>Lot Value</th><th>Release Date</th></tr></thead>
+      <tbody>
+        ${list.length ? list.map(l=>`
+          <tr>
+            <td class="mono">${esc(l.refNo)}</td>
+            <td>${esc(l.item)}</td>
+            <td class="num">${fmt(l.qtyReceived)}</td>
+            <td class="num">${fmt(l.qtyAvailable)}</td>
+            <td class="num">${fmt2(l.costPerTon)}</td>
+            <td class="num">${fmt(l.qtyAvailable*l.costPerTon)}</td>
+            <td class="mono">${esc(l.dateReleased)}</td>
+          </tr>`).join('') : `<tr><td colspan="7" class="empty">Abhi Godown mein koi stock nahi. Shipment release hone par yahan khud aa jayega.</td></tr>`}
+      </tbody>
+    </table>
+  </div>`;
+}
+function wireInventory(){}
+
+/* ============================= SALES ============================= */
+function renderSales(){
+  const list = [...DATA.sales].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="pagehead">
+    <div><h2>Sales</h2><div class="sub">Godown se sale — inventory minus, party ledger mein add</div></div>
+    ${isAdmin() ? `<button class="btn brass" id="new-sale-btn">+ Nai Sale Karein</button>` : ''}
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Date</th><th>Party</th><th>Lot</th><th>Qty (Tons)</th><th>Rate/Ton</th><th>Amount</th><th>Profit</th>${isAdmin()?'<th></th>':''}</tr></thead>
+      <tbody>
+        ${list.length ? list.map(s=>{
+          const p = DATA.parties.find(x=>x.id===s.partyId);
+          const lot = DATA.inventory.find(l=>l.id===s.lotId);
+          const profit = (Number(s.rate)-Number(s.costPerTonSnapshot||0)) * Number(s.qtyTons);
+          return `<tr>
+            <td class="mono">${esc(s.date)}</td>
+            <td>${esc(p?p.name:'—')}</td>
+            <td class="mono">${esc(lot?lot.refNo:'—')}</td>
+            <td class="num">${fmt(s.qtyTons)}</td>
+            <td class="num">${fmt2(s.rate)}</td>
+            <td class="num">${fmt(s.amount)}</td>
+            <td class="num" style="color:${profit>=0?'var(--stamp-green)':'var(--stamp-red)'}">${fmt(profit)}</td>
+            ${isAdmin()?`<td><button class="btn small danger" data-delsale="${s.id}">Delete</button></td>`:''}
+          </tr>`;
+        }).join('') : `<tr><td colspan="${isAdmin()?8:7}" class="empty">Abhi koi sale record nahi.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  ${VIEW.showModal==='new-sale' ? saleFormModal() : ''}`;
+}
+function wireSales(){
+  const b = document.getElementById('new-sale-btn');
+  if(b) b.onclick = ()=>{
+    if(!guardAdmin())return;
+    if(!DATA.inventory.some(l=>l.qtyAvailable>0)){ toast('Godown mein abhi koi stock available nahi.', true); return; }
+    if(!DATA.parties.length){ toast('Pehle koi party add karein (Parties tab se).', true); return; }
+    VIEW.showModal='new-sale'; refreshContent();
+  };
+  document.querySelectorAll('[data-delsale]').forEach(el=>{
+    el.onclick = async ()=>{
+      if(!guardAdmin())return;
+      if(!confirm('Yeh sale delete karne se inventory aur party balance wapas adjust ho jayega. Confirm?')) return;
+      const s = DATA.sales.find(x=>x.id===el.dataset.delsale);
+      const lot = DATA.inventory.find(l=>l.id===s.lotId);
+      if(lot) lot.qtyAvailable = (Number(lot.qtyAvailable)||0) + Number(s.qtyTons);
+      const p = DATA.parties.find(x=>x.id===s.partyId);
+      if(p) p.balance = (Number(p.balance)||0) - Number(s.amount);
+      DATA.sales = DATA.sales.filter(x=>x.id!==s.id);
+      await persist();
+      refreshContent();
+      toast('Sale delete ho gayi aur adjust ho gaya.');
+    };
+  });
+  wireSaleModal();
+}
+function saleFormModal(){
+  const lots = DATA.inventory.filter(l=>l.qtyAvailable>0);
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Nai Sale Entry</h3>
+      <div class="grid grid-2">
+        <div class="field"><label>Date</label><input id="s-date" type="date" value="${today()}"></div>
+        <div class="field"><label>Party</label>
+          <select id="s-party">${DATA.parties.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select>
+        </div>
+        <div class="field" style="grid-column:1/-1;"><label>Inventory Lot</label>
+          <select id="s-lot">${lots.map(l=>`<option value="${l.id}">${esc(l.refNo)} — ${esc(l.item)} (Available: ${fmt(l.qtyAvailable)} Tons)</option>`).join('')}</select>
+        </div>
+        <div class="field"><label>Quantity (Tons)</label><input id="s-qty" type="number" step="0.01"></div>
+        <div class="field"><label>Rate per Ton (PKR)</label><input id="s-rate" type="number" step="0.01"></div>
+      </div>
+      <p style="font-size:12px; color:var(--muted);" id="s-avail-hint"></p>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Sale Save Karein</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wireSaleModal(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  const lotSel = document.getElementById('s-lot');
+  const hint = document.getElementById('s-avail-hint');
+  const updateHint = ()=>{
+    const lot = DATA.inventory.find(l=>l.id===lotSel.value);
+    hint.textContent = lot ? `Available: ${fmt(lot.qtyAvailable)} Tons · Cost/Ton: Rs ${fmt2(lot.costPerTon)}` : '';
+  };
+  lotSel.onchange = updateHint; updateHint();
+  document.getElementById('modal-save').onclick = async ()=>{
+    const lot = DATA.inventory.find(l=>l.id===lotSel.value);
+    const qty = Number(document.getElementById('s-qty').value)||0;
+    const rate = Number(document.getElementById('s-rate').value)||0;
+    if(!lot){ toast('Lot select karein.', true); return; }
+    if(qty<=0){ toast('Sahi quantity darj karein.', true); return; }
+    if(qty > lot.qtyAvailable){ toast('Itni quantity available nahi hai (max: '+fmt(lot.qtyAvailable)+' Tons).', true); return; }
+    const sale = {
+      id:newId('sale'),
+      date: document.getElementById('s-date').value || today(),
+      partyId: document.getElementById('s-party').value,
+      lotId: lot.id,
+      qtyTons: qty, rate, amount: qty*rate,
+      costPerTonSnapshot: lot.costPerTon
+    };
+    DATA.sales.push(sale);
+    lot.qtyAvailable -= qty;
+    const p = DATA.parties.find(x=>x.id===sale.partyId);
+    if(p) p.balance = (Number(p.balance)||0) + sale.amount;
+    await persist();
+    VIEW.showModal=null;
+    refreshContent();
+    toast('Sale save ho gayi — inventory aur party ledger update ho gaye.');
+  };
+}
+
+/* ============================= PARTIES ============================= */
+function renderParties(){
+  const list = [...DATA.parties].sort((a,b)=>a.name.localeCompare(b.name));
+  return `
+  <div class="pagehead">
+    <div><h2>Parties / Ledger</h2><div class="sub">Har party ka receivable balance — sale se badhta hai, payment se ghatta hai</div></div>
+    ${isAdmin() ? `<button class="btn brass" id="new-party-btn">+ Nai Party Add Karein</button>` : ''}
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Party Name</th><th>Phone</th><th>Balance (Receivable)</th><th></th></tr></thead>
+      <tbody>
+        ${list.length ? list.map(p=>`
+          <tr>
+            <td>${esc(p.name)}</td>
+            <td class="mono">${esc(p.phone)||'—'}</td>
+            <td class="num" style="color:${p.balance>0?'var(--stamp-red)':'var(--stamp-green)'}">Rs ${fmt(p.balance)}</td>
+            <td><button class="btn small outline" data-open="${p.id}">Ledger Dekhein</button></td>
+          </tr>`).join('') : `<tr><td colspan="4" class="empty">Abhi koi party add nahi hui.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  ${VIEW.showModal==='new-party' ? partyFormModal() : ''}`;
+}
+function wireParties(){
+  const b = document.getElementById('new-party-btn');
+  if(b) b.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='new-party'; refreshContent(); };
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.onclick = ()=>{ VIEW.detailId = el.dataset.open; refreshContent(); };
+  });
+  wirePartyModal();
+}
+function partyFormModal(){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Nai Party Add Karein</h3>
+      <div class="field"><label>Party Name</label><input id="p-name"></div>
+      <div class="field"><label>Phone</label><input id="p-phone"></div>
+      <div class="field"><label>Address</label><input id="p-address"></div>
+      <div class="field"><label>Opening Balance (PKR, agar pehle se balance hai)</label><input id="p-opening" type="number" step="0.01" value="0"></div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Save Party</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wirePartyModal(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  document.getElementById('modal-save').onclick = async ()=>{
+    const name = document.getElementById('p-name').value.trim();
+    if(!name){ toast('Party ka naam darj karein.', true); return; }
+    const opening = Number(document.getElementById('p-opening').value)||0;
+    DATA.parties.push({
+      id:newId('party'), name,
+      phone: document.getElementById('p-phone').value.trim(),
+      address: document.getElementById('p-address').value.trim(),
+      balance: opening
+    });
+    await persist();
+    VIEW.showModal=null;
+    refreshContent();
+    toast('Party add ho gayi.');
+  };
+}
+function renderPartyDetail(id){
+  const p = DATA.parties.find(x=>x.id===id);
+  if(!p) return `<div class="empty">Party nahi mili.</div>`;
+  const sales = DATA.sales.filter(s=>s.partyId===id).map(s=>({...s, kind:'sale'}));
+  const pays = DATA.payments.filter(pm=>pm.partyId===id).map(pm=>({...pm, kind:'payment'}));
+  const entries = [...sales, ...pays].sort((a,b)=>a.date.localeCompare(b.date));
+  let running = 0;
+  const rows = entries.map(e=>{
+    if(e.kind==='sale'){ running += e.amount; }
+    else { running -= e.amount; }
+    return {...e, running};
+  });
+  return `
+  <button class="btn small outline" id="back-to-parties" style="margin-bottom:16px;">&larr; Parties List</button>
+  <div class="pagehead">
+    <div><h2>${esc(p.name)}</h2><div class="sub">${esc(p.phone)||'—'} · ${esc(p.address)||'—'}</div></div>
+    <div class="row-actions">
+      ${isAdmin() ? `<button class="btn small brass" id="new-payment-btn">+ Payment Receive Karein</button>` : ''}
+    </div>
+  </div>
+  <div class="card" style="max-width:280px; margin-bottom:20px;">
+    <p class="stat-label">Current Balance (Receivable)</p>
+    <p class="stat-value mono ${p.balance>0?'neg':'pos'}">Rs ${fmt(p.balance)}</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Date</th><th>Type</th><th>Details</th><th>Debit (Sale)</th><th>Credit (Payment)</th><th>Balance</th></tr></thead>
+      <tbody>
+        ${rows.length ? rows.map(e=>{
+          if(e.kind==='sale'){
+            const lot = DATA.inventory.find(l=>l.id===e.lotId);
+            return `<tr><td class="mono">${esc(e.date)}</td><td>Sale</td><td>${esc(lot?lot.refNo:'')} × ${fmt(e.qtyTons)} Tons @ ${fmt2(e.rate)}</td><td class="num">${fmt(e.amount)}</td><td class="num">—</td><td class="num">${fmt(e.running)}</td></tr>`;
+          } else {
+            return `<tr><td class="mono">${esc(e.date)}</td><td>Payment</td><td>${esc(e.notes)||'—'}</td><td class="num">—</td><td class="num">${fmt(e.amount)}</td><td class="num">${fmt(e.running)}</td></tr>`;
+          }
+        }).join('') : `<tr><td colspan="6" class="empty">Abhi is party ka koi lein-dein nahi.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  ${VIEW.showModal==='new-payment' ? paymentFormModal(p) : ''}`;
+}
+function wirePartyDetail(){
+  document.getElementById('back-to-parties').onclick = ()=>{ VIEW.detailId=null; refreshContent(); };
+  const b = document.getElementById('new-payment-btn');
+  if(b) b.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='new-payment'; refreshContent(); };
+  wirePaymentModal();
+}
+function paymentFormModal(p){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Payment Receive Karein — ${esc(p.name)}</h3>
+      <div class="grid grid-2">
+        <div class="field"><label>Date</label><input id="pay-date" type="date" value="${today()}"></div>
+        <div class="field"><label>Amount (PKR)</label><input id="pay-amount" type="number" step="0.01"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Bank Account</label>
+          <select id="pay-bank">${DATA.bankAccounts.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select>
+        </div>
+        <div class="field" style="grid-column:1/-1;"><label>Notes</label><input id="pay-notes" placeholder="e.g. Cheque no / Cash"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Payment Save Karein</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wirePaymentModal(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  document.getElementById('modal-save').onclick = async ()=>{
+    const amount = Number(document.getElementById('pay-amount').value)||0;
+    if(amount<=0){ toast('Sahi amount darj karein.', true); return; }
+    const bankId = document.getElementById('pay-bank').value;
+    const payment = {
+      id:newId('pay'), date: document.getElementById('pay-date').value || today(),
+      partyId: VIEW.detailId, amount, bankId,
+      notes: document.getElementById('pay-notes').value.trim()
+    };
+    DATA.payments.push(payment);
+    const p = DATA.parties.find(x=>x.id===VIEW.detailId);
+    if(p) p.balance = (Number(p.balance)||0) - amount;
+    const bank = DATA.bankAccounts.find(b=>b.id===bankId);
+    if(bank) bank.balance = (Number(bank.balance)||0) + amount;
+    await persist();
+    VIEW.showModal=null;
+    refreshContent();
+    toast('Payment receive ho gayi — bank aur party balance update ho gaye.');
+  };
+}
+
+/* ============================= BANK ============================= */
+function renderBank(){
+  const txs = [
+    ...DATA.payments.map(p=>({date:p.date, type:'Party Payment', bankId:p.bankId, amount:p.amount, dir:'in', notes:p.notes, ref:(DATA.parties.find(x=>x.id===p.partyId)||{}).name})),
+    ...DATA.bankTx.map(t=>({date:t.date, type: t.type==='deposit'?'Deposit':'Withdraw', bankId:t.bankId, amount:t.amount, dir: t.type==='deposit'?'in':'out', notes:t.notes, ref:''}))
+  ].sort((a,b)=>b.date.localeCompare(a.date));
+  return `
+  <div class="pagehead">
+    <div><h2>Bank</h2><div class="sub">Sab payments aur manual entries yahan jama hoti hain</div></div>
+    ${isAdmin() ? `<div class="row-actions"><button class="btn small outline" id="new-bankacct-btn">+ Bank Account</button><button class="btn brass" id="new-banktx-btn">+ Manual Entry</button></div>` : ''}
+  </div>
+  <div class="grid grid-3" style="margin-bottom:20px;">
+    ${DATA.bankAccounts.map(b=>`
+      <div class="card"><p class="stat-label">${esc(b.name)}</p><p class="stat-value mono">Rs ${fmt(b.balance)}</p></div>
+    `).join('')}
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Date</th><th>Bank Account</th><th>Type</th><th>Reference</th><th>Amount</th></tr></thead>
+      <tbody>
+        ${txs.length ? txs.map(t=>{
+          const bank = DATA.bankAccounts.find(b=>b.id===t.bankId);
+          return `<tr>
+            <td class="mono">${esc(t.date)}</td>
+            <td>${esc(bank?bank.name:'—')}</td>
+            <td>${esc(t.type)}</td>
+            <td>${esc(t.ref||t.notes||'—')}</td>
+            <td class="num" style="color:${t.dir==='in'?'var(--stamp-green)':'var(--stamp-red)'}">${t.dir==='in'?'+':'-'} ${fmt(t.amount)}</td>
+          </tr>`;
+        }).join('') : `<tr><td colspan="5" class="empty">Abhi koi bank transaction nahi.</td></tr>`}
+      </tbody>
+    </table>
+  </div>
+  ${VIEW.showModal==='new-banktx' ? bankTxModal() : ''}
+  ${VIEW.showModal==='new-bankacct' ? bankAcctModal() : ''}`;
+}
+function wireBank(){
+  const b1 = document.getElementById('new-banktx-btn');
+  if(b1) b1.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='new-banktx'; refreshContent(); };
+  const b2 = document.getElementById('new-bankacct-btn');
+  if(b2) b2.onclick = ()=>{ if(!guardAdmin())return; VIEW.showModal='new-bankacct'; refreshContent(); };
+  wireBankModals();
+}
+function bankTxModal(){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Manual Bank Entry</h3>
+      <div class="grid grid-2">
+        <div class="field"><label>Date</label><input id="bt-date" type="date" value="${today()}"></div>
+        <div class="field"><label>Type</label>
+          <select id="bt-type"><option value="deposit">Deposit</option><option value="withdraw">Withdraw</option></select>
+        </div>
+        <div class="field"><label>Bank Account</label>
+          <select id="bt-bank">${DATA.bankAccounts.map(b=>`<option value="${b.id}">${esc(b.name)}</option>`).join('')}</select>
+        </div>
+        <div class="field"><label>Amount (PKR)</label><input id="bt-amount" type="number" step="0.01"></div>
+        <div class="field" style="grid-column:1/-1;"><label>Notes</label><input id="bt-notes"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Save Entry</button>
+      </div>
+    </div>
+  </div>`;
+}
+function bankAcctModal(){
+  return `
+  <div class="modal-bg" id="modal-bg">
+    <div class="modal">
+      <button class="close-x" id="modal-close">&times;</button>
+      <h3>Naya Bank Account</h3>
+      <div class="field"><label>Account Name</label><input id="ba-name" placeholder="e.g. Meezan Bank - Current"></div>
+      <div class="field"><label>Opening Balance</label><input id="ba-balance" type="number" step="0.01" value="0"></div>
+      <div class="modal-actions">
+        <button class="btn outline" id="modal-cancel">Cancel</button>
+        <button class="btn brass" id="modal-save">Add Account</button>
+      </div>
+    </div>
+  </div>`;
+}
+function wireBankModals(){
+  const bg = document.getElementById('modal-bg');
+  if(!bg) return;
+  const close = ()=>{ VIEW.showModal=null; refreshContent(); };
+  document.getElementById('modal-close').onclick = close;
+  document.getElementById('modal-cancel').onclick = close;
+  bg.addEventListener('click', (e)=>{ if(e.target===bg) close(); });
+  const save = document.getElementById('modal-save');
+  if(VIEW.showModal==='new-banktx'){
+    save.onclick = async ()=>{
+      const amount = Number(document.getElementById('bt-amount').value)||0;
+      if(amount<=0){ toast('Sahi amount darj karein.', true); return; }
+      const bankId = document.getElementById('bt-bank').value;
+      const type = document.getElementById('bt-type').value;
+      DATA.bankTx.push({ id:newId('btx'), date: document.getElementById('bt-date').value||today(), bankId, type, amount, notes: document.getElementById('bt-notes').value.trim() });
+      const bank = DATA.bankAccounts.find(b=>b.id===bankId);
+      if(bank) bank.balance = (Number(bank.balance)||0) + (type==='deposit'?amount:-amount);
+      await persist();
+      VIEW.showModal=null; refreshContent();
+      toast('Bank entry save ho gayi.');
+    };
+  } else if(VIEW.showModal==='new-bankacct'){
+    save.onclick = async ()=>{
+      const name = document.getElementById('ba-name').value.trim();
+      if(!name){ toast('Account ka naam darj karein.', true); return; }
+      DATA.bankAccounts.push({ id:newId('bank'), name, balance: Number(document.getElementById('ba-balance').value)||0 });
+      await persist();
+      VIEW.showModal=null; refreshContent();
+      toast('Bank account add ho gaya.');
+    };
+  }
+}
+
+/* ============================= TRIAL SHEET ============================= */
+function renderTrial(){
+  const bank = bankTotal();
+  const receivable = totalReceivable();
+  const invValue = inventoryValue();
+  const totalSales = DATA.sales.reduce((s,x)=>s+Number(x.amount||0),0);
+  const totalPayments = DATA.payments.reduce((s,x)=>s+Number(x.amount||0),0);
+  const releasedShipments = DATA.shipments.filter(s=>s.inventoryAdded);
+  const totalLandedCost = releasedShipments.reduce((s,sh)=>s+computeCosting(sh).total,0);
+  const totalDutyTax = releasedShipments.reduce((s,sh)=>s+Number(sh.dutyAmount||0)+Number(sh.taxAmount||0),0);
+  const assets = bank + receivable + invValue;
+  return `
+  <div class="pagehead"><div><h2>Trial Sheet</h2><div class="sub">Tamam ledgers ki summary — ek nazar mein pura hisaab</div></div></div>
+  <div class="grid grid-2">
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th colspan="2">Assets / Balances</th></tr></thead>
+        <tbody>
+          <tr><td>Bank Balance (${DATA.bankAccounts.length} account/s)</td><td class="num">Rs ${fmt(bank)}</td></tr>
+          <tr><td>Party Receivable (total)</td><td class="num">Rs ${fmt(receivable)}</td></tr>
+          <tr><td>Godown Inventory Value</td><td class="num">Rs ${fmt(invValue)}</td></tr>
+          <tr style="font-weight:600;"><td>Total</td><td class="num">Rs ${fmt(assets)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th colspan="2">Activity Summary</th></tr></thead>
+        <tbody>
+          <tr><td>Total Sales (all time)</td><td class="num">Rs ${fmt(totalSales)}</td></tr>
+          <tr><td>Total Payments Received</td><td class="num">Rs ${fmt(totalPayments)}</td></tr>
+          <tr><td>Total Landed Cost (released shipments)</td><td class="num">Rs ${fmt(totalLandedCost)}</td></tr>
+          <tr><td>Total Duty &amp; Taxes Paid</td><td class="num">Rs ${fmt(totalDutyTax)}</td></tr>
+          <tr><td>Active Shipments (in pipeline)</td><td class="num">${DATA.shipments.filter(s=>!s.inventoryAdded).length}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="section-title">Bank Accounts Breakdown</div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Account</th><th>Balance</th></tr></thead>
+      <tbody>${DATA.bankAccounts.map(b=>`<tr><td>${esc(b.name)}</td><td class="num">Rs ${fmt(b.balance)}</td></tr>`).join('')}</tbody>
+    </table>
+  </div>
+  <p style="font-size:11.5px; color:var(--muted); margin-top:14px;">Note: yeh ek operational trial sheet hai jo aapke bank, party aur inventory ledgers ko summarize karti hai — yeh formal double-entry accounting trial balance nahi hai.</p>`;
+}
+function wireTrial(){}
+
+/* ============================= SETTINGS (admin only) ============================= */
+function renderSettings(){
+  return `
+  <div class="pagehead"><div><h2>Settings</h2><div class="sub">Admin logins aur bank accounts manage karein</div></div></div>
+
+  <div class="section-title" style="margin-top:0;">Admin Accounts (max 2)</div>
+  <div class="tablewrap" style="margin-bottom:16px;">
+    <table>
+      <thead><tr><th>Username</th><th></th></tr></thead>
+      <tbody>
+        ${DATA.admins.map((a,i)=>`
+          <tr><td>${esc(a.u)}</td><td>${DATA.admins.length>1?`<button class="btn small danger" data-deladmin="${i}">Remove</button>`:''}</td></tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>
+  ${DATA.admins.length<2 ? `
+  <div class="card" style="max-width:420px; margin-bottom:24px;">
+    <div class="field"><label>New Admin Username</label><input id="na-u"></div>
+    <div class="field"><label>New Admin Password</label><input id="na-p" type="password"></div>
+    <button class="btn brass small" id="add-admin-btn">Admin Add Karein</button>
+  </div>` : ''}
+
+  <div class="section-title">Change Password</div>
+  <div class="card" style="max-width:420px; margin-bottom:24px;">
+    <div class="field"><label>Select Admin</label>
+      <select id="cp-user">${DATA.admins.map(a=>`<option value="${esc(a.u)}">${esc(a.u)}</option>`).join('')}</select>
+    </div>
+    <div class="field"><label>New Password</label><input id="cp-pass" type="password"></div>
+    <button class="btn outline small" id="change-pass-btn">Password Update Karein</button>
+  </div>
+
+  <div class="section-title">Viewer Password</div>
+  <div class="card" style="max-width:420px;">
+    <div class="field"><label>New Viewer Password</label><input id="vp-pass" type="password" placeholder="current: hidden"></div>
+    <button class="btn outline small" id="change-viewer-btn">Viewer Password Update Karein</button>
+  </div>`;
+}
+function wireSettings(){
+  document.querySelectorAll('[data-deladmin]').forEach(el=>{
+    el.onclick = async ()=>{
+      if(DATA.admins.length<=1){ toast('Kam se kam ek admin zaroor rakhein.', true); return; }
+      if(!confirm('Is admin ko remove karein?')) return;
+      DATA.admins.splice(Number(el.dataset.deladmin),1);
+      await persist(); refreshContent(); toast('Admin remove ho gaya.');
+    };
+  });
+  const addBtn = document.getElementById('add-admin-btn');
+  if(addBtn) addBtn.onclick = async ()=>{
+    const u = document.getElementById('na-u').value.trim();
+    const p = document.getElementById('na-p').value;
+    if(!u || !p){ toast('Username aur password darj karein.', true); return; }
+    if(DATA.admins.some(a=>a.u===u)){ toast('Yeh username pehle se mojood hai.', true); return; }
+    DATA.admins.push({u,p});
+    await persist(); refreshContent(); toast('Naya admin add ho gaya.');
+  };
+  const cpBtn = document.getElementById('change-pass-btn');
+  if(cpBtn) cpBtn.onclick = async ()=>{
+    const u = document.getElementById('cp-user').value;
+    const newp = document.getElementById('cp-pass').value;
+    if(!newp){ toast('Naya password darj karein.', true); return; }
+    const a = DATA.admins.find(x=>x.u===u);
+    if(a){ a.p = newp; await persist(); toast('Password update ho gaya.'); document.getElementById('cp-pass').value=''; }
+  };
+  const vpBtn = document.getElementById('change-viewer-btn');
+  if(vpBtn) vpBtn.onclick = async ()=>{
+    const newp = document.getElementById('vp-pass').value;
+    if(!newp){ toast('Naya password darj karein.', true); return; }
+    DATA.viewerPassword = newp;
+    await persist(); toast('Viewer password update ho gaya.'); document.getElementById('vp-pass').value='';
+  };
+}
+
+/* ============================= INIT ============================= */
+(async function init(){
+  document.getElementById('app').innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:IBM Plex Sans,sans-serif;">Cloud se data load ho raha hai…</div>';
+  try{
+    await loadData();
+    render();
+  }catch(e){ /* error screen already shown inside loadData */ }
+})();
+</script>
+</body>
+</html>
