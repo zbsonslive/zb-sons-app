@@ -112,8 +112,8 @@
                             <tr>
                                 <th>LC Number</th>
                                 <th>Supplier Name</th>
-                                <th>Item</th>
-                                <th>Total Est. Value</th>
+                                <th>Est. Qty & Unit</th>
+                                <th>Total Value (US$)</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -133,7 +133,7 @@
                 <div class="card-header">
                     <div>
                         <h2 class="page-title">Step 1: Open New LC (Estimated)</h2>
-                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Enter LC details with +/- tolerance and Insurance. This will NOT add to actual stock.</p>
+                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Foreign LC amounts in US$, Insurance in PKR.</p>
                     </div>
                 </div>
                 <form action="#">
@@ -144,8 +144,9 @@
                         <div class="form-group"><label class="form-label">Supplier Name</label><input type="text" id="lc-supplier" class="form-control" placeholder="Enter supplier name"></div>
                         <div class="form-group"><label class="form-label">Bank Name</label><select id="lc-bank" class="form-control"><option>Meezan Bank</option><option>HBL</option><option>Standard Chartered</option></select></div>
                         
-                        <!-- Naya Hissa: Qty, Price, INSURANCE aur Total -->
-                        <div class="form-section-title">Item, Pricing & Insurance (Estimated)</div>
+                        <!-- UPDATE: Qty Dropdown, Exchange Rate & Currency Specifiers -->
+                        <div class="form-section-title">Item, Pricing & Conversions</div>
+                        
                         <div class="form-group">
                             <label class="form-label">Select Item (Paper)</label>
                             <select id="lc-item" class="form-control">
@@ -153,20 +154,36 @@
                                 <option>Kraft Paper 150GSM 40"</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
-                            <label class="form-label">Est. Qty (M.T or Reams)</label>
-                            <input type="number" id="lc-qty" class="form-control" placeholder="e.g. 100" oninput="calculateLCTotal()">
+                            <label class="form-label">Est. Qty & Unit</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="number" id="lc-qty" class="form-control" placeholder="Qty" oninput="calculateLCTotal()" style="flex: 2;">
+                                <select id="lc-unit" class="form-control" style="flex: 1;">
+                                    <option>M.T</option>
+                                    <option>KGs</option>
+                                    <option>Reels</option>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Per Unit / M.T Price</label>
-                            <input type="number" id="lc-price" class="form-control" placeholder="e.g. 150000" oninput="calculateLCTotal()">
+                            <label class="form-label">Per Unit Price (US$)</label>
+                            <input type="number" id="lc-price" class="form-control" placeholder="e.g. 850" oninput="calculateLCTotal()">
                         </div>
+
                         <div class="form-group">
-                            <label class="form-label">Insurance Expense (Rs.)</label>
+                            <label class="form-label">Exchange Rate (1 US$ = Rs.)</label>
+                            <input type="number" id="lc-ex-rate" class="form-control" placeholder="e.g. 280" oninput="calculateLCTotal()">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Insurance Expense (PKR)</label>
                             <input type="number" id="lc-insurance" class="form-control" placeholder="e.g. 25000" oninput="calculateLCTotal()">
                         </div>
-                        <div class="form-group" style="grid-column: span 2;">
-                            <label class="form-label">Total Estimated Value (Including Insurance)</label>
+
+                        <div class="form-group">
+                            <label class="form-label">Total Estimated Value (US$)</label>
                             <input type="text" id="lc-total" class="form-control" placeholder="Auto Calculated" readonly style="background-color: #F3F4F6; font-weight: bold; color: var(--primary);">
                         </div>
                     </div> 
@@ -195,9 +212,8 @@
                         <div class="form-group"><label class="form-label">GD Clearance Date</label><input type="date" id="gd-date" class="form-control"></div>
                         <div class="form-group"><label class="form-label">Actual Received Qty</label><input type="number" id="gd-actual-qty" class="form-control" placeholder="Enter exact quantity"></div>
                         
-                        <!-- Naya Hissa: Actual Insurance -->
                         <div class="form-group" style="grid-column: span 2;">
-                            <label class="form-label">Actual Insurance Expense (Rs.)</label>
+                            <label class="form-label">Actual Insurance Expense (PKR)</label>
                             <input type="number" id="gd-insurance" class="form-control" placeholder="Final paid insurance amount">
                         </div>
                     </div> 
@@ -250,22 +266,30 @@
         clickedMenu.classList.add('active');
     }
 
-    // LC (Step 1) ka Auto-Calculator (Ab Insurance shamil hai)
+    // LC (Step 1) ka Auto-Calculator (Currency Conversion Ke Sath)
     function calculateLCTotal() {
         let qty = parseFloat(document.getElementById('lc-qty').value) || 0;
-        let price = parseFloat(document.getElementById('lc-price').value) || 0;
-        let insurance = parseFloat(document.getElementById('lc-insurance').value) || 0;
+        let priceUSD = parseFloat(document.getElementById('lc-price').value) || 0;
+        let exRate = parseFloat(document.getElementById('lc-ex-rate').value) || 0;
+        let insurancePKR = parseFloat(document.getElementById('lc-insurance').value) || 0;
         let totalField = document.getElementById('lc-total');
         
-        if(qty > 0 || price > 0 || insurance > 0) {
-            let grandTotal = (qty * price) + insurance;
-            totalField.value = "Rs. " + grandTotal.toLocaleString('en-IN'); 
+        // Pehle PKR insurance ko USD mein badalna
+        let insuranceUSD = 0;
+        if(exRate > 0 && insurancePKR > 0) {
+            insuranceUSD = insurancePKR / exRate;
+        }
+
+        // Qty * Price + Converted Insurance
+        if(qty > 0 || priceUSD > 0 || insuranceUSD > 0) {
+            let grandTotalUSD = (qty * priceUSD) + insuranceUSD;
+            // Decimal ke baad sirf 2 numbers dikhana
+            totalField.value = "US$ " + grandTotalUSD.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}); 
         } else { 
             totalField.value = ""; 
         }
     }
 
-    // Sales ka Auto-Calculator
     function calculateSaleTotal() {
         let qty = document.getElementById('sale-qty').value;
         let price = document.getElementById('sale-price').value;
@@ -275,7 +299,6 @@
         } else { totalField.value = ""; }
     }
 
-    // PDF Generator (Same as before)
     function generatePDF() {
         const invNum = document.getElementById('inv-num').value;
         let date = document.getElementById('inv-date').value;
@@ -328,7 +351,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // LC UPDATE - Ab Insurance bhi database mein save hogi
     window.saveLCRecord = async function() {
         const num = document.getElementById('lc-number').value;
         const date = document.getElementById('lc-date').value;
@@ -336,7 +358,9 @@
         const bank = document.getElementById('lc-bank').value;
         const item = document.getElementById('lc-item').value;
         const qty = document.getElementById('lc-qty').value;
+        const unit = document.getElementById('lc-unit').value; // Dropdown value captured
         const price = document.getElementById('lc-price').value;
+        const exRate = document.getElementById('lc-ex-rate').value;
         const insurance = document.getElementById('lc-insurance').value;
         const total = document.getElementById('lc-total').value;
 
@@ -350,18 +374,21 @@
                 bank_name: bank, 
                 item_name: item,
                 estimated_qty: qty ? parseFloat(qty) : 0,
-                per_mt_price: price ? parseFloat(price) : 0,
-                estimated_insurance: insurance ? parseFloat(insurance) : 0,
-                total_estimated_value: total,
+                unit: unit,
+                per_unit_price_usd: price ? parseFloat(price) : 0,
+                exchange_rate: exRate ? parseFloat(exRate) : 0,
+                estimated_insurance_pkr: insurance ? parseFloat(insurance) : 0,
+                total_estimated_value_usd: total,
                 status: "Pending GD Clearance",
                 time_saved: new Date() 
             });
-            alert("Step 1 Mukammal! LC Record (Insurance & Estimated Price ke sath) Cloud par save ho gaya.");
+            alert("Step 1 Mukammal! LC Record (Currency Conversion ke sath) Cloud par save ho gaya.");
             
             // Khali karna
             document.getElementById('lc-number').value = ""; 
             document.getElementById('lc-qty').value = ""; 
             document.getElementById('lc-price').value = "";
+            document.getElementById('lc-ex-rate').value = "";
             document.getElementById('lc-insurance').value = "";
             document.getElementById('lc-total').value = "";
             document.getElementById('lc-supplier').value = "";
@@ -379,12 +406,13 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const statusBadge = data.status === "Pending GD Clearance" ? '<span class="badge badge-info">Pending GD</span>' : '<span class="badge badge-success">Saved</span>';
-                
+                const displayQty = data.estimated_qty ? data.estimated_qty + " " + (data.unit || "") : "-";
+
                 tableBody.innerHTML += `<tr>
                     <td style="font-weight: 600;">${data.lc_number}</td>
                     <td>${data.supplier}</td>
-                    <td>${data.item_name}</td>
-                    <td style="color: var(--primary); font-weight: 600;">${data.total_estimated_value || "-"}</td>
+                    <td>${displayQty}</td>
+                    <td style="color: var(--primary); font-weight: 600;">${data.total_estimated_value_usd || "-"}</td>
                     <td>${statusBadge}</td>
                 </tr>`;
             });
