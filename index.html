@@ -77,6 +77,52 @@
         .page-view.active-page { display: block; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Mobile Responsiveness Fix - Naya aur Behtar Design */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow-y: auto; }
+            .sidebar { width: 100%; height: auto; flex-direction: column; padding: 10px 0; }
+            .logo-area { padding: 5px 10px; border: none; font-size: 1.2rem; width: 100%; text-align: center; }
+            
+            /* Mobile Tabs (Swipe-able Buttons) */
+            .nav-links { 
+                display: flex; 
+                flex-direction: row; 
+                width: 100%; 
+                overflow-x: auto; 
+                padding: 5px 10px; 
+                justify-content: flex-start;
+                gap: 8px;
+                -ms-overflow-style: none; 
+                scrollbar-width: none; 
+            }
+            .nav-links::-webkit-scrollbar { display: none; }
+            
+            /* Tabs ka Size Chota Kiya Gaya Hai */
+            .nav-links li { 
+                padding: 8px 12px; 
+                font-size: 0.75rem; 
+                white-space: nowrap; 
+                border-left: none; 
+                background-color: rgba(255,255,255,0.1); 
+                border-radius: 8px; 
+            }
+            .nav-links li.active { 
+                background-color: var(--primary); 
+                color: white;
+                transform: none; 
+            }
+
+            .main-content { width: 100%; }
+            .top-header { flex-direction: column; gap: 10px; text-align: center; }
+            .content-area { padding: 15px; }
+            .card { padding: 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-section-title { grid-column: span 1; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .card-header { flex-direction: column; text-align: center; }
+            .btn-animated { width: 100%; margin-top: 10px; }
+            table { min-width: 600px; }
+        }
     </style>
 </head>
 <body>
