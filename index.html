@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z.B & SONS ERP</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PDF Banane wali library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* Base Variables & Reset */
         :root { --primary: #4F46E5; --bg-color: #F3F4F6; --sidebar-bg: #111827; --card-bg: #FFFFFF; --text-main: #1F2937; --text-light: #6B7280; --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -118,7 +120,6 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <!-- Yahan ab nakli data nahi, balke Firebase ka data aayega -->
                         <tbody id="inventory-table-body">
                             <tr>
                                 <td colspan="5" style="text-align: center; font-weight: 500;">Cloud se data load ho raha hai...</td>
@@ -159,7 +160,7 @@
             </div>
         </div>
 
-        <!-- PAGE 3: SALES INVOICE FORM -->
+        <!-- PAGE 3: SALES INVOICE FORM (PDF Ready) -->
         <div id="sales-page" class="page-view">
             <div class="card">
                 <div class="card-header">
@@ -170,15 +171,31 @@
                 <form action="#">
                     <div class="form-grid">
                         <div class="form-section-title">Customer & Invoice Details</div>
-                        <div class="form-group"><label class="form-label">Invoice Number</label><input type="text" class="form-control" value="INV-2026-101" readonly style="background-color: #E5E7EB; font-weight: 600;"></div>
-                        <div class="form-group"><label class="form-label">Date of Sale</label><input type="date" class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Invoice Number</label><input type="text" id="inv-num" class="form-control" value="INV-2026-101" readonly style="background-color: #E5E7EB; font-weight: 600;"></div>
+                        <div class="form-group"><label class="form-label">Date of Sale</label><input type="date" id="inv-date" class="form-control"></div>
+                        <div class="form-group">
+                            <label class="form-label">Select Customer</label>
+                            <select id="inv-customer" class="form-control">
+                                <option>Select Customer...</option>
+                                <option>ABC Printers & Publishers</option>
+                                <option>XYZ Packaging Co.</option>
+                                <option>Global Enterprises</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Status</label>
+                            <select class="form-control"><option>Credit (Udhaar)</option><option>Cash Received</option></select>
+                        </div>
                         
                         <div class="form-section-title">Paper Details & Pricing</div>
-                        <div class="form-group"><label class="form-label">Quantity to Sell</label><input type="number" id="sale-qty" class="form-control" placeholder="e.g. 50" oninput="calculateTotal()"></div>
+                        <div class="form-group"><label class="form-label">Select Paper</label><select id="inv-item" class="form-control"><option>Offset Paper 70GSM 23x36</option><option>Kraft Paper 150GSM 40"</option></select></div>
+                        <div class="form-group"><label class="form-label">Quantity</label><input type="number" id="sale-qty" class="form-control" placeholder="e.g. 50" oninput="calculateTotal()"></div>
                         <div class="form-group"><label class="form-label">Sale Price</label><input type="number" id="sale-price" class="form-control" placeholder="Rs." oninput="calculateTotal()"></div>
                         <div class="form-group"><label class="form-label">Total Amount (Rs.)</label><input type="text" id="sale-total" class="form-control" placeholder="Auto Calculated" readonly style="background-color: #F3F4F6; font-weight: bold; color: var(--primary);"></div>
                     </div> 
                     <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px;">
+                        <!-- Print PDF Button Par Function Lagaya Hai -->
+                        <button type="button" class="btn-animated" style="background: #6B7280; box-shadow: none;" onclick="generatePDF()">Print PDF</button>
                         <button type="button" class="btn-animated btn-success">Confirm Sale</button>
                     </div>
                 </form>
@@ -193,7 +210,7 @@
     </div>
 </div>
 
-<!-- Normal JavaScript for App UI -->
+<!-- Normal JavaScript for App UI & PDF -->
 <script>
     function switchPage(pageId, clickedMenu) {
         document.querySelectorAll('.page-view').forEach(page => page.classList.remove('active-page'));
@@ -212,15 +229,99 @@
             totalField.value = "";
         }
     }
+
+    // ==========================================
+    // PDF RASEED BANANE KA FUNCTION
+    // ==========================================
+    function generatePDF() {
+        const invNum = document.getElementById('inv-num').value;
+        let date = document.getElementById('inv-date').value;
+        const customer = document.getElementById('inv-customer').value;
+        const item = document.getElementById('inv-item').value;
+        const qty = document.getElementById('sale-qty').value;
+        const price = document.getElementById('sale-price').value;
+        const total = document.getElementById('sale-total').value;
+
+        // Validation
+        if(!qty || !price || customer === "Select Customer...") {
+            alert("Meharbani karke Customer, Quantity aur Price zaroor likhein taake PDF theek bane!");
+            return;
+        }
+
+        if(!date) { date = "Today"; } // Agar date na daali ho
+
+        // Background mein ek khoobsurat Raseed (Receipt) ka design banana
+        const receiptDiv = document.createElement('div');
+        receiptDiv.innerHTML = `
+            <div style="padding: 40px; font-family: 'Helvetica', sans-serif; color: #222; background: #fff;">
+                <div style="text-align: center; border-bottom: 3px solid #4F46E5; padding-bottom: 20px; margin-bottom: 30px;">
+                    <h1 style="color: #4F46E5; margin: 0; font-size: 32px; font-weight: bold;">Z.B & SONS</h1>
+                    <p style="margin: 5px 0 0 0; font-size: 16px; color: #555; font-weight: bold;">Paper Merchants & Importers</p>
+                    <p style="margin: 2px 0; font-size: 12px; color: #888;">Karachi, Pakistan</p>
+                </div>
+                
+                <h2 style="text-align: center; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px;">Sales Invoice</h2>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+                    <div>
+                        <p style="margin: 0; font-size: 14px; color: #777;">Billed To:</p>
+                        <p style="margin: 5px 0 0 0; font-size: 18px; font-weight: bold;">${customer}</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 14px;"><strong>Invoice No:</strong> ${invNum}</p>
+                        <p style="margin: 5px 0 0 0; font-size: 14px;"><strong>Date:</strong> ${date}</p>
+                    </div>
+                </div>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 40px;">
+                    <thead>
+                        <tr style="background-color: #F3F4F6;">
+                            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #ddd; font-weight: bold;">Description of Goods</th>
+                            <th style="padding: 15px; text-align: center; border-bottom: 2px solid #ddd; font-weight: bold;">Quantity</th>
+                            <th style="padding: 15px; text-align: right; border-bottom: 2px solid #ddd; font-weight: bold;">Rate</th>
+                            <th style="padding: 15px; text-align: right; border-bottom: 2px solid #ddd; font-weight: bold;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 15px; border-bottom: 1px solid #ddd; font-size: 14px;">${item}</td>
+                            <td style="padding: 15px; text-align: center; border-bottom: 1px solid #ddd; font-size: 14px;">${qty}</td>
+                            <td style="padding: 15px; text-align: right; border-bottom: 1px solid #ddd; font-size: 14px;">Rs. ${price}</td>
+                            <td style="padding: 15px; text-align: right; border-bottom: 1px solid #ddd; font-size: 14px;"><strong>${total}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div style="text-align: right; margin-bottom: 50px;">
+                    <p style="font-size: 22px; margin: 0;"><strong>Grand Total: <span style="color: #4F46E5;">${total}</span></strong></p>
+                </div>
+                
+                <div style="text-align: center; font-size: 12px; color: #999; border-top: 1px solid #ddd; padding-top: 20px;">
+                    <p style="margin: 0;">Thank you for your business!</p>
+                    <p style="margin: 5px 0 0 0;">This is a computer-generated invoice and requires no physical signature.</p>
+                </div>
+            </div>
+        `;
+
+        // PDF download karne ki settings
+        const opt = {
+            margin:       0,
+            filename:     'ZB-SONS-Invoice-' + invNum + '.pdf',
+            image:        { type: 'jpeg', quality: 1 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        // html2pdf library ko bolna ke raseed banaye
+        html2pdf().set(opt).from(receiptDiv).save();
+    }
 </script>
 
 <!-- FIREBASE CONNECTION (Cloud Database) -->
 <script type="module">
-    // Firebase Libraries Import (Ab getDocs shamil hai Data laane ke liye)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // Aapki Khufiya Chaabi
     const firebaseConfig = {
       apiKey: "AIzaSyD8zRknvdahpcQ1xaEG7PxhVFggwIZDGzE",
       authDomain: "z-b-sons-erp.firebaseapp.com",
@@ -230,13 +331,9 @@
       appId: "1:105882632973:web:0c7571063184fbd9296644"
     };
 
-    // Firebase Start Karein
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // ==========================================
-    // DATA SAVE KARNE KA FUNCTION (LC FORM)
-    // ==========================================
     window.saveLCRecord = async function() {
         const num = document.getElementById('lc-number').value;
         const date = document.getElementById('lc-date').value;
@@ -246,71 +343,29 @@
         if(!num || !supp) { alert("LC Number aur Supplier zaroori hain!"); return; }
 
         try {
-            await addDoc(collection(db, "Imports_LC"), {
-                lc_number: num,
-                date_opened: date,
-                supplier: supp,
-                bank_name: bank,
-                time_saved: new Date()
-            });
+            await addDoc(collection(db, "Imports_LC"), { lc_number: num, date_opened: date, supplier: supp, bank_name: bank, time_saved: new Date() });
             alert("LC Record Cloud par save ho gaya!");
-            
-            // Form khali karna
-            document.getElementById('lc-number').value = "";
-            document.getElementById('lc-date').value = "";
-            document.getElementById('lc-supplier').value = "";
-
-            // Naya data aane ke baad table ko wapas update karo
+            document.getElementById('lc-number').value = ""; document.getElementById('lc-date').value = ""; document.getElementById('lc-supplier').value = "";
             window.loadInventory();
-            
         } catch (e) { console.error(e); alert("Data save nahi hua."); }
     };
 
-    // ==========================================
-    // DATA FETCH (LAANE) KA FUNCTION (INVENTORY)
-    // ==========================================
     window.loadInventory = async function() {
         const tableBody = document.getElementById('inventory-table-body');
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; font-weight: 500;">Cloud se data load ho raha hai...</td></tr>';
         
         try {
-            // Firebase se data mangwao
             const querySnapshot = await getDocs(collection(db, "Imports_LC"));
-            
-            // Agar database khali ho
-            if(querySnapshot.empty) {
-                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6B7280;">Abhi tak koi LC ya Data save nahi hua.</td></tr>';
-                return;
-            }
-
-            // Agar data mojood ho toh purana text hata do
+            if(querySnapshot.empty) { tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6B7280;">Abhi tak koi LC ya Data save nahi hua.</td></tr>'; return; }
             tableBody.innerHTML = ''; 
-
-            // Har ek record (LC) ke liye table mein ek naya row (line) banao
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                const row = `
-                    <tr>
-                        <td style="color: #6B7280; font-size: 0.85rem;">#${doc.id.substring(0,6)}</td>
-                        <td style="font-weight: 600;">${data.lc_number}</td>
-                        <td>${data.supplier}</td>
-                        <td>${data.bank_name}</td>
-                        <td><span class="badge badge-success">Saved</span></td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
+                tableBody.innerHTML += `<tr><td style="color: #6B7280; font-size: 0.85rem;">#${doc.id.substring(0,6)}</td><td style="font-weight: 600;">${data.lc_number}</td><td>${data.supplier}</td><td>${data.bank_name}</td><td><span class="badge badge-success">Saved</span></td></tr>`;
             });
-            
-        } catch(e) {
-            console.error(e);
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error: Data load nahi ho saka.</td></tr>';
-        }
+        } catch(e) { console.error(e); tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error: Data load nahi ho saka.</td></tr>'; }
     };
 
-    // Jab app khule, toh fauran data load ho jaye
-    window.onload = function() {
-        window.loadInventory();
-    };
+    window.onload = function() { window.loadInventory(); };
 </script>
 
 </body>
