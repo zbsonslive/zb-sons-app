@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z.B & SONS ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Variables & Reset */
+        :root {
+            --primary: #4F46E5;
+            --bg-color: #F3F4F6;
+            --sidebar-bg: #111827;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-light: #6B7280;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar Styling */
+        .sidebar { width: 260px; background-color: var(--sidebar-bg); color: white; display: flex; flex-direction: column; z-index: 100; }
+        .logo-area { padding: 25px 20px; font-size: 1.5rem; font-weight: 700; background: linear-gradient(90deg, #4F46E5, #9333EA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-links { list-style: none; padding: 20px 0; flex: 1; }
+        .nav-links li { padding: 15px 25px; cursor: pointer; font-weight: 500; opacity: 0.7; display: flex; align-items: center; gap: 10px; transition: var(--transition); }
+        .nav-links li:hover, .nav-links li.active { opacity: 1; background-color: rgba(255,255,255,0.05); border-left: 4px solid var(--primary); }
+
+        /* Main Content */
+        .main-content { flex: 1; display: flex; flex-direction: column; width: calc(100% - 260px); }
+        .top-header { background-color: var(--card-bg); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .header-title { font-weight: 600; font-size: 1.1rem; }
+        .user-profile { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #4F46E5, #9333EA); color: white; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+
+        /* Content Area & Cards */
+        .content-area { padding: 30px; overflow-y: auto; height: 100%; display: flex; flex-direction: column; }
+        .card { background-color: var(--card-bg); padding: 30px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .page-title { font-size: 1.4rem; font-weight: 600; }
+        
+        /* Summary Grid for Ledgers */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .summary-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
+        .summary-title { font-size: 0.85rem; color: var(--text-light); text-transform: uppercase; font-weight: 600; margin-bottom: 5px; }
+        .summary-value { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+        
+        /* Form Styling */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+        .form-control { padding: 12px 15px; border: 1px solid #E5E7EB; border-radius: 8px; outline: none; transition: var(--transition); font-family: 'Poppins', sans-serif; font-size: 0.95rem; background-color: #F9FAFB; }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); background-color: #FFFFFF; }
+        .form-section-title { grid-column: span 2; font-size: 1.1rem; color: var(--primary); margin-top: 15px; border-bottom: 2px dashed #E5E7EB; padding-bottom: 10px; }
+        select.form-control { cursor: pointer; }
+        .btn-animated { background: linear-gradient(135deg, var(--primary), #9333EA); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3); }
+        .btn-success { background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3); }
+        
+        /* Table Styling */
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid #E5E7EB; }
+        th { background-color: #F9FAFB; color: var(--text-light); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
+        
+        /* Badges & Colors */
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
+        .badge-success { background-color: #DEF7EC; color: #03543F; }
+        .badge-info { background-color: #DBEAFE; color: #1E40AF; }
+        .badge-purple { background-color: #F3E8FF; color: #6B21A8; }
+        .text-red { color: #DC2626; font-weight: 600; }
+        .text-green { color: #059669; font-weight: 600; }
+        .action-link { color: var(--primary); text-decoration: none; font-weight: 600; }
+        
+        /* Footer & Hide Pages */
+        .footer-credit { text-align: center; padding: 20px; font-size: 0.85rem; color: var(--text-light); margin-top: auto; }
+        .footer-credit span { color: var(--primary); font-weight: 600; }
+        .page-view { display: none; }
+        .page-view.active-page { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="logo-area">Z.B & SONS</div>
+    <ul class="nav-links">
+        <li onclick="switchPage('inventory-page', this)" class="active">📦 Live Inventory</li>
+        <li onclick="switchPage('lc-page', this)">🚢 Imports & LC</li>
+        <li onclick="switchPage('sales-page', this)">🧾 Sales Invoice</li>
+        <li onclick="switchPage('ledger-page', this)">👥 Party Ledgers</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div class="top-header">
+        <div class="header-title">Supply Chain Management</div>
+        <div class="user-profile">
+            <span style="color: #6B7280; font-size: 0.9rem;">Admin Panel</span>
+            <div class="user-avatar">A</div>
+        </div>
+    </div>
+
+    <div class="content-area">
+        
+        <!-- PAGE 1: INVENTORY (DASHBOARD) -->
+        <div id="inventory-page" class="page-view active-page">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="page-title">Warehouse Inventory</h2>
+                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Real-time stock from LC arrivals and sales.</p>
+                    </div>
+                    <button class="btn-animated">+ Add New Stock</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Paper Spec</th>
+                                <th>Available Qty</th>
+                                <th>Cost Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#ITM-001</td>
+                                <td>Offset - 70 GSM, 23x36</td>
+                                <td>500 Reams</td>
+                                <td>Rs. 2,500/Ream</td>
+                                <td><span class="badge badge-success">In Stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>#ITM-002</td>
+                                <td>Kraft - 150 GSM, 40"</td>
+                                <td>25 Tons</td>
+                                <td>Rs. 150,000/Ton</td>
+                                <td><span class="badge badge-success">In Stock</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE 2: LC OPENING FORM -->
+        <div id="lc-page" class="page-view">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="page-title">Open New LC / Import Entry</h2>
+                    </div>
+                </div>
+                <form action="#">
+                    <div class="form-grid">
+                        <div class="form-section-title">Letter of Credit (LC) Details</div>
+                        <div class="form-group"><label class="form-label">LC Number</label><input type="text" class="form-control" placeholder="LC-2026-089"></div>
+                        <div class="form-group"><label class="form-label">Date</label><input type="date" class="form-control"></div>
+                        <div class="form-group"><label class="form-label">Supplier</label><input type="text" class="form-control" placeholder="Enter supplier"></div>
+                        <div class="form-group">
+                            <label class="form-label">Bank Name</label>
+                            <select class="form-control">
+                                <option>Meezan Bank</option>
+                                <option>HBL</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div style="margin-top: 30px; text-align: right;">
+                        <button type="button" class="btn-animated" style="width: 200px;">Save LC Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PAGE 3: SALES INVOICE FORM -->
+        <div id="sales-page" class="page-view">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="page-title">Create Sales Invoice</h2>
+                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Generate invoice to auto-deduct stock and update party ledger.</p>
+                    </div>
+                </div>
+                <form action="#">
+                    <div class="form-grid">
+                        <div class="form-section-title">Customer & Invoice Details</div>
+                        <div class="form-group"><label class="form-label">Invoice Number</label><input type="text" class="form-control" value="INV-2026-101" readonly style="background-color: #E5E7EB; font-weight: 600;"></div>
+                        <div class="form-group"><label class="form-label">Date of Sale</label><input type="date" class="form-control"></div>
+                        <div class="form-group">
+                            <label class="form-label">Select Customer</label>
+                            <select class="form-control">
+                                <option>ABC Printers</option>
+                                <option>XYZ Packaging</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Status</label>
+                            <select class="form-control">
+                                <option>Credit (Udhaar) - Add to Ledger</option>
+                                <option>Cash Received</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div style="margin-top: 30px; display: flex; justify-content: flex-end; gap: 15px;">
+                        <button type="button" class="btn-animated" style="background: #6B7280; box-shadow: none;">Print PDF</button>
+                        <button type="submit" class="btn-animated btn-success">Confirm Sale</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PAGE 4: PARTY LEDGERS (NEW) -->
+        <div id="ledger-page" class="page-view">
+            
+            <!-- Summary Grid -->
+            <div class="summary-grid">
+                <div class="summary-box" style="border-left-color: #059669;">
+                    <div class="summary-title">Total Receivables (Lene Hain)</div>
+                    <div class="summary-value text-green">Rs. 4,500,000</div>
+                </div>
+                <div class="summary-box" style="border-left-color: #DC2626;">
+                    <div class="summary-title">Total Payables (Dene Hain)</div>
+                    <div class="summary-value text-red">Rs. 1,200,000</div>
+                </div>
+                <div class="summary-box" style="border-left-color: #6B21A8;">
+                    <div class="summary-title">Investor Capital Pool</div>
+                    <div class="summary-value" style="color: #6B21A8;">Rs. 15,000,000</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2 class="page-title">Parties & Investor Accounts</h2>
+                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Manage customers, suppliers, banks, and investor shares.</p>
+                    </div>
+                    <button class="btn-animated">+ Add New Party</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Party Name</th>
+                                <th>Category</th>
+                                <th>Total Billed / Invested</th>
+                                <th>Total Received / Paid</th>
+                                <th>Current Balance</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600;">ABC Printers</td>
+                                <td><span class="badge badge-info">Customer</span></td>
+                                <td>Rs. 5,000,000</td>
+                                <td>Rs. 2,000,000</td>
+                                <td><span class="text-green">Rs. 3,000,000 (Dr)</span></td>
+                                <td><a href="#" class="action-link">View Ledger</a></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600;">Global Paper Mills</td>
+                                <td><span class="badge badge-success">Supplier</span></td>
+                                <td>Rs. 8,000,000</td>
+                                <td>Rs. 7,500,000</td>
+                                <td><span class="text-red">Rs. 500,000 (Cr)</span></td>
+                                <td><a href="#" class="action-link">Add Payment</a></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600;">Mr. Ahmed (Investor)</td>
+                                <td><span class="badge badge-purple">Investor</span></td>
+                                <td>Rs. 10,000,000</td>
+                                <td>Rs. 1,500,000 (Profit)</td>
+                                <td style="font-weight: 600;">Rs. 10,000,000 (Cap)</td>
+                                <td><a href="#" class="action-link">Profit Sheet</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Developer Credit -->
+        <div class="footer-credit">
+            Designed & Developed by <span>Mendha's Resources</span> | &copy; 2026 - 2027
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT: Pages ko change karne ka logic -->
+<script>
+    function switchPage(pageId, clickedMenu) {
+        document.querySelectorAll('.page-view').forEach(page => {
+            page.classList.remove('active-page');
+        });
+        document.querySelectorAll('.nav-links li').forEach(menu => {
+            menu.classList.remove('active');
+        });
+        document.getElementById(pageId).classList.add('active-page');
+        clickedMenu.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
