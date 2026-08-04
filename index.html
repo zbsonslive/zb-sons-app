@@ -77,51 +77,81 @@
         .page-view.active-page { display: block; animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Mobile Responsiveness Fix - Naya aur Behtar Design */
-        @media (max-width: 768px) {
-            body { flex-direction: column; overflow-y: auto; }
-            .sidebar { width: 100%; height: auto; flex-direction: column; padding: 10px 0; }
-            .logo-area { padding: 5px 10px; border: none; font-size: 1.2rem; width: 100%; text-align: center; }
-            
-            /* Mobile Tabs (Swipe-able Buttons) */
+        /* ========================================= */
+        /* BULLETPROOF MOBILE RESPONSIVENESS FIX     */
+        /* ========================================= */
+        @media screen and (max-width: 768px) {
+            body { 
+                flex-direction: column; 
+                overflow-y: auto; 
+                height: auto; 
+            }
+            .sidebar { 
+                width: 100%; 
+                height: auto; 
+                padding: 10px; 
+                z-index: 10; 
+                position: relative;
+            }
+            .logo-area { 
+                text-align: center; 
+                border-bottom: none; 
+                padding-bottom: 10px; 
+            }
             .nav-links { 
                 display: flex; 
                 flex-direction: row; 
-                width: 100%; 
                 overflow-x: auto; 
-                padding: 5px 10px; 
-                justify-content: flex-start;
-                gap: 8px;
-                -ms-overflow-style: none; 
-                scrollbar-width: none; 
+                padding: 5px; 
+                gap: 10px; 
+                -webkit-overflow-scrolling: touch; 
+                scrollbar-width: none; /* Firefox */
             }
-            .nav-links::-webkit-scrollbar { display: none; }
-            
-            /* Tabs ka Size Chota Kiya Gaya Hai */
+            .nav-links::-webkit-scrollbar { 
+                display: none; /* Chrome/Safari */
+            }
             .nav-links li { 
-                padding: 8px 12px; 
-                font-size: 0.75rem; 
-                white-space: nowrap; 
-                border-left: none; 
-                background-color: rgba(255,255,255,0.1); 
+                font-size: 0.85rem; 
+                padding: 10px 15px; 
                 border-radius: 8px; 
+                border-left: none; 
+                background: rgba(255,255,255,0.1); 
+                white-space: nowrap; 
             }
             .nav-links li.active { 
-                background-color: var(--primary); 
-                color: white;
-                transform: none; 
+                background: var(--primary); 
             }
-
-            .main-content { width: 100%; }
-            .top-header { flex-direction: column; gap: 10px; text-align: center; }
-            .content-area { padding: 15px; }
-            .card { padding: 20px; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-section-title { grid-column: span 1; }
-            .summary-grid { grid-template-columns: 1fr; }
-            .card-header { flex-direction: column; text-align: center; }
-            .btn-animated { width: 100%; margin-top: 10px; }
-            table { min-width: 600px; }
+            .main-content { 
+                width: 100%; 
+            }
+            .top-header { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 10px; 
+            }
+            .content-area { 
+                padding: 15px; 
+            }
+            .card { 
+                padding: 20px; 
+            }
+            .form-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .form-section-title { 
+                grid-column: span 1; 
+            }
+            .summary-grid { 
+                grid-template-columns: 1fr; 
+            }
+            .card-header { 
+                flex-direction: column; 
+                text-align: center; 
+                gap: 15px; 
+            }
+            .btn-animated { 
+                width: 100%; 
+            }
         }
     </style>
 </head>
@@ -148,7 +178,7 @@
 
     <div class="content-area">
         
-        <!-- PAGE 1: INVENTORY (DASHBOARD) -->
+        <!-- PAGE 1: INVENTORY -->
         <div id="inventory-page" class="page-view active-page">
             <div class="card">
                 <div class="card-header">
@@ -256,10 +286,8 @@
             </div>
         </div>
 
-        <!-- PAGE 4: PARTY LEDGERS (NEW) -->
+        <!-- PAGE 4: PARTY LEDGERS -->
         <div id="ledger-page" class="page-view">
-            
-            <!-- Summary Grid -->
             <div class="summary-grid">
                 <div class="summary-box" style="border-left-color: #059669;">
                     <div class="summary-title">Total Receivables (Lene Hain)</div>
@@ -279,9 +307,7 @@
                 <div class="card-header">
                     <div>
                         <h2 class="page-title">Parties & Investor Accounts</h2>
-                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Manage customers, suppliers, banks, and investor shares.</p>
                     </div>
-                    <button class="btn-animated">+ Add New Party</button>
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
@@ -292,7 +318,6 @@
                                 <th>Total Billed / Invested</th>
                                 <th>Total Received / Paid</th>
                                 <th>Current Balance</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -302,23 +327,6 @@
                                 <td>Rs. 5,000,000</td>
                                 <td>Rs. 2,000,000</td>
                                 <td><span class="text-green">Rs. 3,000,000 (Dr)</span></td>
-                                <td><a href="#" class="action-link">View Ledger</a></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Global Paper Mills</td>
-                                <td><span class="badge badge-success">Supplier</span></td>
-                                <td>Rs. 8,000,000</td>
-                                <td>Rs. 7,500,000</td>
-                                <td><span class="text-red">Rs. 500,000 (Cr)</span></td>
-                                <td><a href="#" class="action-link">Add Payment</a></td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 600;">Mr. Ahmed (Investor)</td>
-                                <td><span class="badge badge-purple">Investor</span></td>
-                                <td>Rs. 10,000,000</td>
-                                <td>Rs. 1,500,000 (Profit)</td>
-                                <td style="font-weight: 600;">Rs. 10,000,000 (Cap)</td>
-                                <td><a href="#" class="action-link">Profit Sheet</a></td>
                             </tr>
                         </tbody>
                     </table>
@@ -326,14 +334,12 @@
             </div>
         </div>
 
-        <!-- Developer Credit -->
         <div class="footer-credit">
-            Designed & Developed by <span>Mendha's Resources</span> | &copy; 2026 - 2027
+            Designed & Developed by <span>Aapka Naam Ya Company</span> | &copy; 2026
         </div>
     </div>
 </div>
 
-<!-- JAVASCRIPT: Pages ko change karne ka logic -->
 <script>
     function switchPage(pageId, clickedMenu) {
         document.querySelectorAll('.page-view').forEach(page => {
