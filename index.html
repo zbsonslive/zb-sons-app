@@ -91,37 +91,37 @@
         <div class="header-title">Supply Chain Management</div>
         <div class="user-profile">
             <span style="color: #6B7280; font-size: 0.9rem;">Admin Panel</span>
-            <div class="user-avatar">A</div>
+            <div class="user-avatar">Z</div>
         </div>
     </div>
 
     <div class="content-area">
         
-        <!-- PAGE 1: INVENTORY -->
+        <!-- PAGE 1: INVENTORY (LIVE DATABASE CONNECTION) -->
         <div id="inventory-page" class="page-view active-page">
             <div class="card">
                 <div class="card-header">
                     <div>
-                        <h2 class="page-title">Warehouse Inventory</h2>
+                        <h2 class="page-title">Warehouse / LC Arrivals</h2>
+                        <p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Real-time stock incoming from Firebase Database.</p>
                     </div>
-                    <button class="btn-animated">+ Add New Stock</button>
+                    <button class="btn-animated" onclick="loadInventory()">🔄 Refresh Live Data</button>
                 </div>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
                             <tr>
-                                <th>Item ID</th>
-                                <th>Paper Spec</th>
-                                <th>Available Qty</th>
+                                <th>Record ID</th>
+                                <th>LC Number</th>
+                                <th>Supplier Name</th>
+                                <th>Bank</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <!-- Yahan ab nakli data nahi, balke Firebase ka data aayega -->
+                        <tbody id="inventory-table-body">
                             <tr>
-                                <td>#ITM-001</td>
-                                <td>Offset - 70 GSM, 23x36</td>
-                                <td>500 Reams</td>
-                                <td><span class="badge badge-success">In Stock</span></td>
+                                <td colspan="5" style="text-align: center; font-weight: 500;">Cloud se data load ho raha hai...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -140,8 +140,6 @@
                 <form action="#">
                     <div class="form-grid">
                         <div class="form-section-title">Letter of Credit (LC) Details</div>
-                        
-                        <!-- Inputs mein ID lagai gayi hain Firebase ke liye -->
                         <div class="form-group"><label class="form-label">LC Number</label><input type="text" id="lc-number" class="form-control" placeholder="LC-2026-089"></div>
                         <div class="form-group"><label class="form-label">Date</label><input type="date" id="lc-date" class="form-control"></div>
                         <div class="form-group"><label class="form-label">Supplier Name</label><input type="text" id="lc-supplier" class="form-control" placeholder="Enter supplier"></div>
@@ -155,7 +153,6 @@
                         </div>
                     </div> 
                     <div style="margin-top: 30px; text-align: right;">
-                        <!-- Save Button par onclick event lagaya gaya hai -->
                         <button type="button" class="btn-animated" style="width: 200px;" onclick="saveLCRecord()">Save LC Record</button>
                     </div>
                 </form>
@@ -188,9 +185,9 @@
             </div>
         </div>
 
-        <!-- PAGE 4: PARTY LEDGERS (Skipped details for brevity) -->
+        <!-- PAGE 4: PARTY LEDGERS -->
         <div id="ledger-page" class="page-view">
-            <div class="card"><h2 class="page-title">Parties & Investor Accounts</h2></div>
+            <div class="card"><h2 class="page-title">Parties & Investor Accounts</h2><p style="color: #6B7280; font-size: 0.9rem; margin-top: 5px;">Yeh section database connection ke baad tayyar kiya jayega.</p></div>
         </div>
 
     </div>
@@ -219,9 +216,9 @@
 
 <!-- FIREBASE CONNECTION (Cloud Database) -->
 <script type="module">
-    // Firebase Libraries Import
+    // Firebase Libraries Import (Ab getDocs shamil hai Data laane ke liye)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // Aapki Khufiya Chaabi
     const firebaseConfig = {
@@ -237,42 +234,82 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Save Data Karne Ka Function
+    // ==========================================
+    // DATA SAVE KARNE KA FUNCTION (LC FORM)
+    // ==========================================
     window.saveLCRecord = async function() {
-        // Form se data uthana
         const num = document.getElementById('lc-number').value;
         const date = document.getElementById('lc-date').value;
         const supp = document.getElementById('lc-supplier').value;
         const bank = document.getElementById('lc-bank').value;
 
-        // Validation (Khali form na bheje)
-        if(!num || !supp) {
-            alert("Bhai, kam az kam LC Number aur Supplier ka naam zaroor likhein!");
-            return;
-        }
+        if(!num || !supp) { alert("LC Number aur Supplier zaroori hain!"); return; }
 
         try {
-            // Firestore mein "Imports" naam ka folder banayega aur data save karega
-            const docRef = await addDoc(collection(db, "Imports_LC"), {
+            await addDoc(collection(db, "Imports_LC"), {
                 lc_number: num,
                 date_opened: date,
                 supplier: supp,
                 bank_name: bank,
                 time_saved: new Date()
             });
+            alert("LC Record Cloud par save ho gaya!");
             
-            // Jab data save ho jaye
-            alert("Zabardast! Aapka LC Record hamesha ke liye Cloud par save ho gaya hai. (ID: " + docRef.id + ")");
-            
-            // Form ko wapas khali kar de
+            // Form khali karna
             document.getElementById('lc-number').value = "";
             document.getElementById('lc-date').value = "";
             document.getElementById('lc-supplier').value = "";
+
+            // Naya data aane ke baad table ko wapas update karo
+            window.loadInventory();
             
-        } catch (e) {
-            console.error("Error adding document: ", e);
-            alert("Data save nahi hua, error aa gaya. Apna internet check karein.");
+        } catch (e) { console.error(e); alert("Data save nahi hua."); }
+    };
+
+    // ==========================================
+    // DATA FETCH (LAANE) KA FUNCTION (INVENTORY)
+    // ==========================================
+    window.loadInventory = async function() {
+        const tableBody = document.getElementById('inventory-table-body');
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; font-weight: 500;">Cloud se data load ho raha hai...</td></tr>';
+        
+        try {
+            // Firebase se data mangwao
+            const querySnapshot = await getDocs(collection(db, "Imports_LC"));
+            
+            // Agar database khali ho
+            if(querySnapshot.empty) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6B7280;">Abhi tak koi LC ya Data save nahi hua.</td></tr>';
+                return;
+            }
+
+            // Agar data mojood ho toh purana text hata do
+            tableBody.innerHTML = ''; 
+
+            // Har ek record (LC) ke liye table mein ek naya row (line) banao
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const row = `
+                    <tr>
+                        <td style="color: #6B7280; font-size: 0.85rem;">#${doc.id.substring(0,6)}</td>
+                        <td style="font-weight: 600;">${data.lc_number}</td>
+                        <td>${data.supplier}</td>
+                        <td>${data.bank_name}</td>
+                        <td><span class="badge badge-success">Saved</span></td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+            
+        } catch(e) {
+            console.error(e);
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error: Data load nahi ho saka.</td></tr>';
         }
+    };
+
+    // Jab app khule, toh fauran data load ho jaye
+    window.onload = function() {
+        window.loadInventory();
     };
 </script>
 
