@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2  (Powered By: XaviTech)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
+
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
 </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -627,7 +629,37 @@
         </div>
       </div>
       <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-        <table class="w-full text-left border-collapse text-sm">
+        
+      <section class="bg-white border rounded-2xl overflow-hidden mb-6">
+        <div class="p-4 border-b flex items-center justify-between">
+          <div>
+            <h3 class="font-extrabold text-slate-900">All Investors</h3>
+            <p class="text-xs text-slate-400">Registered investors, opening balance and current position</p>
+          </div>
+          <button onclick="openInvestorModal()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-bold">+ Add Investor</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-slate-50">
+              <tr>
+                <th class="p-3 text-left">Investor Name</th>
+                <th class="p-3 text-right">Opening Balance</th>
+                <th class="p-3 text-right">Cargo Investment</th>
+                <th class="p-3 text-right">Current Balance</th>
+                <th class="p-3 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="investorMasterListBody">
+              <tr><td colspan="5" class="p-8 text-center text-slate-400">Loading investors...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <div class="mb-3">
+        <h3 class="font-extrabold text-slate-900">Cargo Profit Distribution</h3>
+        <p class="text-xs text-slate-400">Investors currently tagged to cargo / LC</p>
+      </div>
+<table class="w-full text-left border-collapse text-sm">
           <thead>
             <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500 bg-slate-50">
               <th class="py-3 px-4">Cargo Ref</th>
@@ -1548,7 +1580,7 @@
       if (view === 'home') refreshDashboardMetrics();
       if(document.getElementById('view-outstanding')&&!document.getElementById('view-outstanding').classList.contains('hidden')) loadOutstandingManagement();
       if (view === 'masters') loadMasterData();
-      if (view === 'investors') fetchInvestorsAndInvestments();
+      if (view === 'investors') { loadAllInvestorsPanel(); fetchInvestorsAndInvestments(); }
       if (view === 'banks') fetchBanks();
       if (view === 'investors') fetchInvestorsAndInvestments();
       if (view === 'purchases') fetchLocalPurchases();
@@ -2065,6 +2097,7 @@
         if(error)throw error;
         showToast(`${name} saved${opening>0?' with opening balance':''}.`);
         closeModalById('investorModal'); e.target.reset(); document.getElementById('invOpeningBalance').value='0';
+        await loadAllInvestorsPanel();
         await fetchInvestorsAndInvestments();
         if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden')) await loadMasterData();
         refreshDashboardMetrics();
@@ -2090,6 +2123,66 @@
       }]);
       document.getElementById('tagInvestmentModal').classList.add('hidden');
       await fetchInvestorsAndInvestments();
+    }
+
+
+    async function loadAllInvestorsPanel(){
+      const body=document.getElementById('investorMasterListBody'); if(!body)return;
+      try{
+        const [{data:investors,error:ie},{data:ci,error:ce},{data:po,error:pe}]=await Promise.all([
+          db.from('investors').select('*').order('name',{ascending:true}),
+          db.from('cargo_investments').select('investor_id,amount'),
+          db.from('investor_payouts').select('investor_id,amount')
+        ]);
+        if(ie)throw ie;
+        const invested={}, paid={};
+        (ci||[]).forEach(x=>invested[x.investor_id]=(invested[x.investor_id]||0)+Number(x.amount||0));
+        (po||[]).forEach(x=>paid[x.investor_id]=(paid[x.investor_id]||0)+Number(x.amount||0));
+        body.innerHTML=(investors||[]).map(i=>{
+          const opening=Number(i.opening_balance||0), capital=Number(invested[i.id]||0), payouts=Number(paid[i.id]||0);
+          const current=opening+capital-payouts;
+          const safeName=escapeHtml(i.name||'').replace(/'/g,"&#39;");
+          return `<tr class="border-t">
+            <td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td>
+            <td class="p-3 text-right font-mono">${money(opening)}</td>
+            <td class="p-3 text-right font-mono">${money(capital)}</td>
+            <td class="p-3 text-right font-bold font-mono">${money(current)}</td>
+            <td class="p-3 text-right whitespace-nowrap">
+              <button onclick="setInvestorOpening('${i.id}','${safeName}',${opening})" class="text-violet-600 font-bold text-xs mr-3">Opening</button>
+              <button onclick="openInvestorEdit('${i.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button>
+              <button onclick="deleteInvestorSafe('${i.id}','${safeName}')" class="text-red-600 font-bold text-xs">Delete</button>
+            </td>
+          </tr>`;
+        }).join('')||'<tr><td colspan="5" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="5" class="p-6 text-center text-red-500">${escapeHtml(err.message||'Could not load investors.')}</td></tr>`;}
+    }
+
+    async function openInvestorEdit(id){
+      const {data,error}=await db.from('investors').select('*').eq('id',id).single();
+      if(error){showToast(error.message,'error');return;}
+      document.getElementById('editInvestorId').value=data.id;
+      document.getElementById('editInvestorName').value=data.name||'';
+      document.getElementById('editInvestorPhone').value=data.phone||'';
+      const m=document.getElementById('investorEditModal'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+    function closeInvestorEditModal(){const m=document.getElementById('investorEditModal');m.classList.add('hidden');m.classList.remove('flex');}
+    async function saveInvestorEdit(e){
+      e.preventDefault();
+      const id=document.getElementById('editInvestorId').value, name=document.getElementById('editInvestorName').value.trim(), phone=document.getElementById('editInvestorPhone').value.trim();
+      const {error}=await db.rpc('edit_investor_v1333',{p_investor_id:id,p_name:name,p_phone:phone||null});
+      if(error){showToast(error.message,'error');return;}
+      closeInvestorEditModal(); showToast('Investor updated.');
+      await loadAllInvestorsPanel(); await fetchInvestorsAndInvestments();
+      if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden'))await loadMasterData();
+    }
+    async function deleteInvestorSafe(id,name){
+      if(!confirm(`Delete investor "${name}"?\n\nOnly an unused investor can be permanently deleted.`))return;
+      const {error}=await db.rpc('delete_investor_safe_v1333',{p_investor_id:id});
+      if(error){showToast(error.message,'error');return;}
+      showToast('Investor deleted.');
+      await loadAllInvestorsPanel(); await fetchInvestorsAndInvestments();
+      if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden'))await loadMasterData();
+      refreshDashboardMetrics();
     }
 
     async function fetchInvestorsAndInvestments() {
@@ -2304,7 +2397,27 @@
           <tbody><tr><td>1</td><td><b>${escapeHtml(itemName)}</b><div class="muted">${escapeHtml(item.category||'')}</div></td><td class="num">${qty?qty.toLocaleString():'—'} ${escapeHtml(uom)}</td><td class="num">${money(rate)}</td><td class="num">${money(amount)}</td></tr></tbody></table>
           <div class="summary"><div class="grand"><span>Total Purchase</span><span>${money(amount)}</span></div><div><span>Paid</span><b>${money(0)}</b></div><div><span>Supplier Payable</span><b>${money(amount)}</b></div></div>
           <div class="footer"><b>ZB & SONS</b><br>Computer-generated purchase record · A Project by: XaviTech</div>
-        </div></body></html>`);
+        </div>
+  <div id="investorEditModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[100] p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+      <div class="p-5 border-b flex items-center justify-between">
+        <div><h3 class="text-xl font-black">Edit Investor</h3><p class="text-xs text-slate-400 mt-1">Update investor master details.</p></div>
+        <button type="button" onclick="closeInvestorEditModal()" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+      </div>
+      <form onsubmit="saveInvestorEdit(event)" class="p-5 space-y-4">
+        <input type="hidden" id="editInvestorId">
+        <div><label class="block text-xs font-bold text-slate-600 mb-1">Investor Name *</label><input id="editInvestorName" required class="w-full border rounded-lg p-2.5"></div>
+        <div><label class="block text-xs font-bold text-slate-600 mb-1">Phone</label><input id="editInvestorPhone" class="w-full border rounded-lg p-2.5"></div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">Opening Balance is managed separately through <b>Set Opening</b> so the General Ledger stays synchronized.</div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeInvestorEditModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body></html>`);
         w.document.close();w.focus();
       }catch(err){showToast(err.message||'Purchase bill could not be prepared for printing.','error');}
     }
@@ -2335,7 +2448,8 @@
         }
         modal.addEventListener('mousedown',e=>{ if(e.target===modal) closeModalById(modal.id); });
       });
-      document.addEventListener('keydown',e=>{
+      document.getElementById('investorEditModal')?.addEventListener('click',e=>{if(e.target.id==='investorEditModal')closeInvestorEditModal();});
+    document.addEventListener('keydown',e=>{
         if(e.key!=='Escape')return;
         const open=[...document.querySelectorAll('body > div.fixed.inset-0[id]')].filter(m=>!m.classList.contains('hidden'));
         if(open.length) closeModalById(open[open.length-1].id);
