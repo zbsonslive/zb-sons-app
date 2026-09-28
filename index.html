@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (XaviTech)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -570,8 +570,8 @@
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
-          <div class="p-4 border-b"><h3 class="font-extrabold">Warehouse Master</h3><p class="text-xs text-slate-400">Available stock locations</p></div>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Warehouse</th><th class="p-3 text-left">Code / Location</th></tr></thead><tbody id="masterWarehouseBody"></tbody></table></div>
+          <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Warehouse Master</h3><p class="text-xs text-slate-400">Available stock locations</p></div><button onclick="openWarehouseModal()" class="px-3 py-2 rounded-lg bg-orange-600 text-white text-xs font-bold">+ Add Warehouse</button></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Warehouse</th><th class="p-3 text-left">Code / Location</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterWarehouseBody"></tbody></table></div>
         </section>
       </div>
     </div>
@@ -2467,6 +2467,15 @@
       if(error){showToast(error.message,'error');return;} showToast('Inventory opening updated.'); await fetchProducts(); await loadMasterData(); refreshDashboardMetrics();
     }
 
+
+    function openWarehouseModal(){document.getElementById('warehouseEditId').value='';document.getElementById('warehouseModalTitle').textContent='Add Warehouse';['warehouseName','warehouseCode','warehouseLocation','warehouseNotes'].forEach(x=>document.getElementById(x).value='');document.getElementById('warehouseActive').checked=true;const m=document.getElementById('warehouseModal');m.classList.remove('hidden');m.classList.add('flex');}
+    function closeWarehouseModal(){const m=document.getElementById('warehouseModal');if(m){m.classList.add('hidden');m.classList.remove('flex');}}
+    async function openWarehouseEdit(id){const {data,error}=await db.from('warehouses').select('*').eq('id',id).single();if(error){showToast(error.message,'error');return;}document.getElementById('warehouseEditId').value=id;document.getElementById('warehouseModalTitle').textContent='Edit Warehouse';document.getElementById('warehouseName').value=data.warehouse_name||'';document.getElementById('warehouseCode').value=data.warehouse_code||'';document.getElementById('warehouseLocation').value=data.location||data.address||'';document.getElementById('warehouseNotes').value=data.notes||'';document.getElementById('warehouseActive').checked=data.is_active!==false;const m=document.getElementById('warehouseModal');m.classList.remove('hidden');m.classList.add('flex');}
+    async function saveWarehouse(e){e.preventDefault();const id=document.getElementById('warehouseEditId').value||null;const {error}=await db.rpc('save_warehouse_v1335',{p_warehouse_id:id,p_name:document.getElementById('warehouseName').value.trim(),p_code:document.getElementById('warehouseCode').value.trim()||null,p_location:document.getElementById('warehouseLocation').value.trim()||null,p_notes:document.getElementById('warehouseNotes').value.trim()||null,p_is_active:document.getElementById('warehouseActive').checked});if(error){showToast(error.message,'error');return;}closeWarehouseModal();showToast(id?'Warehouse updated.':'Warehouse added.');await loadMasterData();}
+    async function deleteWarehouseSafe(id,name){if(!confirm(`Delete warehouse "${name}"?\n\nOnly an unused warehouse can be permanently deleted.`))return;const {error}=await db.rpc('delete_warehouse_safe_v1335',{p_warehouse_id:id});if(error){showToast(error.message,'error');return;}showToast('Warehouse deleted.');await loadMasterData();}
+    document.addEventListener('click',e=>{if(e.target?.id==='warehouseModal')closeWarehouseModal();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWarehouseModal();});
+
     async function loadMasterData(){
       try{
         const [{data:parties,error:pe},{data:banks,error:be},{data:items,error:ie},{data:warehouses,error:we},{data:investors,error:ive}] = await Promise.all([
@@ -2497,7 +2506,7 @@
           (po||[]).forEach(x=>invCurrent[x.investor_id]=(invCurrent[x.investor_id]||0)-Number(x.amount||0));
         }catch(_e){(investors||[]).forEach(i=>invCurrent[i.id]=Number(i.opening_balance||0));}
         document.getElementById('masterInvestorBody').innerHTML=(investors||[]).map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3 text-right font-mono">${money(i.opening_balance||0)}</td><td class="p-3 text-right font-bold font-mono">${money(invCurrent[i.id]||0)}</td><td class="p-3 text-right"><button onclick="setInvestorOpening('${i.id}','${escapeHtml(i.name||'').replace(/'/g,"&#39;")}',${Number(i.opening_balance||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
-        document.getElementById('masterWarehouseBody').innerHTML=(warehouses||[]).map(w=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(w.warehouse_name||'')}</td><td class="p-3 text-slate-500">${escapeHtml(w.warehouse_code||w.location||w.address||'—')}</td></tr>`).join('')||'<tr><td colspan="2" class="p-8 text-center text-slate-400">No warehouses added.</td></tr>';
+        document.getElementById('masterWarehouseBody').innerHTML=(warehouses||[]).map(w=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(w.warehouse_name||'')}</td><td class="p-3 text-slate-500">${escapeHtml(w.warehouse_code||w.location||w.address||'—')}</td><td class="p-3 text-right whitespace-nowrap"><button onclick="openWarehouseEdit('${w.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteWarehouseSafe('${w.id}','${escapeHtml(w.warehouse_name||'').replace(/'/g,"&#39;")}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No warehouses added.</td></tr>';
       }catch(err){showToast(err.message||'Master data could not be loaded.','error');}
     }
     async function editMasterParty(id){
@@ -4052,5 +4061,6 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
     </div>
   </div>
 
+<div id="warehouseModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[110] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"><div class="p-5 border-b flex items-center justify-between"><div><h3 id="warehouseModalTitle" class="text-xl font-black">Add Warehouse</h3><p class="text-xs text-slate-400 mt-1">Create or update a stock location.</p></div><button type="button" onclick="closeWarehouseModal()" class="text-slate-400 text-2xl">&times;</button></div><form onsubmit="saveWarehouse(event)" class="p-5 space-y-4"><input type="hidden" id="warehouseEditId"><div><label class="block text-xs font-bold mb-1">Warehouse Name *</label><input id="warehouseName" required class="w-full border rounded-lg p-2.5" placeholder="Main Godown"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Warehouse Code</label><input id="warehouseCode" class="w-full border rounded-lg p-2.5" placeholder="WH-01"></div><div><label class="block text-xs font-bold mb-1">Location</label><input id="warehouseLocation" class="w-full border rounded-lg p-2.5" placeholder="Karachi"></div></div><div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="warehouseNotes" rows="3" class="w-full border rounded-lg p-2.5"></textarea></div><label class="flex items-center gap-2 text-sm font-semibold"><input id="warehouseActive" type="checkbox" checked> Active Warehouse</label><div class="flex justify-end gap-2"><button type="button" onclick="closeWarehouseModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Warehouse</button></div></form></div></div>
 </body>
 </html>
