@@ -538,10 +538,11 @@
         <button onclick="loadMasterData()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh Masters</button>
       </div>
 
-      <div class="grid md:grid-cols-4 gap-4 mb-6">
+      <div class="grid md:grid-cols-5 gap-4 mb-6">
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">PARTIES</div><div id="masterPartyCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">BANK ACCOUNTS</div><div id="masterBankCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">ITEMS</div><div id="masterItemCount" class="text-2xl font-black mt-1">0</div></div>
+        <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">INVESTORS</div><div id="masterInvestorCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">WAREHOUSES</div><div id="masterWarehouseCount" class="text-2xl font-black mt-1">0</div></div>
       </div>
 
@@ -559,6 +560,11 @@
         <section class="bg-white border rounded-2xl overflow-hidden">
           <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Item Master</h3><p class="text-xs text-slate-400">Inventory items and current stock</p></div><button onclick="openSimpleItemModal()" class="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold">+ Add Item</button></div>
           <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Item</th><th class="p-3 text-left">Unit</th><th class="p-3 text-right">Stock</th></tr></thead><tbody id="masterItemBody"></tbody></table></div>
+        </section>
+
+        <section class="bg-white border rounded-2xl overflow-hidden">
+          <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Investor Master</h3><p class="text-xs text-slate-400">Investors, opening and current position</p></div><button onclick="openInvestorModal()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-bold">+ Add Investor</button></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Investor</th><th class="p-3 text-right">Opening</th><th class="p-3 text-right">Current</th></tr></thead><tbody id="masterInvestorBody"></tbody></table></div>
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
@@ -1542,6 +1548,7 @@
       if (view === 'home') refreshDashboardMetrics();
       if(document.getElementById('view-outstanding')&&!document.getElementById('view-outstanding').classList.contains('hidden')) loadOutstandingManagement();
       if (view === 'masters') loadMasterData();
+      if (view === 'investors') fetchInvestorsAndInvestments();
       if (view === 'banks') fetchBanks();
       if (view === 'investors') fetchInvestorsAndInvestments();
       if (view === 'purchases') fetchLocalPurchases();
@@ -2058,7 +2065,9 @@
         if(error)throw error;
         showToast(`${name} saved${opening>0?' with opening balance':''}.`);
         closeModalById('investorModal'); e.target.reset(); document.getElementById('invOpeningBalance').value='0';
-        await fetchInvestorsAndInvestments(); refreshDashboardMetrics();
+        await fetchInvestorsAndInvestments();
+        if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden')) await loadMasterData();
+        refreshDashboardMetrics();
       }catch(err){showToast(err.message||'Investor could not be saved.','error');}
     }
 
@@ -2335,21 +2344,34 @@
 
     async function loadMasterData(){
       try{
-        const [{data:parties,error:pe},{data:banks,error:be},{data:items,error:ie},{data:warehouses,error:we}] = await Promise.all([
+        const [{data:parties,error:pe},{data:banks,error:be},{data:items,error:ie},{data:warehouses,error:we},{data:investors,error:ive}] = await Promise.all([
           db.from('parties').select('*').order('name',{ascending:true}),
           db.from('bank_accounts').select('*').order('bank_name',{ascending:true}),
           db.from('items').select('*').order('name',{ascending:true}),
-          db.from('warehouses').select('*').order('warehouse_name',{ascending:true})
+          db.from('warehouses').select('*').order('warehouse_name',{ascending:true}),
+          db.from('investors').select('*').order('name',{ascending:true})
         ]);
-        if(pe)throw pe;if(be)throw be;if(ie)throw ie;if(we)throw we;
+        if(pe)throw pe;if(be)throw be;if(ie)throw ie;if(we)throw we;if(ive)throw ive;
         liveParties=parties||[]; liveProducts=items||[];
         document.getElementById('masterPartyCount').textContent=liveParties.length;
         document.getElementById('masterBankCount').textContent=(banks||[]).length;
         document.getElementById('masterItemCount').textContent=liveProducts.length;
         document.getElementById('masterWarehouseCount').textContent=(warehouses||[]).length;
+        document.getElementById('masterInvestorCount').textContent=(investors||[]).length;
         document.getElementById('masterPartyBody').innerHTML=liveParties.map(p=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(p.name||'')}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${isCustomerParty(p)&&isSupplierParty(p)?'bg-violet-50 text-violet-700':isSupplierParty(p)?'bg-amber-50 text-amber-700':'bg-emerald-50 text-emerald-700'}">${escapeHtml((p.type||'').toUpperCase())}</span></td><td class="p-3 text-right"><button onclick="editMasterParty('${p.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteMasterParty('${p.id}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No parties added.</td></tr>';
         document.getElementById('masterBankBody').innerHTML=(banks||[]).map(b=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(b.bank_name||'')}</td><td class="p-3"><div>${escapeHtml(b.account_title||'')}</div><div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.account_number||b.iban||'')}</div></td><td class="p-3 text-right font-mono">${money(b.opening_balance||0)}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No bank accounts added.</td></tr>';
         document.getElementById('masterItemBody').innerHTML=liveProducts.map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3">${escapeHtml(i.unit||'PCS')}</td><td class="p-3 text-right font-bold">${Number(i.current_stock??i.stock??0).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No items added.</td></tr>';
+        let invCurrent={};
+        try{
+          const [{data:ci},{data:po}]=await Promise.all([
+            db.from('cargo_investments').select('investor_id,amount'),
+            db.from('investor_payouts').select('investor_id,amount')
+          ]);
+          (investors||[]).forEach(i=>invCurrent[i.id]=Number(i.opening_balance||0));
+          (ci||[]).forEach(x=>invCurrent[x.investor_id]=(invCurrent[x.investor_id]||0)+Number(x.amount||0));
+          (po||[]).forEach(x=>invCurrent[x.investor_id]=(invCurrent[x.investor_id]||0)-Number(x.amount||0));
+        }catch(_e){(investors||[]).forEach(i=>invCurrent[i.id]=Number(i.opening_balance||0));}
+        document.getElementById('masterInvestorBody').innerHTML=(investors||[]).map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3 text-right font-mono">${money(i.opening_balance||0)}</td><td class="p-3 text-right font-bold font-mono">${money(invCurrent[i.id]||0)}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
         document.getElementById('masterWarehouseBody').innerHTML=(warehouses||[]).map(w=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(w.warehouse_name||'')}</td><td class="p-3 text-slate-500">${escapeHtml(w.warehouse_code||w.location||w.address||'—')}</td></tr>`).join('')||'<tr><td colspan="2" class="p-8 text-center text-slate-400">No warehouses added.</td></tr>';
       }catch(err){showToast(err.message||'Master data could not be loaded.','error');}
     }
