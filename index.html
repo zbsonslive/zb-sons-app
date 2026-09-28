@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (XaviTech)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -540,8 +540,9 @@
         <button onclick="loadMasterData()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh Masters</button>
       </div>
 
-      <div class="grid md:grid-cols-5 gap-4 mb-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-6 gap-4 mb-6">
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">PARTIES</div><div id="masterPartyCount" class="text-2xl font-black mt-1">0</div></div>
+<div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">SUPPLIERS</div><div id="masterSupplierCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">BANK ACCOUNTS</div><div id="masterBankCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">ITEMS</div><div id="masterItemCount" class="text-2xl font-black mt-1">0</div></div>
         <div class="bg-white border rounded-2xl p-4"><div class="text-xs font-bold text-slate-400">INVESTORS</div><div id="masterInvestorCount" class="text-2xl font-black mt-1">0</div></div>
@@ -552,6 +553,11 @@
         <section class="bg-white border rounded-2xl overflow-hidden">
           <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Party Master</h3><p class="text-xs text-slate-400">Customers, suppliers and both</p></div><button onclick="openPartyModal()" class="px-3 py-2 rounded-lg bg-slate-900 text-white text-xs font-bold">+ Add Party</button></div>
           <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Name</th><th class="p-3 text-left">Type</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterPartyBody"></tbody></table></div>
+        </section>
+
+        <section class="bg-white border rounded-2xl overflow-hidden">
+          <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Supplier Master</h3><p class="text-xs text-slate-400">Suppliers, opening payable and master details</p></div><button onclick="openSupplierMasterAdd()" class="px-3 py-2 rounded-lg bg-amber-600 text-white text-xs font-bold">+ Add Supplier</button></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Supplier</th><th class="p-3 text-right">Opening Payable</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterSupplierBody"></tbody></table></div>
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
@@ -2476,6 +2482,15 @@
     document.addEventListener('click',e=>{if(e.target?.id==='warehouseModal')closeWarehouseModal();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeWarehouseModal();});
 
+
+    function openSupplierMasterAdd(){
+      openPartyModal();
+      setTimeout(()=>{
+        const el=document.getElementById('partyType');
+        if(el){el.value='SUPPLIER';el.dispatchEvent(new Event('change'));}
+      },0);
+    }
+
     async function loadMasterData(){
       try{
         const [{data:parties,error:pe},{data:banks,error:be},{data:items,error:ie},{data:warehouses,error:we},{data:investors,error:ive}] = await Promise.all([
@@ -2488,6 +2503,10 @@
         if(pe)throw pe;if(be)throw be;if(ie)throw ie;if(we)throw we;if(ive)throw ive;
         liveParties=parties||[]; liveProducts=items||[];
         document.getElementById('masterPartyCount').textContent=liveParties.length;
+        const masterSuppliers=liveParties.filter(p=>isSupplierParty(p));
+        document.getElementById('masterSupplierCount').textContent=masterSuppliers.length;
+        document.getElementById('masterSupplierBody').innerHTML=masterSuppliers.map(p=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(p.name||'')}</td><td class="p-3 text-right font-mono">${money(Number(p.opening_payable||0))}</td><td class="p-3 text-right whitespace-nowrap"><button onclick="setPartyOpening('${p.id}','${escapeHtml(p.name||'').replace(/'/g,"&#39;")}','SUPPLIER',${Number(p.opening_receivable||0)},${Number(p.opening_payable||0)})" class="text-violet-600 font-bold text-xs mr-3">Opening</button><button onclick="editMasterParty('${p.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteMasterParty('${p.id}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No suppliers added.</td></tr>';
+
         document.getElementById('masterBankCount').textContent=(banks||[]).length;
         document.getElementById('masterItemCount').textContent=liveProducts.length;
         document.getElementById('masterWarehouseCount').textContent=(warehouses||[]).length;
