@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2  (Powered By: XaviTech)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -554,17 +554,17 @@
 
         <section class="bg-white border rounded-2xl overflow-hidden">
           <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Bank Account Master</h3><p class="text-xs text-slate-400">Registered company bank accounts</p></div><button onclick="openBankModal()" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold">+ Add Bank</button></div>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Bank</th><th class="p-3 text-left">Account</th><th class="p-3 text-right">Opening</th></tr></thead><tbody id="masterBankBody"></tbody></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Bank</th><th class="p-3 text-left">Account</th><th class="p-3 text-right">Opening</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterBankBody"></tbody></table></div>
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
           <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Item Master</h3><p class="text-xs text-slate-400">Inventory items and current stock</p></div><button onclick="openSimpleItemModal()" class="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold">+ Add Item</button></div>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Item</th><th class="p-3 text-left">Unit</th><th class="p-3 text-right">Stock</th></tr></thead><tbody id="masterItemBody"></tbody></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Item</th><th class="p-3 text-left">Unit</th><th class="p-3 text-right">Stock</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterItemBody"></tbody></table></div>
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
           <div class="p-4 border-b flex items-center justify-between"><div><h3 class="font-extrabold">Investor Master</h3><p class="text-xs text-slate-400">Investors, opening and current position</p></div><button onclick="openInvestorModal()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-bold">+ Add Investor</button></div>
-          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Investor</th><th class="p-3 text-right">Opening</th><th class="p-3 text-right">Current</th></tr></thead><tbody id="masterInvestorBody"></tbody></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Investor</th><th class="p-3 text-right">Opening</th><th class="p-3 text-right">Current</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="masterInvestorBody"></tbody></table></div>
         </section>
 
         <section class="bg-white border rounded-2xl overflow-hidden">
@@ -2342,6 +2342,35 @@
       });
     }
 
+
+    async function setInvestorOpening(id,name,current){
+      const v=prompt(`Opening balance for ${name} (PKR):`,String(current||0)); if(v===null)return;
+      const amount=Number(v); if(!Number.isFinite(amount)||amount<0){showToast('Enter a valid non-negative amount.','error');return;}
+      const {error}=await db.rpc('set_investor_opening_v1332',{p_investor_id:id,p_amount:amount});
+      if(error){showToast(error.message,'error');return;} showToast('Investor opening balance updated.'); await loadMasterData(); await fetchInvestorsAndInvestments(); refreshDashboardMetrics();
+    }
+    async function setPartyOpening(id,name,type,rec,pay){
+      let r=rec||0,p=pay||0;
+      if(type==='customer'||type==='both'){const x=prompt(`Opening receivable from ${name} (PKR):`,String(r));if(x===null)return;r=Number(x);}
+      if(type==='supplier'||type==='both'){const x=prompt(`Opening payable to ${name} (PKR):`,String(p));if(x===null)return;p=Number(x);}
+      if(!Number.isFinite(r)||!Number.isFinite(p)||r<0||p<0){showToast('Enter valid non-negative amounts.','error');return;}
+      const {error}=await db.rpc('set_party_opening_v1332',{p_party_id:id,p_receivable:r,p_payable:p});
+      if(error){showToast(error.message,'error');return;} showToast('Party opening balance updated.'); await fetchParties(); await loadMasterData(); refreshDashboardMetrics();
+    }
+    async function setBankOpening(id,name,current){
+      const v=prompt(`Opening bank balance for ${name} (PKR):`,String(current||0));if(v===null)return;
+      const amount=Number(v);if(!Number.isFinite(amount)||amount<0){showToast('Enter a valid non-negative amount.','error');return;}
+      const {error}=await db.rpc('set_bank_opening_v1332',{p_bank_id:id,p_amount:amount});
+      if(error){showToast(error.message,'error');return;} showToast('Bank opening balance updated.'); await loadMasterData(); await fetchBanks(); refreshDashboardMetrics();
+    }
+    async function setItemOpening(id,name,qty,cost){
+      const q=prompt(`Opening quantity for ${name}:`,String(qty||0));if(q===null)return;
+      const c=prompt(`Opening cost per unit for ${name} (PKR):`,String(cost||0));if(c===null)return;
+      const nq=Number(q),nc=Number(c);if(!Number.isFinite(nq)||!Number.isFinite(nc)||nq<0||nc<0){showToast('Enter valid non-negative quantity and cost.','error');return;}
+      const {error}=await db.rpc('set_item_opening_v1332',{p_item_id:id,p_qty:nq,p_cost:nc});
+      if(error){showToast(error.message,'error');return;} showToast('Inventory opening updated.'); await fetchProducts(); await loadMasterData(); refreshDashboardMetrics();
+    }
+
     async function loadMasterData(){
       try{
         const [{data:parties,error:pe},{data:banks,error:be},{data:items,error:ie},{data:warehouses,error:we},{data:investors,error:ive}] = await Promise.all([
@@ -2358,9 +2387,9 @@
         document.getElementById('masterItemCount').textContent=liveProducts.length;
         document.getElementById('masterWarehouseCount').textContent=(warehouses||[]).length;
         document.getElementById('masterInvestorCount').textContent=(investors||[]).length;
-        document.getElementById('masterPartyBody').innerHTML=liveParties.map(p=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(p.name||'')}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${isCustomerParty(p)&&isSupplierParty(p)?'bg-violet-50 text-violet-700':isSupplierParty(p)?'bg-amber-50 text-amber-700':'bg-emerald-50 text-emerald-700'}">${escapeHtml((p.type||'').toUpperCase())}</span></td><td class="p-3 text-right"><button onclick="editMasterParty('${p.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteMasterParty('${p.id}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No parties added.</td></tr>';
-        document.getElementById('masterBankBody').innerHTML=(banks||[]).map(b=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(b.bank_name||'')}</td><td class="p-3"><div>${escapeHtml(b.account_title||'')}</div><div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.account_number||b.iban||'')}</div></td><td class="p-3 text-right font-mono">${money(b.opening_balance||0)}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No bank accounts added.</td></tr>';
-        document.getElementById('masterItemBody').innerHTML=liveProducts.map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3">${escapeHtml(i.unit||'PCS')}</td><td class="p-3 text-right font-bold">${Number(i.current_stock??i.stock??0).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No items added.</td></tr>';
+        document.getElementById('masterPartyBody').innerHTML=liveParties.map(p=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(p.name||'')}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${isCustomerParty(p)&&isSupplierParty(p)?'bg-violet-50 text-violet-700':isSupplierParty(p)?'bg-amber-50 text-amber-700':'bg-emerald-50 text-emerald-700'}">${escapeHtml((p.type||'').toUpperCase())}</span></td><td class="p-3 text-right"><button onclick="setPartyOpening('${p.id}','${escapeHtml(p.name||'').replace(/'/g,"&#39;")}','${partyKind(p)}',${Number(p.opening_receivable||0)},${Number(p.opening_payable||0)})" class="text-violet-600 font-bold text-xs mr-3">Opening</button><button onclick="editMasterParty('${p.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteMasterParty('${p.id}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No parties added.</td></tr>';
+        document.getElementById('masterBankBody').innerHTML=(banks||[]).map(b=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(b.bank_name||'')}</td><td class="p-3"><div>${escapeHtml(b.account_title||'')}</div><div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.account_number||b.iban||'')}</div></td><td class="p-3 text-right font-mono">${money(b.opening_balance||0)}</td><td class="p-3 text-right"><button onclick="setBankOpening('${b.id}','${escapeHtml(b.bank_name||'').replace(/'/g,"&#39;")}',${Number(b.opening_balance||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No bank accounts added.</td></tr>';
+        document.getElementById('masterItemBody').innerHTML=liveProducts.map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3">${escapeHtml(i.unit||'PCS')}</td><td class="p-3 text-right font-bold">${Number(i.current_stock??i.stock??0).toLocaleString()}</td><td class="p-3 text-right"><button onclick="setItemOpening('${i.id}','${escapeHtml(i.name||'').replace(/'/g,"&#39;")}',${Number(i.current_stock??i.stock??0)},${Number(i.purchase_price||i.cost_price||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No items added.</td></tr>';
         let invCurrent={};
         try{
           const [{data:ci},{data:po}]=await Promise.all([
@@ -2371,7 +2400,7 @@
           (ci||[]).forEach(x=>invCurrent[x.investor_id]=(invCurrent[x.investor_id]||0)+Number(x.amount||0));
           (po||[]).forEach(x=>invCurrent[x.investor_id]=(invCurrent[x.investor_id]||0)-Number(x.amount||0));
         }catch(_e){(investors||[]).forEach(i=>invCurrent[i.id]=Number(i.opening_balance||0));}
-        document.getElementById('masterInvestorBody').innerHTML=(investors||[]).map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3 text-right font-mono">${money(i.opening_balance||0)}</td><td class="p-3 text-right font-bold font-mono">${money(invCurrent[i.id]||0)}</td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
+        document.getElementById('masterInvestorBody').innerHTML=(investors||[]).map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3 text-right font-mono">${money(i.opening_balance||0)}</td><td class="p-3 text-right font-bold font-mono">${money(invCurrent[i.id]||0)}</td><td class="p-3 text-right"><button onclick="setInvestorOpening('${i.id}','${escapeHtml(i.name||'').replace(/'/g,"&#39;")}',${Number(i.opening_balance||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
         document.getElementById('masterWarehouseBody').innerHTML=(warehouses||[]).map(w=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(w.warehouse_name||'')}</td><td class="p-3 text-slate-500">${escapeHtml(w.warehouse_code||w.location||w.address||'—')}</td></tr>`).join('')||'<tr><td colspan="2" class="p-8 text-center text-slate-400">No warehouses added.</td></tr>';
       }catch(err){showToast(err.message||'Master data could not be loaded.','error');}
     }
