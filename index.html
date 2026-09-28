@@ -2398,24 +2398,6 @@
           <div class="summary"><div class="grand"><span>Total Purchase</span><span>${money(amount)}</span></div><div><span>Paid</span><b>${money(0)}</b></div><div><span>Supplier Payable</span><b>${money(amount)}</b></div></div>
           <div class="footer"><b>ZB & SONS</b><br>Computer-generated purchase record · A Project by: XaviTech</div>
         </div>
-  <div id="investorEditModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[100] p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-      <div class="p-5 border-b flex items-center justify-between">
-        <div><h3 class="text-xl font-black">Edit Investor</h3><p class="text-xs text-slate-400 mt-1">Update investor master details.</p></div>
-        <button type="button" onclick="closeInvestorEditModal()" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
-      </div>
-      <form onsubmit="saveInvestorEdit(event)" class="p-5 space-y-4">
-        <input type="hidden" id="editInvestorId">
-        <div><label class="block text-xs font-bold text-slate-600 mb-1">Investor Name *</label><input id="editInvestorName" required class="w-full border rounded-lg p-2.5"></div>
-        <div><label class="block text-xs font-bold text-slate-600 mb-1">Phone</label><input id="editInvestorPhone" class="w-full border rounded-lg p-2.5"></div>
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">Opening Balance is managed separately through <b>Set Opening</b> so the General Ledger stays synchronized.</div>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeInvestorEditModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Changes</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
 </body></html>`);
         w.document.close();w.focus();
@@ -4051,5 +4033,24 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+  <div id="investorEditModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[100] p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+      <div class="p-5 border-b flex items-center justify-between">
+        <div><h3 class="text-xl font-black">Edit Investor</h3><p class="text-xs text-slate-400 mt-1">Update investor master details.</p></div>
+        <button type="button" onclick="closeInvestorEditModal()" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+      </div>
+      <form onsubmit="saveInvestorEdit(event)" class="p-5 space-y-4">
+        <input type="hidden" id="editInvestorId">
+        <div><label class="block text-xs font-bold text-slate-600 mb-1">Investor Name *</label><input id="editInvestorName" required class="w-full border rounded-lg p-2.5"></div>
+        <div><label class="block text-xs font-bold text-slate-600 mb-1">Phone</label><input id="editInvestorPhone" class="w-full border rounded-lg p-2.5"></div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">Opening Balance is managed separately through <b>Set Opening</b> so the General Ledger stays synchronized.</div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeInvestorEditModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
