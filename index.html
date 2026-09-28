@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1083,8 +1083,8 @@
         <form onsubmit="saveSimpleItem(event)" class="space-y-4">
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Item Name *</label><input id="simpleItemName" required placeholder="e.g. Printing Paper 80 GSM" class="w-full border rounded-xl p-3 outline-none focus:ring-2 focus:ring-orange-200"></div>
           <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-600 mb-1">Category</label><input id="simpleItemCategory" placeholder="e.g. Paper" class="w-full border rounded-xl p-3"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Unit</label><select id="simpleItemUnit" class="w-full border rounded-xl p-3 bg-white"><option>PCS</option><option>KG</option><option>Ream</option><option>Roll</option><option>Carton</option><option>Sheet</option><option>Set</option></select></div></div>
-          <div><label class="block text-xs font-bold text-slate-600 mb-1">Quantity *</label><input id="simpleItemQty" required type="number" min="0" step="0.001" value="0" class="w-full border rounded-xl p-3"></div>
-          <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-600 mb-1">Opening / Average Cost</label><input id="simpleItemPurchase" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Sale Price</label><input id="simpleItemSale" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div></div>
+          <div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Quantity *</label><input id="simpleItemQty" required type="number" min="0" step="0.001" value="0" class="w-full border rounded-xl p-3"></div>
+          <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Cost / Unit</label><input id="simpleItemPurchase" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Sale Price</label><input id="simpleItemSale" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div></div>
           <div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeSimpleItemModal()" class="px-4 py-2.5 text-slate-600 font-semibold">Cancel</button><button id="simpleItemSaveBtn" class="px-5 py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl font-bold">Save Item</button></div>
         </form>
       </div>
@@ -1350,6 +1350,11 @@
           <option value="supplier">Supplier</option>
           <option value="both">Both — Customer & Supplier</option>
         </select>
+        <div class="grid grid-cols-2 gap-3">
+          <div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Receivable</label><input id="partyOpeningReceivable" type="number" min="0" step="0.01" value="0" class="w-full border rounded-lg p-2.5" placeholder="Customer owes us"></div>
+          <div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Payable</label><input id="partyOpeningPayable" type="number" min="0" step="0.01" value="0" class="w-full border rounded-lg p-2.5" placeholder="We owe supplier"></div>
+        </div>
+        <p class="text-[11px] text-slate-400">Customer: use Receivable. Supplier: use Payable. BOTH may use either or both.</p>
         <div class="flex gap-2 pt-1">
           <button type="button" onclick="closeModalById('partyModal')" class="flex-1 py-2 border rounded-lg font-bold text-slate-600">Cancel</button>
           <button type="submit" class="flex-1 py-2 bg-slate-900 text-white rounded-lg font-bold">Save</button>
@@ -1365,6 +1370,7 @@
         <div class="flex items-center justify-between border-b pb-3"><h3 class="text-lg font-bold">Add Investor</h3><button type="button" onclick="closeModalById('investorModal')" class="text-2xl text-slate-400 hover:text-slate-700">×</button></div>
         <input type="text" id="invName" required placeholder="Investor Name" class="w-full border rounded-lg p-2.5" />
         <input type="text" id="invPhone" placeholder="Phone" class="w-full border rounded-lg p-2.5" />
+        <div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Investor Balance (PKR)</label><input type="number" id="invOpeningBalance" min="0" step="0.01" value="0" class="w-full border rounded-lg p-2.5" /><p class="text-[11px] text-slate-400 mt-1">Amount payable / capital due to this investor at Go-Live.</p></div>
         <div class="flex gap-2"><button type="button" onclick="closeModalById('investorModal')" class="flex-1 py-2 border rounded-lg font-bold text-slate-600">Cancel</button><button type="submit" class="flex-1 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Investor</button></div>
       </form>
     </div>
@@ -1890,10 +1896,13 @@
       };
 
       try {
-        const { error } = await db.from('bank_accounts').insert([bankPayload]);
+        const { data:bankRow, error } = await db.from('bank_accounts').insert([bankPayload]).select('id').single();
         if (error) throw error;
-
-        showToast(`Bank account "${bankPayload.bank_name}" saved successfully.`);
+        if(bankPayload.opening_balance>0){
+          const {error:oe}=await db.rpc('post_bank_opening_v133',{p_bank_id:bankRow.id,p_amount:bankPayload.opening_balance});
+          if(oe) throw oe;
+        }
+        showToast(`Bank account "${bankPayload.bank_name}" saved${bankPayload.opening_balance>0?' with opening balance':''}.`);
         document.getElementById('bankModal').classList.add('hidden');
         await fetchBanks();
         refreshDashboardMetrics();
@@ -2042,13 +2051,15 @@
     function openInvestorModal() { document.getElementById('investorModal').classList.remove('hidden'); }
     async function handleSaveInvestor(e) {
       e.preventDefault();
-      await db.from('investors').insert([{
-        name: document.getElementById('invName').value.trim(),
-        phone: document.getElementById('invPhone').value.trim(),
-        is_active: true
-      }]);
-      document.getElementById('investorModal').classList.add('hidden');
-      await fetchInvestorsAndInvestments();
+      const name=document.getElementById('invName').value.trim(), phone=document.getElementById('invPhone').value.trim();
+      const opening=Number(document.getElementById('invOpeningBalance')?.value||0);
+      try{
+        const {data,error}=await db.rpc('create_investor_with_opening_v133',{p_name:name,p_phone:phone||null,p_amount:opening});
+        if(error)throw error;
+        showToast(`${name} saved${opening>0?' with opening balance':''}.`);
+        closeModalById('investorModal'); e.target.reset(); document.getElementById('invOpeningBalance').value='0';
+        await fetchInvestorsAndInvestments(); refreshDashboardMetrics();
+      }catch(err){showToast(err.message||'Investor could not be saved.','error');}
     }
 
     function openTagInvestmentModal() {
@@ -2363,10 +2374,20 @@
     function openPartyModal() { document.getElementById('partyModal').classList.remove('hidden'); }
     async function handleSaveParty(e) {
       e.preventDefault();
-      await db.from('parties').insert([{ name: document.getElementById('partyName').value, type: document.getElementById('partyType').value }]);
-      closeModalById('partyModal');
-      await fetchParties();
-      if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden')) await loadMasterData();
+      const name=document.getElementById('partyName').value.trim();
+      const type=document.getElementById('partyType').value;
+      const receivable=Number(document.getElementById('partyOpeningReceivable')?.value||0);
+      const payable=Number(document.getElementById('partyOpeningPayable')?.value||0);
+      try{
+        const {data,error}=await db.rpc('create_party_with_opening_v133',{p_name:name,p_type:type,p_receivable:receivable,p_payable:payable});
+        if(error)throw error;
+        showToast(`${name} saved${receivable||payable?' with opening balance':''}.`);
+        closeModalById('partyModal'); e.target.reset();
+        document.getElementById('partyOpeningReceivable').value='0'; document.getElementById('partyOpeningPayable').value='0';
+        await fetchParties();
+        if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden')) await loadMasterData();
+        refreshDashboardMetrics();
+      }catch(err){showToast(err.message||'Party could not be saved.','error');}
     }
     async function fetchParties() {
       const { data } = await db.from('parties').select('*');
@@ -2395,15 +2416,10 @@
       e.preventDefault(); const btn=document.getElementById('simpleItemSaveBtn'); btn.disabled=true; btn.textContent='Saving...';
       const name=document.getElementById('simpleItemName').value.trim(), category=document.getElementById('simpleItemCategory').value.trim(), unit=document.getElementById('simpleItemUnit').value, qty=Number(document.getElementById('simpleItemQty').value||0), purchase=Number(document.getElementById('simpleItemPurchase').value||0), sale=Number(document.getElementById('simpleItemSale').value||0);
       try{
-        let payload={name,category:category||null,unit,current_stock:qty,stock:qty,purchase_price:purchase,cost_price:purchase,selling_price:sale,unit_price:sale,is_active:true};
-        let res=await db.from('items').insert([payload]);
-        if(res.error){
-          // Compatibility with the original simple items table.
-          const legacy=await db.from('items').insert([{name,stock:qty,unit_price:sale,lc_number:null}]);
-          if(legacy.error) throw res.error;
-          showToast('Item saved. Your current database uses the basic item format.');
-        } else showToast(`${name} added to Inventory.`);
-        closeSimpleItemModal(); e.target.reset(); document.getElementById('simpleItemQty').value='0'; document.getElementById('simpleItemPurchase').value='0'; document.getElementById('simpleItemSale').value='0'; await fetchProducts();
+        const {data,error}=await db.rpc('create_item_with_opening_v133',{p_name:name,p_category:category||null,p_unit:unit,p_qty:qty,p_cost:purchase,p_sale_price:sale});
+        if(error)throw error;
+        showToast(`${name} added${qty>0?' with opening stock':''}.`);
+        closeSimpleItemModal(); e.target.reset(); document.getElementById('simpleItemQty').value='0'; document.getElementById('simpleItemPurchase').value='0'; document.getElementById('simpleItemSale').value='0'; await fetchProducts(); refreshDashboardMetrics();
       }catch(err){showToast(err.message||'Item could not be saved.','error');}
       finally{btn.disabled=false;btn.textContent='Save Item';}
     }
