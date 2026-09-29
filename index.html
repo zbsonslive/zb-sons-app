@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviTech)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powerd By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -1106,10 +1106,19 @@
           </thead>
           <tbody id="invoiceItemsBody"></tbody>
         </table>
+        <div class="mb-5 bg-slate-50 border rounded-xl p-4">
+          <div class="flex flex-col md:flex-row md:items-end gap-3">
+            <div class="flex-1"><label class="block text-xs font-bold mb-1">Other Charges</label><select id="invoiceChargeType" class="w-full border rounded-lg p-2.5 bg-white"><option value="CARTAGE">Cartage Charges</option><option value="WAREHOUSING">Warehousing Charges</option></select></div>
+            <div class="w-full md:w-48"><label class="block text-xs font-bold mb-1">Amount</label><input id="invoiceChargeAmount" type="number" min="0" step="0.01" class="w-full border rounded-lg p-2.5" placeholder="0.00"></div>
+            <button type="button" onclick="addInvoiceCharge()" class="px-4 py-2.5 bg-white border rounded-lg text-xs font-bold">+ Add Charge</button>
+          </div>
+          <div id="invoiceChargesList" class="mt-3 space-y-2"></div>
+        </div>
         <div class="flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
           <button type="button" onclick="addInvoiceRow()" class="px-3 py-2 text-xs font-bold text-brand-600 bg-brand-50 hover:bg-brand-100 rounded-lg">+ Add Item</button>
           <div class="w-full md:w-80 bg-slate-50 border rounded-xl p-4 text-sm">
             <div class="flex justify-between mb-2"><span class="text-slate-500">Subtotal</span><strong id="invoiceSubtotal">PKR 0.00</strong></div>
+            <div class="flex justify-between mb-2"><span class="text-slate-500">Other Charges</span><strong id="invoiceOtherCharges">PKR 0.00</strong></div>
             <div class="flex justify-between items-center mb-2"><span class="text-slate-500">Discount</span><input id="invoiceDiscount" type="number" min="0" step="0.01" value="0" oninput="recalculateInvoice()" class="w-28 border rounded-lg px-2 py-1 text-right"></div>
             <div class="flex justify-between pt-2 border-t text-base"><span class="font-bold">Grand Total</span><strong id="invoiceGrandTotal" class="text-brand-600">PKR 0.00</strong></div>
           </div>
@@ -3669,7 +3678,22 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       tbody.appendChild(tr); if(itemId) invoiceItemChanged(tr.querySelector('.inv-item')); else recalculateInvoice();
     }
     function invoiceItemChanged(sel){ const p=liveProducts.find(x=>String(x.id)===String(sel.value)); const row=sel.closest('tr'); if(p && row) row.querySelector('.inv-price').value=Number(p.selling_price ?? p.unit_price ?? 0); recalculateInvoice(); }
-    function recalculateInvoice(){ let subtotal=0; document.querySelectorAll('#invoiceItemsBody .invoice-row').forEach(r=>{const q=Number(r.querySelector('.inv-qty').value||0),p=Number(r.querySelector('.inv-price').value||0),t=q*p;subtotal+=t;r.querySelector('.inv-line-total').textContent=money(t)}); const discount=Number(document.getElementById('invoiceDiscount')?.value||0), grand=Math.max(0,subtotal-discount); document.getElementById('invoiceSubtotal').textContent=money(subtotal);document.getElementById('invoiceGrandTotal').textContent=money(grand);return {subtotal,discount,grand}; }
+    let invoiceCharges=[];
+    function chargeLabel(t){return t==='WAREHOUSING'?'Warehousing Charges':'Cartage Charges';}
+    function addInvoiceCharge(type=null,amount=null){
+      const t=type||document.getElementById('invoiceChargeType')?.value||'CARTAGE';
+      const a=amount!==null?Number(amount):Number(document.getElementById('invoiceChargeAmount')?.value||0);
+      if(a<=0){showToast('Enter a valid charge amount.','error');return;}
+      invoiceCharges.push({charge_type:t,charge_label:chargeLabel(t),amount:a});
+      if(document.getElementById('invoiceChargeAmount'))document.getElementById('invoiceChargeAmount').value='';
+      renderInvoiceCharges();recalculateInvoice();
+    }
+    function removeInvoiceCharge(i){invoiceCharges.splice(i,1);renderInvoiceCharges();recalculateInvoice();}
+    function renderInvoiceCharges(){
+      const el=document.getElementById('invoiceChargesList');if(!el)return;
+      el.innerHTML=invoiceCharges.map((c,i)=>`<div class="flex justify-between items-center bg-white border rounded-lg px-3 py-2 text-sm"><span>${escapeHtml(c.charge_label)}</span><div><b class="font-mono mr-3">${money(c.amount)}</b><button type="button" onclick="removeInvoiceCharge(${i})" class="text-red-500 text-xs font-bold">Remove</button></div></div>`).join('');
+    }
+    function recalculateInvoice(){ let subtotal=0; document.querySelectorAll('#invoiceItemsBody .invoice-row').forEach(r=>{const q=Number(r.querySelector('.inv-qty').value||0),p=Number(r.querySelector('.inv-price').value||0),t=q*p;subtotal+=t;r.querySelector('.inv-line-total').textContent=money(t)}); const charges=invoiceCharges.reduce((a,c)=>a+Number(c.amount||0),0),discount=Number(document.getElementById('invoiceDiscount')?.value||0), grand=Math.max(0,subtotal+charges-discount); document.getElementById('invoiceSubtotal').textContent=money(subtotal);if(document.getElementById('invoiceOtherCharges'))document.getElementById('invoiceOtherCharges').textContent=money(charges);document.getElementById('invoiceGrandTotal').textContent=money(grand);return {subtotal,charges,discount,grand}; }
     function nextInvoiceNumber(){
       const d=new Date();
       const stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
@@ -3701,6 +3725,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
           for(const b of [...stockBackups].reverse()){
             await db.from('items').update({current_stock:b.oldStock,stock:b.oldStock}).eq('id',b.itemId);
           }
+          await db.from('invoice_other_charges').delete().eq('invoice_id',invoiceId);
           await db.from('invoice_items').delete().eq('invoice_id',invoiceId);
           await db.from('invoices').delete().eq('id',invoiceId);
         }
@@ -3842,7 +3867,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         if(saleQty>Number(selectedCargo.quantity||0)-usedQty){showToast(`LC allocation exceeds available batch quantity. Remaining: ${(Number(selectedCargo.quantity||0)-usedQty).toLocaleString()} ${selectedCargo.cargo_uom||''}`,'error');return;}
       }
 
-      const {subtotal,discount,grand}=recalculateInvoice();
+      const {subtotal,charges,discount,grand}=recalculateInvoice();
       if(grand<=0){showToast('Invoice total must be greater than zero.','error');return;}
 
       const btn=document.getElementById('postInvoiceBtn');
@@ -3876,6 +3901,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         const itemPayload=rows.map(x=>({item_id:x.item_id,quantity:x.quantity,unit_price:x.unit_price,invoice_id:invoiceId}));
         const {error:e2}=await db.from('invoice_items').insert(itemPayload);
         if(e2) throw e2;
+        if(invoiceCharges.length){
+          const {error:ce}=await db.from('invoice_other_charges').insert(invoiceCharges.map(c=>({invoice_id:invoiceId,charge_type:c.charge_type,charge_label:c.charge_label,amount:c.amount})));
+          if(ce)throw ce;
+        }
 
         let totalCost=0;
         for(const r of rows){
@@ -3908,7 +3937,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
           if(allocErr)throw allocErr;
         }
 
-        const {data:acc,error:ae}=await db.from('chart_of_accounts').select('id,account_code').in('account_code',['1300','1400','4100','5100']);
+        const {data:acc,error:ae}=await db.from('chart_of_accounts').select('id,account_code').in('account_code',['1300','1400','4100','4200','5100']);
         if(ae) throw ae;
         const A=Object.fromEntries((acc||[]).map(a=>[a.account_code,a.id]));
         if(!A['1300']||!A['4100']) throw new Error('Required sales accounts 1300 and 4100 are missing from Chart of Accounts.');
@@ -3923,8 +3952,12 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
         const jl=[
           {journal_entry_id:journalId,account_id:A['1300'],party_id:partyId,description:`Receivable - ${invoiceNo}`,debit:grand,credit:0},
-          {journal_entry_id:journalId,account_id:A['4100'],party_id:null,description:`Sales Revenue - ${invoiceNo}`,debit:0,credit:grand}
+          {journal_entry_id:journalId,account_id:A['4100'],party_id:null,description:`Sales Revenue - ${invoiceNo}`,debit:0,credit:Math.max(0,subtotal-discount)}
         ];
+        if(charges>0){
+          if(!A['4200'])throw new Error('Other Income account 4200 is missing from Chart of Accounts.');
+          jl.push({journal_entry_id:journalId,account_id:A['4200'],party_id:null,description:`Invoice Other Charges - ${invoiceNo}`,debit:0,credit:charges});
+        }
         if(totalCost>0&&A['1400']&&A['5100']) jl.push(
           {journal_entry_id:journalId,account_id:A['5100'],party_id:null,description:`Cost of Goods Sold - ${invoiceNo}`,debit:totalCost,credit:0},
           {journal_entry_id:journalId,account_id:A['1400'],party_id:null,description:`Inventory issued - ${invoiceNo}`,debit:0,credit:totalCost}
@@ -3939,6 +3972,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         showToast(`Sales Invoice ${invoiceNo} saved successfully.`);
         document.getElementById('invoiceItemsBody').innerHTML='';
         document.getElementById('invoiceDiscount').value=0;
+        invoiceCharges=[];renderInvoiceCharges();
         document.getElementById('invLc').value='';
         document.getElementById('invNo').value=nextInvoiceNumber();
         addInvoiceRow();
@@ -3969,6 +4003,8 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         if(ie)throw ie;
         const {data:lines,error:le}=await db.from('invoice_items').select('item_id,quantity,unit_price').eq('invoice_id',invoiceId);
         if(le)throw le;
+        const {data:chargesData,error:ce}=await db.from('invoice_other_charges').select('charge_type,charge_label,amount').eq('invoice_id',invoiceId).order('created_at',{ascending:true});
+        if(ce)throw ce;
         const {data:alloc,error:ae}=await db.from('customer_invoice_payments').select('amount').eq('invoice_id',invoiceId);
         if(ae)throw ae;
         const received=(alloc||[]).reduce((t,x)=>t+Number(x.amount||0),0);
@@ -3979,6 +4015,8 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
           const total=Number(r.quantity||0)*Number(r.unit_price||0);
           return `<tr><td>${n+1}</td><td><b>${escapeHtml(item.name||'Item')}</b><div class="muted">${escapeHtml(item.category||'')}</div></td><td class="num">${Number(r.quantity||0).toLocaleString()} ${escapeHtml(item.unit||'')}</td><td class="num">${money(r.unit_price)}</td><td class="num">${money(total)}</td></tr>`;
         }).join('');
+        const chargeRows=(chargesData||[]).map(c=>`<tr><td></td><td><b>${escapeHtml(c.charge_label||chargeLabel(c.charge_type))}</b><div class="muted">Other Charge</div></td><td></td><td></td><td class="num">${money(c.amount)}</td></tr>`).join('');
+        const chargeTotal=(chargesData||[]).reduce((a,c)=>a+Number(c.amount||0),0);
         const w=window.open('','_blank','width=900,height=1100');
         if(!w)throw new Error('Pop-up blocked. Please allow pop-ups for this file.');
         w.document.write(`<!doctype html><html><head><title>${escapeHtml(inv.invoice_number)} - ZB & SONS</title><meta charset="utf-8"><style>
@@ -3986,8 +4024,8 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         </style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><div class="sheet">
         <div class="top"><div><div class="brand"><span>ZB</span> & SONS</div><div class="tag">BUSINESS SALES INVOICE</div></div><div class="invoice-title"><h1>SALES INVOICE</h1><p><b>${escapeHtml(inv.invoice_number)}</b></p><p>Date: ${escapeHtml(inv.invoice_date)}</p></div></div>
         <div class="grid"><div class="box"><div class="label">Bill To</div><div class="value">${escapeHtml(party.name||'Customer')}</div><div class="muted">${escapeHtml(party.city||'')}</div></div><div class="box"><div class="label">Payment Status</div><div class="value">${due<=.005?'PAID':received>0?'PARTIALLY PAID':'UNPAID'}</div><div class="muted">Received: ${money(received)} · Outstanding: ${money(due)}</div></div></div>
-        <table><thead><tr><th>#</th><th>Item Description</th><th class="num">Quantity</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead><tbody>${rows}</tbody></table>
-        <div class="summary"><div><span>Subtotal</span><b>${money(inv.subtotal)}</b></div><div><span>Discount</span><b>${money(inv.discount_amount)}</b></div><div><span>Tax</span><b>${money(inv.tax_amount)}</b></div><div class="grand"><span>Grand Total</span><span>${money(inv.grand_total)}</span></div><div><span>Received</span><b>${money(received)}</b></div><div class="due"><span>Balance Due</span><span>${money(due)}</span></div></div>
+        <table><thead><tr><th>#</th><th>Item Description</th><th class="num">Quantity</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead><tbody>${rows}${chargeRows}</tbody></table>
+        <div class="summary"><div><span>Subtotal</span><b>${money(inv.subtotal)}</b></div><div><span>Other Charges</span><b>${money(chargeTotal)}</b></div><div><span>Discount</span><b>${money(inv.discount_amount)}</b></div><div><span>Tax</span><b>${money(inv.tax_amount)}</b></div><div class="grand"><span>Grand Total</span><span>${money(inv.grand_total)}</span></div><div><span>Received</span><b>${money(received)}</b></div><div class="due"><span>Balance Due</span><span>${money(due)}</span></div></div>
         <div class="footer"><b>ZB & SONS</b><br>Computer-generated sales invoice · A Project by: XaviTech</div>
         </div></body></html>`);
         w.document.close();w.focus();
