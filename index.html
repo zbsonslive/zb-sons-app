@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powerd By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By : XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -3742,19 +3742,22 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         if(!['MASTER','ADMIN','ACCOUNTS'].includes(currentERPUser?.role)){showToast('You do not have permission to edit posted sales invoices.','error');return;}
         if(!liveParties.length)await fetchParties();
         if(!liveProducts.length)await fetchProducts();
+        if(!liveLcs.length)await loadCargoShipments();
 
         const {data:alloc,error:ae}=await db.from('customer_invoice_payments').select('amount').eq('invoice_id',invoiceId);
         if(ae)throw ae;
-        if((alloc||[]).some(x=>Number(x.amount||0)>0))throw new Error('This invoice already has a customer receipt allocation. Remove/reverse the receipt first.');
+        if((alloc||[]).some(x=>Number(x.amount||0)>0))throw new Error('This invoice already has a customer receipt allocation. Reverse/remove the receipt first.');
 
-        const {data:lcAlloc,error:lae}=await db.from('lc_sales_allocations').select('id').eq('invoice_id',invoiceId).limit(1);
+        const {data:lcAlloc,error:lae}=await db.from('lc_sales_allocations').select('cargo_id').eq('invoice_id',invoiceId).limit(1);
         if(lae)throw lae;
-        if((lcAlloc||[]).length)throw new Error('LC-linked invoice editing is protected in v1.31.1. Cancel and recreate it instead.');
+        const linkedCargoId=(lcAlloc||[])[0]?.cargo_id||null;
 
         const {data:inv,error:ie}=await db.from('invoices').select('id,invoice_number,invoice_date,party_id,discount_amount,status').eq('id',invoiceId).eq('type','SALE').single();
         if(ie)throw ie;
         const {data:lines,error:le}=await db.from('invoice_items').select('item_id,quantity,unit_price').eq('invoice_id',invoiceId);
         if(le)throw le;
+        const {data:charges,error:ce}=await db.from('invoice_other_charges').select('charge_type,charge_label,amount').eq('invoice_id',invoiceId).order('created_at',{ascending:true});
+        if(ce)throw ce;
 
         editingSalesInvoiceId=invoiceId;
         document.getElementById('invParty').value=inv.party_id||'';
@@ -3763,16 +3766,16 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         document.getElementById('invDate').value=inv.invoice_date||'';
         await populateInvoiceLcOptions();
         document.getElementById('invLc').disabled=false;
-        document.getElementById('invLc').value=linkedCargoId;
+        document.getElementById('invLc').value=linkedCargoId||'';
         document.getElementById('invoiceDiscount').value=Number(inv.discount_amount||0);
         document.getElementById('invoiceItemsBody').innerHTML='';
         (lines||[]).forEach(x=>addInvoiceRow(x.item_id,Number(x.quantity||0),Number(x.unit_price||0)));
-        recalculateInvoice();
+        invoiceCharges=(charges||[]).map(c=>({charge_type:c.charge_type,charge_label:c.charge_label||chargeLabel(c.charge_type),amount:Number(c.amount||0)}));
+        renderInvoiceCharges();recalculateInvoice();
         const btn=document.getElementById('postInvoiceBtn');
-        btn.textContent='Save Safe Edit';
-        btn.classList.add('bg-blue-700');
-        showToast('Invoice loaded in safe edit mode. Stock and accounting will be corrected automatically.');
-        document.getElementById('sales')?.scrollIntoView({behavior:'smooth',block:'start'});
+        btn.textContent='Save Safe Edit';btn.classList.add('bg-blue-700');
+        showToast(linkedCargoId?'LC-linked invoice loaded safely. Stock, LC allocation, charges and accounting will be corrected together.':'Invoice loaded in safe edit mode.');
+        document.getElementById('view-sales')?.scrollIntoView({behavior:'smooth',block:'start'});
       }catch(err){showToast(err.message||'Invoice could not be loaded for editing.','error');}
     }
 
@@ -3784,7 +3787,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       if(btn){btn.textContent='Save Invoice';btn.classList.remove('bg-blue-700');}
       const body=document.getElementById('invoiceItemsBody');if(body){body.innerHTML='';addInvoiceRow();}
       const d=document.getElementById('invoiceDiscount');if(d)d.value=0;
-      recalculateInvoice();
+      invoiceCharges=[];renderInvoiceCharges();recalculateInvoice();
     }
 
     async function saveSafeSalesEdit(){
@@ -3808,7 +3811,8 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       try{
         const {data,error}=await db.rpc('safe_edit_sales_invoice',{
           p_invoice_id:invoiceId,p_party_id:partyId,p_invoice_date:invoiceDate,
-          p_discount:discount,p_lines:rows,p_cargo_id:(document.getElementById('invLc').value||null),p_reason:String(reason).trim()
+          p_discount:discount,p_lines:rows,p_cargo_id:(document.getElementById('invLc').value||null),
+          p_charges:invoiceCharges,p_reason:String(reason).trim()
         });
         if(error)throw error;
         showToast(`Sales Invoice ${data||''} updated safely.`);
