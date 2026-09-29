@@ -843,6 +843,17 @@
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo Ref</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Goods</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Unit Cost</th><th class="p-3 text-center">Status</th><th class="p-3"></th></tr></thead><tbody id="cargoTableBody"><tr><td colspan="9" class="p-8 text-center text-slate-400">No shipments loaded.</td></tr></tbody></table></div>
       </div>
       <div class="bg-white border rounded-2xl overflow-hidden shadow-sm mt-5">
+        <div class="p-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div><h3 class="font-extrabold">LC Allocation Reconciliation</h3><p class="text-xs text-slate-400 mt-1">Compare original LC quantity, sales allocated to that batch, remaining LC quantity and current item stock.</p></div>
+          <button onclick="loadLcAllocationReconciliation()" class="text-xs font-bold text-brand-600">Refresh Reconciliation</button>
+        </div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr>
+          <th class="p-3 text-left">LC / Cargo</th><th class="p-3 text-left">Item</th><th class="p-3 text-center">Status</th>
+          <th class="p-3 text-right">LC Qty</th><th class="p-3 text-right">Allocated / Sold</th><th class="p-3 text-right">LC Remaining</th><th class="p-3 text-right">Current Item Stock</th><th class="p-3 text-center">Check</th>
+        </tr></thead><tbody id="lcReconBody"><tr><td colspan="8" class="p-8 text-center text-slate-400">Click Refresh Reconciliation.</td></tr></tbody></table></div>
+      </div>
+
+      <div class="bg-white border rounded-2xl overflow-hidden shadow-sm mt-5">
         <div class="p-4 border-b flex justify-between items-center"><div><h3 class="font-extrabold">LC-wise Profitability</h3><p class="text-xs text-slate-400 mt-1">Sales explicitly allocated to each cleared LC / Cargo batch.</p></div><button onclick="loadLcProfitability()" class="text-xs font-bold text-brand-600">Refresh Profitability</button></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Qty Sold</th><th class="p-3 text-right">Remaining Qty</th><th class="p-3 text-right">% Sold</th><th class="p-3 text-right">Remaining Stock Value</th><th class="p-3 text-right">Sales</th><th class="p-3 text-right">COGS</th><th class="p-3 text-right">Gross Profit</th><th class="p-3 text-right">Margin</th></tr></thead><tbody id="lcProfitBody"><tr><td colspan="11" class="p-8 text-center text-slate-400">Click Refresh Profitability.</td></tr></tbody></table></div>
       </div>
@@ -1846,6 +1857,7 @@
         return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold">${escapeHtml(x.cargo_ref)}</td><td class="p-3">${escapeHtml(sup)}</td><td class="p-3">${escapeHtml(item)}</td><td class="p-3 text-right font-mono">${Number(x.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono">${money(x.goods_value)}</td><td class="p-3 text-right font-mono font-bold">${money(x.total_landed_cost)}</td><td class="p-3 text-right font-mono">${money(x.landed_cost_per_unit)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status)}</span></td><td class="p-3 text-right whitespace-nowrap"><button onclick="openLcSupplierPayment('${x.id}')" class="text-amber-600 font-bold text-xs mr-3">Pay Supplier</button><button onclick="editCargoShipment('${x.id}')" class="text-emerald-600 font-bold text-xs mr-3">Edit</button><button onclick="showCargoDetail('${x.id}')" class="text-brand-600 font-bold text-xs">View</button></td></tr>`;
       }).join('')||'<tr><td colspan="9" class="p-8 text-center text-slate-400">No Cargo / LC recorded yet.</td></tr>';
       document.getElementById('cargoOpenCount').textContent=open;document.getElementById('cargoGoodsTotal').textContent=money(goods);document.getElementById('cargoLandedTotal').textContent=money(landed);document.getElementById('cargoChargesTotal').textContent=money(charges);
+      if(document.getElementById('lcReconBody')) await loadLcAllocationReconciliation();
     }
 
     let lcPayOutstanding=0;
@@ -1881,6 +1893,28 @@
       finally{btn.disabled=false;btn.textContent='Save Payment';}
     }
     document.addEventListener('click',e=>{if(e.target?.id==='lcSupplierPaymentModal')closeLcSupplierPayment();});
+
+    async function loadLcAllocationReconciliation(){
+      const tb=document.getElementById('lcReconBody');if(!tb)return;
+      tb.innerHTML='<tr><td colspan="8" class="p-8 text-center text-slate-400">Loading reconciliation...</td></tr>';
+      try{
+        if(!liveProducts.length)await fetchProducts();
+        const {data:lcs,error:le}=await db.from('cargo_shipments').select('id,cargo_ref,item_id,quantity,cargo_uom,status').order('shipment_date',{ascending:false});
+        if(le)throw le;
+        const ids=(lcs||[]).map(x=>x.id);let alloc=[];
+        if(ids.length){
+          const {data,error}=await db.from('lc_sales_allocations').select('cargo_id,invoice_id,quantity,sales_amount').in('cargo_id',ids);
+          if(error)throw error;alloc=data||[];
+        }
+        const sums={};alloc.forEach(a=>sums[a.cargo_id]=(sums[a.cargo_id]||0)+Number(a.quantity||0));
+        tb.innerHTML=(lcs||[]).map(x=>{
+          const item=liveProducts.find(p=>String(p.id)===String(x.item_id))||{};
+          const qty=Number(x.quantity||0),used=Number(sums[x.id]||0),rem=qty-used,stock=Number(item.current_stock??item.stock??0),u=x.cargo_uom||item.unit||'';
+          const ok=rem>=-0.005;
+          return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold">${escapeHtml(x.cargo_ref||'-')}</td><td class="p-3">${escapeHtml(item.name||'-')}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status||'-')}</span></td><td class="p-3 text-right font-mono">${qty.toLocaleString()} ${escapeHtml(u)}</td><td class="p-3 text-right font-mono">${used.toLocaleString()} ${escapeHtml(u)}</td><td class="p-3 text-right font-mono font-bold ${rem<0?'text-red-600':'text-emerald-700'}">${rem.toLocaleString()} ${escapeHtml(u)}</td><td class="p-3 text-right font-mono">${stock.toLocaleString()} ${escapeHtml(item.unit||u)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${ok?'bg-emerald-50 text-emerald-700':'bg-red-50 text-red-700'}">${ok?'OK':'OVER-ALLOCATED'}</span></td></tr>`;
+        }).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No LC / Cargo records found.</td></tr>';
+      }catch(err){tb.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
 
     function editCargoShipment(id){
       const x=liveLcs.find(v=>String(v.id)===String(id));if(!x)return;
