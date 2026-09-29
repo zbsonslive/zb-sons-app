@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.37 | (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -4097,9 +4097,42 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       });
       let total=0,received=0,due=0;rows.forEach(i=>{total+=Number(i.grand_total||0);received+=i.received;due+=i.due;});
       document.getElementById('salesRegCount').textContent=rows.length;document.getElementById('salesRegTotal').textContent=money(total);document.getElementById('salesRegReceived').textContent=money(received);document.getElementById('salesRegDue').textContent=money(due);
-      tbody.innerHTML=rows.map(i=>{const party=liveParties.find(p=>String(p.id)===String(i.party_id))?.name||'-';return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-semibold">${escapeHtml(i.invoice_number)}</td><td class="p-3">${escapeHtml(i.invoice_date)}</td><td class="p-3">${escapeHtml(party)}</td><td class="p-3 text-xs">${escapeHtml(i.lc_number||'-')}</td><td class="p-3 text-right font-mono">${money(i.grand_total)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(i.received)}</td><td class="p-3 text-right font-mono text-amber-700">${money(i.due)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${i.display_status==='PAID'?'bg-emerald-50 text-emerald-700':i.display_status==='PARTIAL'?'bg-blue-50 text-blue-700':'bg-amber-50 text-amber-700'}">${i.display_status==='PARTIAL'?'PARTIALLY PAID':i.display_status}</span></td><td class="p-3 text-center"><div class="flex justify-center gap-1.5 flex-wrap"><button onclick="printSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold">Print</button><button onclick="editSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 text-[11px] font-bold">Edit</button><button onclick="cancelSalesInvoice('${i.id}','${escapeHtml(i.invoice_number)}')" class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-100 text-[11px] font-bold">Delete / Cancel</button></div></td></tr>`}).join('')||'<tr><td colspan="9" class="p-8 text-center text-slate-400">No sales invoices match the selected filters.</td></tr>';
+      tbody.innerHTML=rows.map(i=>{const party=liveParties.find(p=>String(p.id)===String(i.party_id))?.name||'-';return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-semibold">${escapeHtml(i.invoice_number)}</td><td class="p-3">${escapeHtml(i.invoice_date)}</td><td class="p-3">${escapeHtml(party)}</td><td class="p-3 text-xs">${escapeHtml(i.lc_number||'-')}</td><td class="p-3 text-right font-mono">${money(i.grand_total)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(i.received)}</td><td class="p-3 text-right font-mono text-amber-700">${money(i.due)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${i.display_status==='PAID'?'bg-emerald-50 text-emerald-700':i.display_status==='PARTIAL'?'bg-blue-50 text-blue-700':'bg-amber-50 text-amber-700'}">${i.display_status==='PARTIAL'?'PARTIALLY PAID':i.display_status}</span>${i.due>.005?`<button onclick="openQuickInvoiceReceipt('${i.id}')" class="block mx-auto mt-2 px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[11px] font-bold">Receive Payment</button>`:''}</td><td class="p-3 text-center"><div class="flex justify-center gap-1.5 flex-wrap"><button onclick="printSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold">Print</button><button onclick="editSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 text-[11px] font-bold">Edit</button><button onclick="cancelSalesInvoice('${i.id}','${escapeHtml(i.invoice_number)}')" class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-100 text-[11px] font-bold">Delete / Cancel</button></div></td></tr>`}).join('')||'<tr><td colspan="9" class="p-8 text-center text-slate-400">No sales invoices match the selected filters.</td></tr>';
     }
     function clearSalesRegisterFilters(){['salesRegSearch','salesRegFrom','salesRegTo'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});const s=document.getElementById('salesRegStatus');if(s)s.value='';renderSalesRegister();}
+
+    let quickInvoiceReceiptDue=0;
+    function closeQuickInvoiceReceipt(){const m=document.getElementById('quickInvoiceReceiptModal');if(m){m.classList.add('hidden');m.classList.remove('flex');}}
+    async function openQuickInvoiceReceipt(invoiceId){
+      const i=salesRegisterData.find(x=>String(x.id)===String(invoiceId));if(!i)return;
+      if(!liveBanks.length)await fetchBanks();
+      const party=liveParties.find(p=>String(p.id)===String(i.party_id))||{};
+      quickInvoiceReceiptDue=Number(i.due||0);
+      document.getElementById('qirInvoiceId').value=i.id;document.getElementById('qirPartyId').value=i.party_id||'';
+      document.getElementById('qirSub').textContent=`${i.invoice_number} · ${party.name||'Customer'}`;
+      document.getElementById('qirTotal').textContent=money(i.grand_total);document.getElementById('qirReceived').textContent=money(i.received);document.getElementById('qirDue').textContent=money(i.due);
+      document.getElementById('qirDate').value=new Date().toISOString().slice(0,10);document.getElementById('qirAmount').value=Number(i.due||0).toFixed(2);
+      document.getElementById('qirReference').value='';document.getElementById('qirNotes').value='';document.getElementById('qirAccount').value='1100';
+      const bs=document.getElementById('qirBank');bs.innerHTML=liveBanks.map(b=>`<option value="${b.id}">${escapeHtml(b.bank_name||'Bank')} · ${escapeHtml(b.account_title||b.account_number||'')}</option>`).join('');
+      document.getElementById('qirBankWrap').classList.add('hidden');
+      const m=document.getElementById('quickInvoiceReceiptModal');m.classList.remove('hidden');m.classList.add('flex');
+    }
+    async function saveQuickInvoiceReceipt(e){
+      e.preventDefault();const invoiceId=document.getElementById('qirInvoiceId').value,amount=Number(document.getElementById('qirAmount').value||0),date=document.getElementById('qirDate').value,accountCode=document.getElementById('qirAccount').value,bankId=accountCode==='1200'?(document.getElementById('qirBank').value||null):null,ref=document.getElementById('qirReference').value.trim()||null,notes=document.getElementById('qirNotes').value.trim()||null;
+      if(amount<=0||!date){showToast('Receipt date and amount are required.','error');return;}
+      if(amount>quickInvoiceReceiptDue+.005){showToast(`Receipt cannot exceed invoice outstanding ${money(quickInvoiceReceiptDue)}.`,'error');return;}
+      if(accountCode==='1200'&&!bankId){showToast('Select the bank account receiving this payment.','error');return;}
+      const btn=document.getElementById('qirSaveBtn');btn.disabled=true;btn.textContent='Receiving...';
+      try{
+        const {data,error}=await db.rpc('post_quick_invoice_receipt_v137',{p_invoice_id:invoiceId,p_payment_date:date,p_amount:amount,p_cash_account_code:accountCode,p_bank_account_id:bankId,p_reference:ref,p_notes:notes});
+        if(error)throw error;
+        showToast(`Payment received successfully${data?' · '+data:''}.`);closeQuickInvoiceReceipt();
+        await fetchRecentInvoices();await loadCashBook();await loadTrialBalance();refreshDashboardMetrics();
+      }catch(err){showToast(err.message||'Invoice payment could not be received.','error');}
+      finally{btn.disabled=false;btn.textContent='Receive Payment';}
+    }
+    document.addEventListener('change',e=>{if(e.target?.id==='qirAccount'){document.getElementById('qirBankWrap').classList.toggle('hidden',e.target.value!=='1200');}});
+    document.addEventListener('click',e=>{if(e.target?.id==='quickInvoiceReceiptModal')closeQuickInvoiceReceipt();});
 
     async function printSalesInvoice(invoiceId){
       try{
@@ -4287,5 +4320,18 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div>
 <div class="overflow-x-auto border rounded-xl"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Customer</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty Sold</th><th class="p-3 text-right">Sale Rate</th><th class="p-3 text-right">Sale Amount</th><th class="p-3 text-right">COGS</th><th class="p-3 text-right">Gross Profit</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Action</th></tr></thead><tbody id="lcSalesDrillBody"></tbody></table></div>
 </div></div></div>
+<div id="quickInvoiceReceiptModal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[140] p-4">
+<div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+<div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Receive Invoice Payment</h3><p id="qirSub" class="text-xs text-slate-400 mt-1"></p></div><button type="button" onclick="closeQuickInvoiceReceipt()" class="text-2xl text-slate-400">&times;</button></div>
+<form onsubmit="saveQuickInvoiceReceipt(event)" class="p-5 space-y-4">
+<input type="hidden" id="qirInvoiceId"><input type="hidden" id="qirPartyId">
+<div class="grid grid-cols-3 gap-3 bg-slate-50 rounded-xl p-3 text-sm"><div><span class="text-xs text-slate-400">Invoice Total</span><div id="qirTotal" class="font-bold font-mono"></div></div><div><span class="text-xs text-slate-400">Received</span><div id="qirReceived" class="font-bold font-mono text-emerald-700"></div></div><div><span class="text-xs text-slate-400">Outstanding</span><div id="qirDue" class="font-bold font-mono text-amber-700"></div></div></div>
+<div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Receipt Date *</label><input id="qirDate" type="date" required class="w-full border rounded-lg p-2.5"></div><div><label class="block text-xs font-bold mb-1">Receive Amount *</label><input id="qirAmount" type="number" min="0.01" step="0.01" required class="w-full border rounded-lg p-2.5"></div></div>
+<div><label class="block text-xs font-bold mb-1">Receive In *</label><select id="qirAccount" required class="w-full border rounded-lg p-2.5"><option value="1100">Cash on Hand</option><option value="1200">Bank Account</option></select></div>
+<div id="qirBankWrap" class="hidden"><label class="block text-xs font-bold mb-1">Bank Account *</label><select id="qirBank" class="w-full border rounded-lg p-2.5"></select></div>
+<div><label class="block text-xs font-bold mb-1">Reference / Cheque / Transfer No.</label><input id="qirReference" class="w-full border rounded-lg p-2.5"></div>
+<div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="qirNotes" rows="2" class="w-full border rounded-lg p-2.5"></textarea></div>
+<div class="flex justify-end gap-2"><button type="button" onclick="closeQuickInvoiceReceipt()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="qirSaveBtn" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold">Receive Payment</button></div>
+</form></div></div>
 </body>
 </html>
