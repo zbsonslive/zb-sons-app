@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | (Powered By: XaviSoft)</title>
-  <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
-
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
-</script>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -349,16 +346,22 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<style id="hardAuthGateV1494">
+  body.erp-locked #erpSidebar,
+  body.erp-locked #erpMain { display:none !important; }
+  body.erp-locked #authGate { display:flex !important; }
+</style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex">
+<body class="erp-locked text-slate-800 antialiased min-h-screen flex">
 
   <div id="authGate" class="fixed inset-0 z-[9999] bg-slate-950 flex items-center justify-center p-5">
     <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-7">
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
-      <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
-      <label class="text-xs font-bold text-slate-500">PASSWORD</label><input id="loginPassword" type="password" class="mt-1 mb-4 w-full border rounded-xl px-4 py-3" placeholder="••••••••" onkeydown="if(event.key==='Enter')erpLogin()">
-      <button onclick="erpLogin()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-black">Sign In</button>
+      <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
+      <label class="text-xs font-bold text-slate-500">PASSWORD</label><input id="loginPassword" type="password" autocomplete="new-password" class="mt-1 mb-4 w-full border rounded-xl px-4 py-3" placeholder="Type password manually" onkeydown="markManualPasswordV1493(event);if(event.key==='Enter')erpLogin()">
+      <button id="erpSignInBtn" onclick="erpLogin()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-black">Sign In</button>
       <p class="text-[11px] text-slate-400 text-center mt-4">Authorized ZB & SONS users only · A Project by: XaviSoft</p>
     </div>
   </div>
@@ -459,7 +462,7 @@
   </div>
 
   <!-- MAIN WORKSPACE -->
-  <main class="flex-1 p-8 md:p-12 overflow-y-auto min-w-0">
+  <main id="erpMain" class="flex-1 p-8 md:p-12 overflow-y-auto min-w-0">
     <div class="hidden md:flex items-center justify-between mb-4">
       <button onclick="goBackView()" class="px-3 py-2 border bg-white rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50">← Back</button>
     </div>
@@ -1031,12 +1034,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.49</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.49.4</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.49 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.49.4 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1886,7 +1889,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.49',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.49.4',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -1911,7 +1914,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.49'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.49.4'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2029,7 +2032,20 @@
       const bank=liveBanks.find(b=>String(b.id)===String(bankId))||{},opening=document.getElementById('bankLedgerOpening').textContent,received=document.getElementById('bankLedgerDebit').textContent,paid=document.getElementById('bankLedgerCredit').textContent,closing=document.getElementById('bankLedgerClosing').textContent,period=document.getElementById('bankLedgerPeriod').textContent;
       const rows=bankLedgerRows.map(r=>`<tr><td>${escapeHtml(r.entry_date||'')}</td><td>${escapeHtml(r.reference_number||r.entry_number||'-')}</td><td>${escapeHtml(r.description||r.narration||'-')}</td><td>${escapeHtml(r.party_name||'-')}</td><td class="num">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="num">${Number(r.credit||0)?money(r.credit):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
       const w=window.open('','_blank','width=1100,height=900');if(!w)return;
-      w.document.write(`<!doctype html><html><head><title>Bank Statement</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#111}h1{margin:0;font-size:22px}.muted{color:#666;font-size:12px;margin-top:5px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}@media print{body{padding:10px}}</style></head><body><h1>ZB & SONS ERP — Bank Statement</h1><div class="muted">${escapeHtml(bank.bank_name||'')} · ${escapeHtml(bank.account_title||bank.account_number||'')} | ${escapeHtml(period)}</div><div class="summary"><div class="box"><small>Opening</small><b>${opening}</b></div><div class="box"><small>Received</small><b>${received}</b></div><div class="box"><small>Paid</small><b>${paid}</b></div><div class="box"><small>Closing</small><b>${closing}</b></div></div><table><thead><tr><th>Date</th><th>Reference</th><th>Description</th><th>Party</th><th>Received</th><th>Paid</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
+      w.document.write(`<!doctype html><html><head><title>Bank Statement</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#111}h1{margin:0;font-size:22px}.muted{color:#666;font-size:12px;margin-top:5px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}@media print{body{padding:10px}}</style></head><body><h1>ZB & SONS ERP — Bank Statement</h1><div class="muted">${escapeHtml(bank.bank_name||'')} · ${escapeHtml(bank.account_title||bank.account_number||'')} | ${escapeHtml(period)}</div><div class="summary"><div class="box"><small>Opening</small><b>${opening}</b></div><div class="box"><small>Received</small><b>${received}</b></div><div class="box"><small>Paid</small><b>${paid}</b></div><div class="box"><small>Closing</small><b>${closing}</b></div></div><table><thead><tr><th>Date</th><th>Reference</th><th>Description</th><th>Party</th><th>Received</th><th>Paid</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const gate=document.getElementById('authGate');
+  if(!gate)return;
+  new MutationObserver(()=>{
+    if(document.body.classList.contains('erp-locked')){
+      gate.classList.remove('hidden');
+      gate.classList.add('flex');
+    }
+  }).observe(gate,{attributes:true,attributeFilter:['class']});
+});
+</script>
+</body></html>`);w.document.close();
     }
 
     // --------------------------------------------------------
@@ -3620,21 +3636,56 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      const {data:{session}}=await db.auth.getSession();
-      if(!session){document.getElementById('authGate').classList.remove('hidden');return;}
-      await loadCurrentERPUser(session.user);
+      // v1.49.4 Strict Login: every fresh app load requires credentials.
+      currentERPUser=null;
+      document.body.classList.add('erp-locked');
+      manualPasswordEnteredV1493=false;
+      const gate=document.getElementById('authGate');
+      gate.classList.remove('hidden');
+      try{ await db.auth.signOut({scope:'local'}); }catch(_){}
+      const email=document.getElementById('loginEmail'),password=document.getElementById('loginPassword');
+      if(email) email.value='';
+      if(password) password.value='';
+      setTimeout(()=>email?.focus(),80);
+    }
+    let manualPasswordEnteredV1493=false;
+    function markManualPasswordV1493(e){
+      if(e && e.isTrusted && (e.key.length===1 || e.key==='Backspace' || e.key==='Delete')) manualPasswordEnteredV1493=true;
     }
     async function erpLogin(){
-      const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value,msg=document.getElementById('authMessage');
+      const email=document.getElementById('loginEmail').value.trim();
+      const password=document.getElementById('loginPassword').value;
+      const msg=document.getElementById('authMessage');
+      msg.classList.remove('hidden');
+      if(!email || !password || !manualPasswordEnteredV1493){
+        msg.className='mb-3 p-3 rounded-xl text-sm bg-red-50 text-red-700';
+        msg.textContent=!email ? 'Email is required.' : 'Please type your password manually before signing in.';
+        document.getElementById('loginPassword').value='';
+        manualPasswordEnteredV1493=false;
+        document.getElementById('loginPassword').focus();
+        return;
+      }
+      msg.className='mb-3 p-3 rounded-xl text-sm bg-slate-50 text-slate-600';
+      msg.textContent='Signing in...';
       const {data,error}=await db.auth.signInWithPassword({email,password});
-      if(error){msg.className='mb-3 p-3 rounded-xl text-sm bg-red-50 text-red-700';msg.textContent=error.message;return;}
+      if(error || !data?.user){
+        msg.className='mb-3 p-3 rounded-xl text-sm bg-red-50 text-red-700';
+        msg.textContent=error?.message||'Login failed.';
+        return;
+      }
       await loadCurrentERPUser(data.user);
+      if(currentERPUser){
+        password=document.getElementById('loginPassword');
+        if(password) password.value='';
+        manualPasswordEnteredV1493=false;
+        msg.classList.add('hidden');
+      }
     }
     async function erpLogout(){await db.auth.signOut();location.reload();}
     async function loadCurrentERPUser(authUser){
       const {data,error}=await db.from('erp_users').select('id,auth_user_id,email,full_name,role,is_active').eq('auth_user_id',authUser.id).maybeSingle();
-      if(error||!data||!data.is_active){await db.auth.signOut();const m=document.getElementById('authMessage');m.className='mb-3 p-3 rounded-xl text-sm bg-red-50 text-red-700';m.textContent='ERP access is not active for this account.';document.getElementById('authGate').classList.remove('hidden');return;}
-      currentERPUser=data;document.getElementById('authGate').classList.add('hidden');
+      if(error||!data||!data.is_active){document.body.classList.add('erp-locked');await db.auth.signOut();const m=document.getElementById('authMessage');m.className='mb-3 p-3 rounded-xl text-sm bg-red-50 text-red-700';m.textContent='ERP access is not active for this account.';document.getElementById('authGate').classList.remove('hidden');return;}
+      currentERPUser=data;document.body.classList.remove('erp-locked');document.getElementById('authGate').classList.add('hidden');
       const box=document.getElementById('currentUserBox');if(box)box.classList.remove('hidden');
       if(document.getElementById('currentUserName'))document.getElementById('currentUserName').textContent=data.full_name||data.email;
       if(document.getElementById('currentUserRole'))document.getElementById('currentUserRole').textContent=data.role;
@@ -4740,10 +4791,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.49 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.49.4 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.49</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.49.4</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -4782,5 +4833,21 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div id="gs149Body" class="p-4 overflow-y-auto max-h-[62vh]"><div class="text-center text-slate-400 py-12">Type at least 2 characters to search across ZB & SONS ERP.</div></div>
 <div class="px-5 py-3 border-t text-[10px] text-slate-400 flex justify-between"><span>Enter = open first result · Esc = close</span><span>Powered By: XaviSoft</span></div>
 </div></div>
+
+<script>
+  // v1.49.4: this MUST be a normal inline script; inline code in a script tag
+  // that also has src= is ignored by browsers.
+  window.addEventListener('DOMContentLoaded', async () => {
+    const gate=document.getElementById('authGate');
+    if(gate){ gate.classList.remove('hidden'); gate.classList.add('flex'); }
+    currentERPUser=null;
+    const email=document.getElementById('loginEmail');
+    const password=document.getElementById('loginPassword');
+    if(email) email.value='';
+    if(password) password.value='';
+    await initERPAuth();
+  });
+  document.addEventListener('keydown',e=>{if(e.key==='Escape' && typeof closeInvestorEditModal==='function')closeInvestorEditModal();});
+</script>
 </body>
 </html>
