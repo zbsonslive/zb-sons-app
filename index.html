@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2</title>
+  <title>ZB & SONS ERP v1.31.1 | (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -348,8 +348,10 @@
   }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body class="text-slate-800 antialiased min-h-screen flex">
+
   <div id="authGate" class="fixed inset-0 z-[9999] bg-slate-950 flex items-center justify-center p-5">
     <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-7">
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p></div>
@@ -357,7 +359,7 @@
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
       <label class="text-xs font-bold text-slate-500">PASSWORD</label><input id="loginPassword" type="password" class="mt-1 mb-4 w-full border rounded-xl px-4 py-3" placeholder="••••••••" onkeydown="if(event.key==='Enter')erpLogin()">
       <button onclick="erpLogin()" class="w-full py-3 bg-slate-900 text-white rounded-xl font-black">Sign In</button>
-      <p class="text-[11px] text-slate-400 text-center mt-4">Authorized ZB & SONS users only · A Project by: XaviTech</p>
+      <p class="text-[11px] text-slate-400 text-center mt-4">Authorized ZB & SONS users only · A Project by: XaviSoft</p>
     </div>
   </div>
 
@@ -442,7 +444,7 @@
         <div class="text-[11px]">
           <p class="font-bold text-slate-800">ZB & SONS</p>
           <p id="dbStatusBadge" class="text-emerald-600 font-medium">System Online</p>
-          <p class="text-[9px] text-slate-400 mt-1 uppercase tracking-wider">A Project by: <span class="font-bold text-slate-600">XaviTech</span></p>
+          <p class="text-[9px] text-slate-400 mt-1 uppercase tracking-wider">A Project by: <span class="font-bold text-slate-600">XaviSoft</span></p>
         </div>
       </div>
     </div>
@@ -466,7 +468,7 @@
     <div id="view-home" class="page-view max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p><h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Executive Dashboard</h1><p class="text-sm text-slate-500 mt-1">Live financial, inventory and LC position from posted ERP transactions.</p></div>
-        <div class="flex gap-2"><button onclick="navigate('profitanalysis')" class="px-4 py-2.5 border bg-white rounded-xl text-sm font-bold">Profit Analysis</button><button onclick="refreshDashboardMetrics()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh</button></div>
+        <div class="flex gap-2"><button onclick="openGlobalSearchV149()" class="bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>⌕</span><span>Smart Search</span><span class="text-[10px] text-slate-400">Ctrl+K</span></button><button onclick="openNotificationCenterV148()" class="relative bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>🔔</span><span>Notifications</span><span id="notificationCountV148" class="hidden min-w-[20px] h-5 px-1 bg-red-600 text-white text-[10px] font-black rounded-full items-center justify-center">0</span></button><button onclick="navigate('profitanalysis')" class="px-4 py-2.5 border bg-white rounded-xl text-sm font-bold">Profit Analysis</button><button onclick="refreshDashboardMetrics()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh</button></div>
       </div>
 
 
@@ -504,9 +506,16 @@
         <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">ACTIVE LC / CARGO</p><p id="dashLcExposure" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p id="dashLcCount" class="text-[11px] text-slate-400 mt-2">0 active shipments</p></div>
       </div>
 
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+        <button onclick="navigate('salesregister')" class="text-left erp-card bg-white border rounded-2xl p-4 hover:shadow-md transition"><p class="text-xs font-bold text-slate-400">UNPAID / PARTIAL INVOICES</p><p id="dash143UnpaidInvoices" class="text-2xl font-black mt-2">0</p><p id="dash143UnpaidAmount" class="text-[11px] text-red-600 mt-1">PKR 0.00 outstanding</p></button>
+        <button onclick="navigate('lc-pl')" class="text-left erp-card bg-white border rounded-2xl p-4 hover:shadow-md transition"><p class="text-xs font-bold text-slate-400">OPEN / IN-TRANSIT LC</p><p id="dash143ActiveLc" class="text-2xl font-black mt-2">0</p><p class="text-[11px] text-slate-400 mt-1">Shipments requiring follow-up</p></button>
+        <button onclick="navigate('inventory')" class="text-left erp-card bg-white border rounded-2xl p-4 hover:shadow-md transition"><p class="text-xs font-bold text-slate-400">ZERO / LOW STOCK</p><p id="dash143LowStock" class="text-2xl font-black mt-2">0</p><p class="text-[11px] text-slate-400 mt-1">Items at or below 10 units</p></button>
+        <button onclick="navigate('bankledger')" class="text-left erp-card bg-white border rounded-2xl p-4 hover:shadow-md transition"><p class="text-xs font-bold text-slate-400">BANK ATTENTION</p><p id="dash143BankAlerts" class="text-2xl font-black mt-2">0</p><p class="text-[11px] text-slate-400 mt-1">Negative / unreconciled banks</p></button>
+      </div>
+
       <div class="grid lg:grid-cols-3 gap-5 mb-5">
         <div class="lg:col-span-2 bg-white border rounded-2xl overflow-hidden">
-          <div class="p-5 border-b flex justify-between items-center"><div><h3 class="font-extrabold">Management Alerts</h3><p class="text-xs text-slate-400 mt-1">Items that may need attention</p></div><span id="dashAlertCount" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100">0 Alerts</span></div>
+          <div class="p-5 border-b flex justify-between items-center"><div><h3 class="font-extrabold">Business Snapshot</h3><p class="text-xs text-slate-400 mt-1">Current operational indicators</p></div><span id="dashAlertCount" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100">0 Alerts</span></div>
           <div id="dashAlerts" class="divide-y"><div class="p-5 text-sm text-slate-400">Loading alerts…</div></div>
         </div>
         <div class="bg-white border rounded-2xl p-5">
@@ -514,7 +523,8 @@
           <div class="space-y-2">
             <button onclick="navigate('sales')" class="w-full text-left p-3 rounded-xl bg-emerald-50 text-emerald-800 font-bold text-sm">Create Sales Invoice →</button>
             <button onclick="navigate('purchases')" class="w-full text-left p-3 rounded-xl bg-slate-50 font-bold text-sm">Record Purchase →</button>
-            <button onclick="navigate('outstanding')" class="w-full text-left p-3 rounded-xl bg-slate-50 font-bold text-sm">Manage Outstanding →</button>
+            <button onclick="navigate('outstanding')" class="w-full text-left p-3 rounded-xl bg-slate-50 font-bold text-sm">Receive / Manage Outstanding →</button>
+            <button onclick="navigate('supplierpayments')" class="w-full text-left p-3 rounded-xl bg-slate-50 font-bold text-sm">Pay Supplier →</button>
             <button onclick="navigate('lc-pl')" class="w-full text-left p-3 rounded-xl bg-slate-50 font-bold text-sm">Open Cargo / LC →</button>
           </div>
         </div>
@@ -783,21 +793,28 @@
     </div>
 
         <!-- VIEW: SUPPLIER LEDGER -->
-    <div id="view-supplierledger" class="page-view hidden max-w-6xl">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div><h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Supplier Ledger</h1><p class="text-sm text-slate-500 mt-1">Supplier payable, LC / cargo liability and supplier payments only.</p></div>
-        <div class="flex items-center gap-2 flex-wrap"><select id="supplierLedgerSelector" onchange="loadSupplierLedger()" class="border rounded-lg px-3 py-2 text-sm bg-white min-w-[260px]"><option value="">Select supplier</option></select>
-<button type="button" onclick="paySelectedSupplierFromLedger()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-sm whitespace-nowrap">+ Pay Supplier</button></div>
+    <div id="view-supplierledger" class="page-view hidden max-w-7xl">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+        <div><h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Supplier Ledger</h1><p class="text-sm text-slate-500 mt-1">Purchases / LC liability, payments, bank trace and running payable.</p></div>
+        <div class="flex items-center gap-2 flex-wrap"><button type="button" onclick="paySelectedSupplierFromLedger()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-sm whitespace-nowrap">+ Pay Supplier</button><button type="button" onclick="printSupplierLedgerV141()" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-bold">Print / PDF</button></div>
       </div>
-      <div class="grid md:grid-cols-3 gap-4 mb-5">
-        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">PAYABLE CREATED</p><p id="slPayable" class="text-2xl font-extrabold mt-2">PKR 0.00</p></div>
-        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">PAYMENTS / ADJUSTMENTS</p><p id="slPaid" class="text-2xl font-extrabold mt-2">PKR 0.00</p></div>
-        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">OUTSTANDING PAYABLE</p><p id="slBalance" class="text-2xl font-extrabold mt-2">PKR 0.00</p></div>
+      <div class="bg-white border rounded-2xl p-4 mb-5"><div class="grid md:grid-cols-4 gap-3 items-end">
+        <div><label class="text-xs font-bold text-slate-500">SUPPLIER</label><select id="supplierLedgerSelector" onchange="loadSupplierLedger()" class="mt-1 w-full border rounded-xl px-3 py-2.5 bg-white"><option value="">Select supplier</option></select></div>
+        <div><label class="text-xs font-bold text-slate-500">FROM DATE</label><input id="sl141From" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+        <div><label class="text-xs font-bold text-slate-500">TO DATE</label><input id="sl141To" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+        <button onclick="loadSupplierLedger()" class="bg-slate-900 text-white rounded-xl px-4 py-2.5 font-bold">Generate Ledger</button>
+      </div></div>
+      <div class="grid md:grid-cols-4 gap-4 mb-5">
+        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">OPENING BALANCE</p><p id="sl141Opening" class="text-xl font-extrabold mt-2">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">PAYABLE CREATED</p><p id="slPayable" class="text-xl font-extrabold mt-2">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">PAYMENTS / ADJUSTMENTS</p><p id="slPaid" class="text-xl font-extrabold mt-2 text-emerald-700">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-5"><p class="text-xs font-bold text-slate-400">CURRENT PAYABLE</p><p id="slBalance" class="text-xl font-extrabold mt-2 text-red-700">PKR 0.00</p></div>
       </div>
       <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        <div class="p-4 border-b"><b id="sl141Heading">Select a supplier</b><div id="sl141Period" class="text-xs text-slate-400 mt-1"></div></div>
         <div class="overflow-x-auto"><table class="w-full text-left border-collapse text-sm">
-          <thead class="bg-slate-50"><tr><th class="py-3 px-4">Date</th><th class="py-3 px-4">Particulars</th><th class="py-3 px-4">LC / Shipment</th><th class="py-3 px-4 text-right">Payable</th><th class="py-3 px-4 text-right">Payment</th><th class="py-3 px-4 text-right">Balance</th></tr></thead>
-          <tbody id="supplierLedgerBody" class="divide-y divide-slate-100 font-mono text-xs"><tr><td colspan="6" class="p-8 text-center text-slate-400">Select a supplier.</td></tr></tbody>
+          <thead class="bg-slate-50"><tr><th class="py-3 px-4">Date</th><th class="py-3 px-4">Voucher / Particulars</th><th class="py-3 px-4">Purchase / LC</th><th class="py-3 px-4">Paid Through</th><th class="py-3 px-4 text-right">Payable</th><th class="py-3 px-4 text-right">Payment</th><th class="py-3 px-4 text-right">Balance</th></tr></thead>
+          <tbody id="supplierLedgerBody" class="divide-y divide-slate-100 font-mono text-xs"><tr><td colspan="7" class="p-8 text-center text-slate-400">Select a supplier.</td></tr></tbody>
         </table></div>
       </div>
     </div>
@@ -919,34 +936,6 @@
       </div>
     </div>
 
-    <!-- CUSTOMER RECEIPT HISTORY & STATEMENT -->
-    <div id="view-customerstatement" class="page-view hidden max-w-7xl">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Receivables Control</p><h1 class="text-3xl font-extrabold mt-1">Customer Receipt History & Statement</h1><p class="text-sm text-slate-500 mt-1">Complete invoice and receipt trail with customer running balance.</p></div>
-        <button onclick="printCustomerStatementV140()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Print / PDF</button>
-      </div>
-      <div class="bg-white border rounded-2xl p-5 mb-5"><div class="grid md:grid-cols-4 gap-3 items-end">
-        <div><label class="text-xs font-bold text-slate-500">CUSTOMER</label><select id="cs140Customer" class="mt-1 w-full border rounded-xl px-3 py-2.5"><option value="">Select customer</option></select></div>
-        <div><label class="text-xs font-bold text-slate-500">FROM DATE</label><input id="cs140From" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
-        <div><label class="text-xs font-bold text-slate-500">TO DATE</label><input id="cs140To" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
-        <button onclick="loadCustomerStatementV140()" class="bg-slate-900 text-white rounded-xl px-4 py-2.5 font-bold">Generate Statement</button>
-      </div></div>
-      <div class="grid md:grid-cols-4 gap-4 mb-5">
-        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL SALES</p><p id="cs140Sales" class="text-xl font-black mt-2">PKR 0.00</p></div>
-        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL RECEIVED</p><p id="cs140Received" class="text-xl font-black mt-2 text-emerald-700">PKR 0.00</p></div>
-        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">CURRENT OUTSTANDING</p><p id="cs140Outstanding" class="text-xl font-black mt-2 text-red-700">PKR 0.00</p></div>
-        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">UNPAID / PARTIAL INVOICES</p><p id="cs140Unpaid" class="text-xl font-black mt-2">0</p></div>
-      </div>
-      <div class="bg-white border rounded-2xl overflow-hidden mb-5">
-        <div class="p-4 border-b"><b id="cs140Heading">Select a customer</b><div id="cs140Period" class="text-xs text-slate-500 mt-1"></div></div>
-        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Type / Reference</th><th class="p-3 text-left">Details</th><th class="p-3 text-left">Received In</th><th class="p-3 text-right">Invoice</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Balance</th><th class="p-3 text-left">Action</th></tr></thead><tbody id="cs140Body"><tr><td colspan="8" class="p-8 text-center text-slate-400">Select customer and generate statement.</td></tr></tbody></table></div>
-      </div>
-      <div class="bg-white border rounded-2xl overflow-hidden">
-        <div class="p-4 border-b"><b>Invoice-wise Receipt History</b></div>
-        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Invoice Date</th><th class="p-3 text-right">Invoice Amount</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Outstanding</th><th class="p-3 text-left">Status</th></tr></thead><tbody id="cs140InvoiceBody"></tbody></table></div>
-      </div>
-    </div>
-
     <!-- SUPPLIER PAYMENT & PAYABLE CONTROL -->
     <div id="view-supplierpayments" class="page-view hidden max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
@@ -964,7 +953,7 @@
     <div id="view-bankledger" class="page-view hidden max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
         <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Banking Control</p><h1 class="text-3xl font-extrabold mt-1">Bank Ledger & Statement</h1><p class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance from posted accounting entries.</p></div>
-        <button onclick="printBankLedger()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Print / PDF</button>
+        <div class="flex gap-2"><button onclick="openBankReconciliationV142()" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold">Reconcile Bank</button><button onclick="printBankLedger()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Print / PDF</button></div>
       </div>
       <div class="bg-white border rounded-2xl p-5 mb-5">
         <div class="grid md:grid-cols-4 gap-3 items-end">
@@ -984,6 +973,10 @@
         <div class="p-4 border-b"><b id="bankLedgerHeading">Select a bank account</b><div id="bankLedgerPeriod" class="text-xs text-slate-500 mt-1"></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher / Reference</th><th class="p-3 text-left">Description</th><th class="p-3 text-left">Party</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Paid</th><th class="p-3 text-right">Balance</th></tr></thead><tbody id="bankLedgerBody"><tr><td colspan="7" class="p-8 text-center text-slate-400">Select bank and generate statement.</td></tr></tbody></table></div>
       </div>
+      <div class="bg-white border rounded-2xl overflow-hidden mt-5">
+        <div class="p-4 border-b"><b>Reconciliation History</b><div class="text-xs text-slate-400 mt-1">Saved bank reconciliation snapshots.</div></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-right">Book Balance</th><th class="p-3 text-right">Pending Deposits</th><th class="p-3 text-right">Pending Payments</th><th class="p-3 text-right">Adjusted Balance</th><th class="p-3 text-right">Actual Bank</th><th class="p-3 text-right">Difference</th></tr></thead><tbody id="br142History"><tr><td colspan="7" class="p-6 text-center text-slate-400">Select a bank.</td></tr></tbody></table></div>
+      </div>
     </div>
 
     <!-- FINANCE & ACCOUNTS HUB -->
@@ -991,29 +984,60 @@
       <div class="mb-7">
         <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Finance Control Center</p>
         <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Finance & Accounts</h1>
-        <p class="text-sm text-slate-500 mt-1">Cash, banking, party ledgers, accounting and financial reporting in one place.</p>
+        <p class="text-sm text-slate-500 mt-1">Daily finance first. Technical accounting remains available under Advanced Accounting.</p>
       </div>
-      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <button onclick="navigate('cashbook')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Cash & Bank" onclick="event.stopPropagation();togglePagePin('cashbook')">☆</span><div class="font-extrabold text-lg">Cash & Bank</div><div class="text-sm text-slate-500 mt-1">Receipts, payments, transfers and cash book.</div></button>
-        <button onclick="navigate('bankledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Bank Ledger" onclick="event.stopPropagation();togglePagePin('bankledger')">☆</span><div class="font-extrabold text-lg">Bank Ledger & Statement</div><div class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance with print.</div></button>
-        <button onclick="navigate('supplierpayments')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Supplier Payment Control</div><div class="text-sm text-slate-500 mt-1">Supplier payable, LC/Purchase allocation and complete payment register.</div></button>
-        <button onclick="navigate('customerstatement')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Customer Statement</div><div class="text-sm text-slate-500 mt-1">Invoices, receipt history, outstanding and running balance.</div></button>
-        <button onclick="navigate('trialbalance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Trial Balance" onclick="event.stopPropagation();togglePagePin('trialbalance')">☆</span><div class="font-extrabold text-lg">Trial Balance</div><div class="text-sm text-slate-500 mt-1">Account balances and debit / credit position.</div></button>
-        <button onclick="navigate('khata')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Customer Ledger" onclick="event.stopPropagation();togglePagePin('khata')">☆</span><div class="font-extrabold text-lg">Customer Ledger</div><div class="text-sm text-slate-500 mt-1">Customer receivables and transaction history.</div></button>
-        <button onclick="navigate('supplierledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Supplier Ledger" onclick="event.stopPropagation();togglePagePin('supplierledger')">☆</span><div class="font-extrabold text-lg">Supplier Ledger</div><div class="text-sm text-slate-500 mt-1">Supplier payables and payment history.</div></button>
-        <button onclick="navigate('statements')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Party Statements" onclick="event.stopPropagation();togglePagePin('statements')">☆</span><div class="font-extrabold text-lg">Party Statements</div><div class="text-sm text-slate-500 mt-1">Customer and supplier statements with date range and print/PDF.</div></button>
-        <button onclick="navigate('outstanding')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Outstanding Management" onclick="event.stopPropagation();togglePagePin('outstanding')">☆</span><div class="font-extrabold text-lg">Outstanding Management</div><div class="text-sm text-slate-500 mt-1">Receivables, payables and net outstanding position.</div></button>
-        <button onclick="navigate('vouchers')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Accounting Vouchers" onclick="event.stopPropagation();togglePagePin('vouchers')">☆</span><div class="font-extrabold text-lg">Accounting Vouchers</div><div class="text-sm text-slate-500 mt-1">Journal, receipt and payment voucher entries.</div></button>
-        <button onclick="navigate('accounts')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin General Ledger" onclick="event.stopPropagation();togglePagePin('accounts')">☆</span><div class="font-extrabold text-lg">General Ledger</div><div class="text-sm text-slate-500 mt-1">Detailed account-wise accounting movements.</div></button>
-        <button onclick="navigate('profitanalysis')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Profit & Expense Analysis" onclick="event.stopPropagation();togglePagePin('profitanalysis')">☆</span><div class="font-extrabold text-lg">Profit & Expense Analysis</div><div class="text-sm text-slate-500 mt-1">Sales, COGS, gross profit, expenses and net profit by period.</div></button>
-        <button onclick="navigate('reports')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Financial Reports" onclick="event.stopPropagation();togglePagePin('reports')">☆</span><div class="font-extrabold text-lg">Financial Reports</div><div class="text-sm text-slate-500 mt-1">Profit & Loss and management reports.</div></button>
-        <button onclick="navigate('finance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Financial Management" onclick="event.stopPropagation();togglePagePin('finance')">☆</span><div class="font-extrabold text-lg">Financial Management</div><div class="text-sm text-slate-500 mt-1">Expenses and other finance controls.</div></button>
-        <button onclick="navigate('audit')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Audit Trail" onclick="event.stopPropagation();togglePagePin('audit')">☆</span><div class="font-extrabold text-lg">Audit Trail</div><div class="text-sm text-slate-500 mt-1">Read-only chronological system and transaction activity.</div></button>
-        <button onclick="navigate('reversals')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Edit, Cancel & Reversal Control</div><div class="text-sm text-slate-500 mt-1">Safely reverse posted sales, purchases, receipts, payments and expenses.</div></button>
-        <button data-user-admin onclick="navigate('users')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Users & Permissions</div><div class="text-sm text-slate-500 mt-1">Secure user control for authorized management.</div></button>
-      </div>
-    </div>
 
+      <div class="mb-7">
+        <div class="flex items-center justify-between mb-3"><div><h2 class="text-lg font-black">Daily Finance</h2><p class="text-xs text-slate-400">Receipts, payments, bank activity and outstanding control.</p></div></div>
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <button onclick="navigate('cashbook')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Cash & Bank" onclick="event.stopPropagation();togglePagePin('cashbook')">☆</span><div class="font-extrabold text-lg">Cash & Bank</div><div class="text-sm text-slate-500 mt-1">Receipts, payments and transfers.</div></button>
+          <button onclick="navigate('bankledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Bank Ledger" onclick="event.stopPropagation();togglePagePin('bankledger')">☆</span><div class="font-extrabold text-lg">Bank Ledger</div><div class="text-sm text-slate-500 mt-1">Bank-wise statement and running balance.</div></button>
+          <button onclick="navigate('supplierpayments')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Supplier Payments</div><div class="text-sm text-slate-500 mt-1">Purchase / LC payment allocation.</div></button>
+          <button onclick="navigate('outstanding')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Outstanding Management" onclick="event.stopPropagation();togglePagePin('outstanding')">☆</span><div class="font-extrabold text-lg">Outstanding</div><div class="text-sm text-slate-500 mt-1">Customer receivables and supplier payables.</div></button>
+        </div>
+      </div>
+
+      <div class="mb-7">
+        <h2 class="text-lg font-black mb-1">Party Accounts</h2><p class="text-xs text-slate-400 mb-3">One ledger per party type — no duplicate statement menu.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <button onclick="navigate('khata')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Customer Ledger" onclick="event.stopPropagation();togglePagePin('khata')">☆</span><div class="font-extrabold text-lg">Customer Ledger</div><div class="text-sm text-slate-500 mt-1">Sales, receipts and running receivable balance.</div></button>
+          <button onclick="navigate('supplierledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Supplier Ledger" onclick="event.stopPropagation();togglePagePin('supplierledger')">☆</span><div class="font-extrabold text-lg">Supplier Ledger</div><div class="text-sm text-slate-500 mt-1">Purchases / LC liability, payments and running payable.</div></button>
+        </div>
+      </div>
+
+      <div class="mb-7">
+        <h2 class="text-lg font-black mb-1">Management Reports</h2><p class="text-xs text-slate-400 mb-3">Core reports only; overlapping report menus removed from the hub.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          <button onclick="navigate('profitanalysis')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Profit & Expense Analysis" onclick="event.stopPropagation();togglePagePin('profitanalysis')">☆</span><div class="font-extrabold text-lg">Profit & Expense Analysis</div><div class="text-sm text-slate-500 mt-1">Sales, COGS, expenses and net profit by period.</div></button>
+          <button onclick="navigate('trialbalance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Trial Balance" onclick="event.stopPropagation();togglePagePin('trialbalance')">☆</span><div class="font-extrabold text-lg">Trial Balance</div><div class="text-sm text-slate-500 mt-1">Account balances and debit / credit position.</div></button>
+        </div>
+      </div>
+
+      <details class="bg-slate-50 border rounded-2xl p-4">
+        <summary class="cursor-pointer font-black text-slate-700 select-none">Advanced Accounting & System Control</summary>
+        <p class="text-xs text-slate-400 mt-1 mb-4">For accounting adjustments, audit and administration. Daily users normally do not need these screens.</p>
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-3">
+          <button onclick="navigate('vouchers')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Accounting Vouchers</div><div class="text-xs text-slate-500 mt-1">Manual journal / receipt / payment vouchers.</div></button>
+          <button onclick="navigate('accounts')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">General Ledger</div><div class="text-xs text-slate-500 mt-1">Technical account-wise movements.</div></button>
+          <button onclick="navigate('finance')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Expenses & Finance Controls</div><div class="text-xs text-slate-500 mt-1">Expense entry and finance controls.</div></button>
+          <button onclick="navigate('audit')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Audit Trail</div><div class="text-xs text-slate-500 mt-1">Read-only system activity.</div></button><button onclick="openBusinessTimelineV147()" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Business Activity Timeline</div><div class="text-xs text-slate-500 mt-1">Track who added, changed, cancelled or removed records and when.</div></button>
+          <button onclick="navigate('reversals')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Edit, Cancel & Reversal</div><div class="text-xs text-slate-500 mt-1">Safe correction controls.</div></button><button onclick="runGoLiveAuditV144()" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">System Health Check</div><div class="text-xs text-slate-500 mt-1">Read-only go-live integrity audit.</div></button><button onclick="openBackupCenterV145()" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Backup & Export Center</div><div class="text-xs text-slate-500 mt-1">Download independent copies of critical ERP data.</div></button>
+          <button data-user-admin onclick="navigate('users')" class="text-left bg-white border rounded-xl p-4 hover:shadow-sm"><div class="font-bold">Users & Permissions</div><div class="text-xs text-slate-500 mt-1">Authorized user administration.</div></button>
+        </div>
+      </details>
+
+      <div id="health144Panel" class="hidden mt-5 bg-white border rounded-2xl overflow-hidden">
+        <div class="p-5 border-b flex justify-between items-center"><div><h3 class="font-extrabold">Go-Live System Health</h3><p class="text-xs text-slate-400 mt-1">Read-only checks. No business transaction is changed by this audit.</p></div><div class="flex gap-2"><button onclick="openBankTagRepairV1442()" class="px-3 py-2 bg-amber-500 text-white rounded-lg text-xs font-bold">Repair Bank Tagging</button><button onclick="runGoLiveAuditV144()" class="px-3 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold">Run Again</button></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 p-5 border-b bg-slate-50/50">
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.49</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+</div></div>
+        <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
+      </div>
+      <div class="mt-4 text-xs text-slate-400">v1.49 hardening: integrity audit added without creating another daily-use module.</div>
+    </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
@@ -1297,7 +1321,7 @@
         <div><span>Stock Value</span><b id="bpStock">PKR 0.00</b></div><div><span>Liquid Funds</span><b id="bpLiquid">PKR 0.00</b></div>
       </div>
       <div class="bp-section"><h3>Profit & Loss</h3><table><tbody id="bpProfitLoss"></tbody></table></div>
-      <div class="bp-foot">Generated from ZB & SONS ERP · A Project by XaviTech</div>
+      <div class="bp-foot">Generated from ZB & SONS ERP · A Project by XaviSoft</div>
     </div>
 
     <div id="view-reports" class="page-view hidden max-w-6xl">
@@ -1702,7 +1726,6 @@
       if (view === 'cashbook') loadCashBook();
       if (view === 'bankledger') initBankLedger();
       if (view === 'supplierpayments') initSupplierPaymentControlV139();
-      if (view === 'customerstatement') initCustomerStatementV140();
       if (view === 'trialbalance') loadTrialBalance();
       if (view === 'khata') populateKhataPartySelector();
       if (view === 'supplierledger') populateSupplierLedgerSelector();
@@ -1722,30 +1745,6 @@
       if (view === 'reports') loadBusinessReports();
       if (view === 'finance') loadExpenses();
       if (view === 'lc-pl') loadCargoShipments();
-    }
-
-    let customerStatementRowsV140=[],customerStatementInvoicesV140=[];
-    async function initCustomerStatementV140(){
-      if(!liveParties.length)await fetchParties();
-      const el=document.getElementById('cs140Customer');if(!el)return;const old=el.value;
-      el.innerHTML='<option value="">Select customer</option>'+liveParties.filter(p=>isCustomerParty(p)).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');if(old)el.value=old;
-    }
-    async function loadCustomerStatementV140(){
-      const customerId=document.getElementById('cs140Customer')?.value,from=document.getElementById('cs140From')?.value||null,to=document.getElementById('cs140To')?.value||null,body=document.getElementById('cs140Body');
-      if(!customerId){showToast('Select a customer.','error');return;}body.innerHTML='<tr><td colspan="8" class="p-8 text-center text-slate-400">Loading customer statement...</td></tr>';
-      try{
-        const [{data:rows,error},{data:invs,error:ie}]=await Promise.all([db.rpc('customer_statement_v140',{p_customer_id:customerId,p_from_date:from,p_to_date:to}),db.rpc('customer_invoice_summary_v140',{p_customer_id:customerId})]);if(error)throw error;if(ie)throw ie;
-        customerStatementRowsV140=rows||[];customerStatementInvoicesV140=invs||[];
-        const customer=liveParties.find(p=>String(p.id)===String(customerId))||{},sales=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.invoice_amount||0),0),received=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.received||0),0),outstanding=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.outstanding||0),0),unpaid=customerStatementInvoicesV140.filter(x=>Number(x.outstanding||0)>.005).length;
-        document.getElementById('cs140Sales').textContent=money(sales);document.getElementById('cs140Received').textContent=money(received);document.getElementById('cs140Outstanding').textContent=money(outstanding);document.getElementById('cs140Unpaid').textContent=unpaid;document.getElementById('cs140Heading').textContent=customer.name||'Customer';document.getElementById('cs140Period').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
-        body.innerHTML=customerStatementRowsV140.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.tx_date||'')}</td><td class="p-3"><b>${escapeHtml(r.tx_type||'')}</b><div class="text-xs text-slate-400">${escapeHtml(r.reference||'-')}</div></td><td class="p-3">${escapeHtml(r.details||'-')}</td><td class="p-3">${escapeHtml(r.received_in||'-')}</td><td class="p-3 text-right font-mono">${Number(r.invoice_amount||0)?money(r.invoice_amount):'-'}</td><td class="p-3 text-right font-mono text-emerald-700">${Number(r.received_amount||0)?money(r.received_amount):'-'}</td><td class="p-3 text-right font-mono font-bold">${money(r.running_balance)}</td><td class="p-3">${r.invoice_id?`<button onclick="printInvoice('${r.invoice_id}')" class="text-xs font-bold text-brand-600">Print Invoice</button>`:'-'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No transactions in selected period.</td></tr>';
-        document.getElementById('cs140InvoiceBody').innerHTML=customerStatementInvoicesV140.map(x=>`<tr class="border-t"><td class="p-3 font-bold">${escapeHtml(x.invoice_number||'-')}</td><td class="p-3">${escapeHtml(x.invoice_date||'')}</td><td class="p-3 text-right font-mono">${money(x.invoice_amount)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(x.received)}</td><td class="p-3 text-right font-mono text-red-700">${money(x.outstanding)}</td><td class="p-3"><span class="text-xs font-bold">${escapeHtml(x.payment_status||'')}</span></td></tr>`).join('');
-      }catch(err){body.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
-    }
-    function printCustomerStatementV140(){
-      const customerId=document.getElementById('cs140Customer')?.value;if(!customerId){showToast('Generate customer statement first.','error');return;}const customer=liveParties.find(p=>String(p.id)===String(customerId))||{},period=document.getElementById('cs140Period').textContent;
-      const rows=customerStatementRowsV140.map(r=>`<tr><td>${escapeHtml(r.tx_date||'')}</td><td>${escapeHtml(r.tx_type||'')}<br><small>${escapeHtml(r.reference||'')}</small></td><td>${escapeHtml(r.details||'-')}</td><td>${escapeHtml(r.received_in||'-')}</td><td class="num">${Number(r.invoice_amount||0)?money(r.invoice_amount):'-'}</td><td class="num">${Number(r.received_amount||0)?money(r.received_amount):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
-      const w=window.open('','_blank','width=1100,height=900');if(!w)return;w.document.write(`<!doctype html><html><head><title>Customer Statement</title><style>body{font-family:Arial;padding:28px}h1{margin:0}.muted{color:#666;font-size:12px;margin:6px 0 18px}.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}</style></head><body><h1>ZB & SONS ERP — Customer Statement</h1><div class="muted">${escapeHtml(customer.name||'')} | ${escapeHtml(period)}</div><div class="sum"><div class="box"><small>Total Sales</small><b>${document.getElementById('cs140Sales').textContent}</b></div><div class="box"><small>Total Received</small><b>${document.getElementById('cs140Received').textContent}</b></div><div class="box"><small>Outstanding</small><b>${document.getElementById('cs140Outstanding').textContent}</b></div><div class="box"><small>Unpaid / Partial</small><b>${document.getElementById('cs140Unpaid').textContent}</b></div></div><table><thead><tr><th>Date</th><th>Type / Ref</th><th>Details</th><th>Received In</th><th>Invoice</th><th>Received</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
     }
 
     async function initSupplierPaymentControlV139(){
@@ -1788,11 +1787,224 @@
     }
     document.addEventListener('click',e=>{if(e.target?.id==='supplierPaymentV139Modal')closeSupplierPaymentV139();});
 
+    function openBusinessTimelineV147(){const m=document.getElementById('businessTimelineV147Modal');m.classList.remove('hidden');m.classList.add('flex');initBusinessTimelineV147();}
+    function closeBusinessTimelineV147(){const m=document.getElementById('businessTimelineV147Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    async function initBusinessTimelineV147(){
+      const now=new Date(),ago=new Date();ago.setDate(now.getDate()-30);
+      if(!document.getElementById('tl147From').value)document.getElementById('tl147From').value=ago.toISOString().slice(0,10);
+      if(!document.getElementById('tl147To').value)document.getElementById('tl147To').value=now.toISOString().slice(0,10);
+      await loadBusinessTimelineV147();
+    }
+    function setTimelineTodayV147(){const d=new Date().toISOString().slice(0,10);document.getElementById('tl147From').value=d;document.getElementById('tl147To').value=d;loadBusinessTimelineV147();}
+    function timelineBadgeV147(a){a=String(a||'ACTIVITY').toUpperCase();return a;}
+    async function loadBusinessTimelineV147(){
+      const body=document.getElementById('tl147Body');body.innerHTML='<div class="text-slate-400 py-6">Loading timeline...</div>';
+      const from=document.getElementById('tl147From').value||null,to=document.getElementById('tl147To').value||null,user=document.getElementById('tl147User').value||null,module=document.getElementById('tl147Module').value||null,action=document.getElementById('tl147Action').value||null;
+      try{
+        const {data,error}=await db.rpc('business_activity_timeline_v147',{p_from:from,p_to:to,p_user:user,p_module:module,p_action:action,p_limit:500});if(error)throw error;const rows=data||[];
+        document.getElementById('tl147Count').textContent=`${rows.length} activit${rows.length===1?'y':'ies'}`;
+        const users=[...new Set(rows.map(r=>r.user_name).filter(Boolean))].sort(),mods=[...new Set(rows.map(r=>r.module_name).filter(Boolean))].sort();
+        const us=document.getElementById('tl147User'),ms=document.getElementById('tl147Module'),uv=us.value,mv=ms.value;
+        users.forEach(x=>{if(![...us.options].some(o=>o.value===x)){const o=new Option(x,x);us.add(o);}});mods.forEach(x=>{if(![...ms.options].some(o=>o.value===x)){const o=new Option(x,x);ms.add(o);}});us.value=uv;ms.value=mv;
+        body.innerHTML=rows.map(r=>{const dt=new Date(r.activity_at),when=isNaN(dt)?String(r.activity_at||''):dt.toLocaleString();return `<div class="relative"><span class="absolute -left-[36px] top-1 w-4 h-4 bg-white border-4 border-slate-900 rounded-full"></span><div class="border rounded-xl p-4 bg-white"><div class="flex flex-wrap justify-between gap-2"><div><span class="text-[10px] font-black px-2 py-1 rounded-full bg-slate-100">${escapeHtml(timelineBadgeV147(r.action_type))}</span><span class="text-xs font-bold ml-2">${escapeHtml(r.module_name||'System')}</span></div><span class="text-xs text-slate-400">${escapeHtml(when)}</span></div><div class="font-bold mt-3">${escapeHtml(r.description||r.reference||'ERP activity')}</div><div class="text-xs text-slate-500 mt-1">By <b>${escapeHtml(r.user_name||'Legacy / Unrecorded User')}</b>${r.user_role?' · '+escapeHtml(r.user_role):''}${r.reference?' · Ref: '+escapeHtml(r.reference):''}</div></div></div>`;}).join('')||'<div class="text-slate-400 py-8">No activities found for these filters.</div>';
+      }catch(err){body.innerHTML=`<div class="text-red-500 py-6">${escapeHtml(err.message||String(err))}</div>`;}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='businessTimelineV147Modal')closeBusinessTimelineV147();});
+
+    function openNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.remove('hidden');m.classList.add('flex');loadNotificationCenterV148();}
+    function closeNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function notificationIconV148(type){return ({RECEIVABLE:'Customer',PAYABLE:'Supplier',CARGO:'LC / Cargo',STOCK:'Inventory',BANK:'Bank',SYSTEM:'System',BACKUP:'Backup'})[type]||'Attention';}
+    async function loadNotificationCenterV148(){
+      const body=document.getElementById('nc148Body');body.innerHTML='<div class="text-slate-400 py-8 text-center">Loading notifications...</div>';
+      let rows=[];
+      try{const {data,error}=await db.rpc('erp_action_center_v148');if(error)throw error;rows=data||[];}catch(err){body.innerHTML=`<div class="text-red-500 py-6">${escapeHtml(err.message||String(err))}</div>`;return;}
+      const last=localStorage.getItem('zb_v145_last_backup');let backupAttention=false;
+      if(!last)backupAttention=true;else{const d=new Date(last);if(!isNaN(d)&&Date.now()-d.getTime()>7*86400000)backupAttention=true;}
+      if(backupAttention)rows.push({priority:'MEDIUM',notification_type:'BACKUP',title:'Local backup is due',details:last?`Last browser-recorded backup: ${last}`:'No local backup is recorded in this browser.',action_label:'Open Backup Center',action_target:'BACKUP',item_count:1});
+      const high=rows.filter(r=>r.priority==='HIGH').length,med=rows.filter(r=>r.priority==='MEDIUM').length,info=rows.filter(r=>r.priority==='INFO').length;
+      document.getElementById('nc148Total').textContent=rows.length;document.getElementById('nc148High').textContent=high;document.getElementById('nc148Medium').textContent=med;document.getElementById('nc148Info').textContent=info;
+      const badge=document.getElementById('notificationCountV148');badge.textContent=rows.length>99?'99+':rows.length;badge.classList.toggle('hidden',rows.length===0);badge.classList.toggle('flex',rows.length>0);
+      body.innerHTML=rows.map(r=>`<div class="border rounded-xl p-4 flex gap-4 items-start"><div class="w-24 shrink-0"><span class="text-[10px] font-black px-2 py-1 rounded-full ${r.priority==='HIGH'?'bg-red-100 text-red-700':r.priority==='MEDIUM'?'bg-amber-100 text-amber-700':'bg-blue-100 text-blue-700'}">${escapeHtml(r.priority)}</span><div class="text-[10px] text-slate-400 mt-2">${escapeHtml(notificationIconV148(r.notification_type))}</div></div><div class="flex-1"><div class="font-black">${escapeHtml(r.title)}</div><div class="text-xs text-slate-500 mt-1">${escapeHtml(r.details||'')}</div></div><div class="text-right"><div class="text-xl font-black">${Number(r.item_count||0).toLocaleString()}</div><button onclick="notificationActionV148('${escapeHtml(r.action_target||'')}')" class="mt-2 border rounded-lg px-3 py-2 text-xs font-bold">${escapeHtml(r.action_label||'View')}</button></div></div>`).join('')||'<div class="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-5 text-center font-bold">No current attention items detected.</div>';
+    }
+    function notificationActionV148(target){
+      closeNotificationCenterV148();
+      if(target==='BACKUP'){openBackupCenterV145();return;}
+      if(target==='HEALTH'){runGoLiveAuditV144();return;}
+      const map={OUTSTANDING:'outstanding',SUPPLIER:'supplierpayments',CARGO:'cargo',INVENTORY:'inventory',BANK:'bankledger'};
+      const key=map[target];if(!key){showToast('Open the relevant ERP module to review this item.');return;}
+      const el=document.querySelector(`[onclick*="'${key}'"],[onclick*='"${key}"']`);if(el)el.click();else showToast('Open the relevant ERP module to review this item.');
+    }
+    async function refreshNotificationBadgeV148(){try{const {data}=await db.rpc('erp_action_center_v148');let n=(data||[]).length;const last=localStorage.getItem('zb_v145_last_backup');if(!last)n++;const b=document.getElementById('notificationCountV148');if(b){b.textContent=n>99?'99+':n;b.classList.toggle('hidden',n===0);b.classList.toggle('flex',n>0);}}catch(_){}}
+    document.addEventListener('click',e=>{if(e.target?.id==='notificationCenterV148Modal')closeNotificationCenterV148();});
+    setTimeout(refreshNotificationBadgeV148,1800);
+
+    let gs149Timer=null,gs149Rows=[];
+    function openGlobalSearchV149(){const m=document.getElementById('globalSearchV149Modal');m.classList.remove('hidden');m.classList.add('flex');setTimeout(()=>document.getElementById('gs149Input')?.focus(),50);}
+    function closeGlobalSearchV149(){const m=document.getElementById('globalSearchV149Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function scheduleGlobalSearchV149(){clearTimeout(gs149Timer);gs149Timer=setTimeout(runGlobalSearchV149,280);}
+    function globalSearchKeyV149(e){if(e.key==='Escape')closeGlobalSearchV149();if(e.key==='Enter'&&gs149Rows.length){e.preventDefault();openGlobalSearchResultV149(0);}}
+    function gsIconV149(t){return ({INVOICE:'Invoice',PARTY:'Party',CARGO:'LC / Cargo',ITEM:'Item',VOUCHER:'Voucher',PAYMENT:'Payment'})[t]||'Record';}
+    async function runGlobalSearchV149(){
+      const q=document.getElementById('gs149Input').value.trim(),body=document.getElementById('gs149Body');
+      if(q.length<2){gs149Rows=[];body.innerHTML='<div class="text-center text-slate-400 py-12">Type at least 2 characters to search across ZB & SONS ERP.</div>';return;}
+      body.innerHTML='<div class="text-center text-slate-400 py-12">Searching...</div>';
+      try{const {data,error}=await db.rpc('global_smart_search_v149',{p_query:q,p_limit:60});if(error)throw error;gs149Rows=data||[];
+        body.innerHTML=gs149Rows.map((r,i)=>`<button onclick="openGlobalSearchResultV149(${i})" class="w-full text-left border rounded-xl p-4 mb-2 hover:bg-slate-50 flex gap-4 items-center"><div class="w-24 shrink-0"><span class="text-[10px] font-black bg-slate-100 rounded-full px-2 py-1">${escapeHtml(gsIconV149(r.result_type))}</span></div><div class="flex-1 min-w-0"><div class="font-black truncate">${escapeHtml(r.title||'Record')}</div><div class="text-xs text-slate-500 mt-1 truncate">${escapeHtml(r.subtitle||'')}</div></div><div class="text-right shrink-0"><div class="text-xs font-bold">${escapeHtml(r.reference||'')}</div><div class="text-[10px] text-slate-400 mt-1">${escapeHtml(r.result_date||'')}</div></div></button>`).join('')||'<div class="text-center text-slate-400 py-12">No matching ERP record found.</div>';
+      }catch(err){body.innerHTML=`<div class="text-center text-red-500 py-12">${escapeHtml(err.message||String(err))}</div>`;}
+    }
+    function openGlobalSearchResultV149(i){
+      const r=gs149Rows[i];if(!r)return;closeGlobalSearchV149();
+      const targets={INVOICE:['salesregister','sales'],PARTY:[r.party_type==='SUPPLIER'?'supplierledger':'customerledger'],CARGO:['cargo'],ITEM:['inventory'],VOUCHER:['vouchers','journal'],PAYMENT:['supplierpayments','outstanding']};
+      for(const key of (targets[r.result_type]||[])){const el=document.querySelector(`[onclick*="'${key}'"],[onclick*='"${key}"']`);if(el){el.click();showToast(`Opened ${r.result_type.toLowerCase()} module for ${r.reference||r.title}.`);return;}}
+      showToast(`Found: ${r.title}${r.reference?' · '+r.reference:''}`);
+    }
+    document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openGlobalSearchV149();}else if(e.key==='Escape'&&!document.getElementById('globalSearchV149Modal')?.classList.contains('hidden'))closeGlobalSearchV149();});
+    document.addEventListener('click',e=>{if(e.target?.id==='globalSearchV149Modal')closeGlobalSearchV149();});
+
+    const backupTablesV145=[
+      ['Master Data','parties'],['Master Data','items'],['Master Data','bank_accounts'],['Master Data','investors'],['Master Data','warehouses'],
+      ['Sales','invoices'],['Sales','invoice_items'],['Sales','customer_invoice_payments'],
+      ['Purchases','local_purchases'],['Purchases','supplier_payments'],['Cargo / LC','cargo_shipments'],['Cargo / LC','supplier_shipment_payments'],
+      ['Inventory','stock_movements'],['Finance','expenses'],['Finance','bank_transactions'],
+      ['Accounting','chart_of_accounts'],['Accounting','journal_entries'],['Accounting','journal_lines']
+    ];
+    function openBackupCenterV145(){const m=document.getElementById('backupCenterV145Modal');m.classList.remove('hidden');m.classList.add('flex');document.getElementById('bk145Last').textContent=localStorage.getItem('zb_v145_last_backup')||'Not recorded';previewBackupCountsV145();}
+    function closeBackupCenterV145(){const m=document.getElementById('backupCenterV145Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function downloadBlobV145(name,text,type){const blob=new Blob([text],{type}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);}
+    async function previewBackupCountsV145(){
+      const body=document.getElementById('bk145CountBody');body.innerHTML='<tr><td colspan="3" class="p-6 text-center text-slate-400">Reading record counts...</td></tr>';
+      const rows=[];let total=0,available=0;
+      for(const [area,table] of backupTablesV145){const {count,error}=await db.from(table).select('*',{count:'exact',head:true});if(!error){rows.push({area,table,count:count||0});total+=count||0;available++;}else rows.push({area,table,count:null});}
+      document.getElementById('bk145Tables').textContent=`${available}/${backupTablesV145.length}`;document.getElementById('bk145Records').textContent=total.toLocaleString();
+      body.innerHTML=rows.map(r=>`<tr class="border-t"><td class="p-3">${escapeHtml(r.area)}</td><td class="p-3 font-mono text-xs">${escapeHtml(r.table)}</td><td class="p-3 text-right font-bold">${r.count===null?'Unavailable':Number(r.count).toLocaleString()}</td></tr>`).join('');
+    }
+    async function fetchAllRowsV145(table){
+      const page=1000,out=[];let from=0;
+      while(true){const {data,error}=await db.from(table).select('*').range(from,from+page-1);if(error)throw error;out.push(...(data||[]));if(!data||data.length<page)break;from+=page;if(from>250000)throw new Error(`Safety limit reached while exporting ${table}`);}
+      return out;
+    }
+    async function downloadFullBackupV145(){
+      const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
+      try{
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.49',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        let total=0;
+        for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
+        const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
+        const now=new Date().toLocaleString();localStorage.setItem('zb_v145_last_backup',now);document.getElementById('bk145Last').textContent=now;document.getElementById('bk145Records').textContent=total.toLocaleString();showToast('Full ERP backup downloaded.');
+      }catch(err){showToast(err.message||'Backup could not be prepared.','error');}finally{btn.disabled=false;btn.textContent='Download Full Backup (.json)';}
+    }
+    function csvCellV145(v){if(v===null||v===undefined)return '';if(typeof v==='object')v=JSON.stringify(v);v=String(v);return /[",\n]/.test(v)?`"${v.replaceAll('"','""')}"`:v;}
+    async function exportExcelWorkbookV1451(){
+      if(typeof XLSX==='undefined'){showToast('Excel export library could not load. Check internet connection and refresh.','error');return;}
+      const btn=[...document.querySelectorAll('button')].find(b=>b.textContent.includes('Complete Excel Workbook'));if(btn){btn.disabled=true;btn.textContent='Preparing Excel Workbook...';}
+      try{
+        const wb=XLSX.utils.book_new();
+        const sheets=[['Parties','parties'],['Items','items'],['Banks','bank_accounts'],['Investors','investors'],['Warehouses','warehouses'],['Sales Invoices','invoices'],['Invoice Items','invoice_items'],['Customer Receipts','customer_invoice_payments'],['Purchases','local_purchases'],['Supplier Payments','supplier_payments'],['Cargo LC','cargo_shipments'],['Shipment Payments','supplier_shipment_payments'],['Stock Movements','stock_movements'],['Expenses','expenses'],['Bank Transactions','bank_transactions'],['Chart of Accounts','chart_of_accounts'],['Journal Entries','journal_entries'],['Journal Lines','journal_lines']];
+        let exported=0,total=0;
+        for(const [sheetName,table] of sheets){
+          try{
+            const rows=await fetchAllRowsV145(table);total+=rows.length;
+            const clean=rows.map(r=>Object.fromEntries(Object.entries(r).map(([k,v])=>[k,(v&&typeof v==='object')?JSON.stringify(v):v])));
+            const ws=XLSX.utils.json_to_sheet(clean.length?clean:[{Info:'No records'}]);
+            const range=XLSX.utils.decode_range(ws['!ref']||'A1:A1');ws['!autofilter']={ref:XLSX.utils.encode_range(range)};
+            const widths=[];for(let c=range.s.c;c<=range.e.c;c++){let max=10;for(let rr=range.s.r;rr<=Math.min(range.e.r,200);rr++){const cell=ws[XLSX.utils.encode_cell({r:rr,c})];if(cell?.v!=null)max=Math.max(max,String(cell.v).length+2);}widths[c]={wch:Math.min(max,35)};}ws['!cols']=widths;
+            XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
+          }catch(err){console.warn('Excel export skipped',table,err);}
+        }
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.49'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
+        XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
+        showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
+      }catch(err){showToast(err.message||'Excel workbook could not be prepared.','error');}
+      finally{if(btn){btn.disabled=false;btn.textContent='Download Complete Excel Workbook (.xlsx)';}}
+    }
+
+    async function exportCsvV145(table){
+      try{const rows=await fetchAllRowsV145(table);if(!rows.length){showToast(`No records found in ${table}.`,'error');return;}const keys=[...new Set(rows.flatMap(r=>Object.keys(r)))],csv='\uFEFFPowered By,XaviSoft\nExport,'+csvCellV145(table)+'\nExport Date,'+csvCellV145(new Date().toLocaleString())+'\n\n'+keys.map(csvCellV145).join(',')+'\n'+rows.map(r=>keys.map(k=>csvCellV145(r[k])).join(',')).join('\n');downloadBlobV145(`ZB_SONS_${table}_${new Date().toISOString().slice(0,10)}.csv`,csv,'text/csv;charset=utf-8');showToast(`${table} export downloaded.`);}catch(err){showToast(err.message||`Could not export ${table}.`,'error');}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='backupCenterV145Modal')closeBackupCenterV145();});
+
+    let bankTagRowsV1442=[];
+    async function openBankTagRepairV1442(){const m=document.getElementById('bankTagRepairV1442Modal');m.classList.remove('hidden');m.classList.add('flex');await loadBankTagRepairV1442();}
+    function closeBankTagRepairV1442(){const m=document.getElementById('bankTagRepairV1442Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    async function loadBankTagRepairV1442(){
+      const body=document.getElementById('bt1442Body');body.innerHTML='<tr><td colspan="8" class="p-8 text-center text-slate-400">Loading legacy bank entries...</td></tr>';
+      try{
+        if(!liveBanks.length)await fetchBanks();
+        const {data,error}=await db.rpc('untagged_bank_lines_v1442');if(error)throw error;bankTagRowsV1442=data||[];
+        document.getElementById('bt1442Count').textContent=`${bankTagRowsV1442.length} legacy bank line${bankTagRowsV1442.length===1?'':'s'}`;
+        const opts='<option value="">Select bank...</option>'+liveBanks.map(b=>`<option value="${b.id}">${escapeHtml(b.bank_name||b.name||'Bank')} ${b.account_number?'· '+escapeHtml(b.account_number):''}</option>`).join('');
+        body.innerHTML=bankTagRowsV1442.map(r=>`<tr class="border-t"><td class="p-3">${escapeHtml(r.entry_date||'')}</td><td class="p-3"><b>${escapeHtml(r.entry_number||'')}</b></td><td class="p-3">${escapeHtml(String(r.reference_type||'').replaceAll('_',' '))}<br><span class="text-[10px] text-slate-400">${escapeHtml(r.reference_number||'-')}</span></td><td class="p-3 max-w-[300px]">${escapeHtml(r.description||'-')}</td><td class="p-3 text-right">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="p-3 text-right">${Number(r.credit||0)?money(r.credit):'-'}</td><td class="p-3"><select id="btbank_${r.journal_line_id}" class="w-full border rounded-lg p-2 bg-white">${opts}</select></td><td class="p-3"><button onclick="repairBankTagV1442('${r.journal_line_id}')" class="px-3 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold">Assign</button></td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-emerald-700 font-bold">All posted bank lines are tagged.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
+    async function repairBankTagV1442(lineId){
+      const bankId=document.getElementById(`btbank_${lineId}`)?.value;if(!bankId){showToast('Select the correct bank first.','error');return;}
+      const bank=liveBanks.find(b=>String(b.id)===String(bankId))||{};if(!confirm(`Assign this legacy transaction to ${bank.bank_name||bank.name||'selected bank'}? Only bank tagging will change.`))return;
+      try{const {error}=await db.rpc('repair_bank_line_tag_v1442',{p_journal_line_id:lineId,p_bank_account_id:bankId});if(error)throw error;showToast('Bank tag repaired.');await loadBankTagRepairV1442();await fetchBanks();}catch(err){showToast(err.message||'Bank tag could not be repaired.','error');}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='bankTagRepairV1442Modal')closeBankTagRepairV1442();});
+
+    async function refreshHealthHeaderV1461(){
+      const dbEl=document.getElementById('health146Db'),uEl=document.getElementById('health146User'),rEl=document.getElementById('health146Role'),bEl=document.getElementById('health146Backup');
+      if(bEl)bEl.textContent=localStorage.getItem('zb_v145_last_backup')||'Not recorded';
+      try{const {error}=await db.from('chart_of_accounts').select('id').limit(1);if(error)throw error;if(dbEl){dbEl.textContent='Connected';dbEl.className='font-bold text-sm mt-1 text-emerald-700';}}catch(e){if(dbEl){dbEl.textContent='Connection Issue';dbEl.className='font-bold text-sm mt-1 text-red-600';}}
+      try{const {data:{user}}=await db.auth.getUser();if(uEl)uEl.textContent=user?.email||'Not authenticated';if(user){try{const {data:role}=await db.rpc('current_erp_role');if(rEl)rEl.textContent=`Role: ${role||'Unknown'}`;}catch(_){if(rEl)rEl.textContent='Role unavailable';}}}catch(e){if(uEl)uEl.textContent='Session check failed';}
+    }
+
+    async function runGoLiveAuditV144(){
+      refreshHealthHeaderV1461();
+      const panel=document.getElementById('health144Panel'),body=document.getElementById('health144Body');if(!panel||!body)return;
+      panel.classList.remove('hidden');body.innerHTML='<tr><td colspan="4" class="p-8 text-center text-slate-400">Running integrity checks...</td></tr>';panel.scrollIntoView({behavior:'smooth',block:'start'});
+      try{
+        const {data,error}=await db.rpc('erp_go_live_audit_v144');if(error)throw error;
+        const rows=data||[],sev=x=>String(x.status||'').toUpperCase(),passed=rows.filter(x=>sev(x)==='PASS').length,warn=rows.filter(x=>sev(x)==='WARNING').length,critical=rows.filter(x=>sev(x)==='CRITICAL').length;
+        document.getElementById('health144Checks').textContent=rows.length;document.getElementById('health144Passed').textContent=passed;document.getElementById('health144Warnings').textContent=warn;document.getElementById('health144Critical').textContent=critical;
+        const badge=x=>x==='PASS'?'bg-emerald-50 text-emerald-700':x==='WARNING'?'bg-amber-50 text-amber-700':'bg-red-50 text-red-700';
+        body.innerHTML=rows.map(r=>`<tr class="border-t"><td class="p-3"><span class="px-2 py-1 rounded-full text-[10px] font-black ${badge(sev(r))}">${escapeHtml(sev(r))}</span></td><td class="p-3 font-bold">${escapeHtml(r.check_name||'')}</td><td class="p-3 text-slate-600">${escapeHtml(r.details||'')}</td><td class="p-3 text-right font-mono font-bold">${Number(r.issue_count||0).toLocaleString()}</td></tr>`).join('');
+        showToast(critical?`${critical} critical issue(s) need attention.`:warn?`Health check complete with ${warn} warning(s).`:'Go-live health check passed.');
+      }catch(err){body.innerHTML=`<tr><td colspan="4" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;showToast('Health check could not run.','error');}
+    }
+
+    let bankReconTxV142=[];
+    async function openBankReconciliationV142(){
+      const bankId=document.getElementById('bankLedgerBank')?.value;if(!bankId){showToast('Select a bank and generate statement first.','error');return;}
+      const bank=liveBanks.find(b=>String(b.id)===String(bankId))||{},m=document.getElementById('bankReconciliationV142Modal');m.classList.remove('hidden');m.classList.add('flex');
+      document.getElementById('br142BankName').textContent=`${bank.bank_name||'Bank'} · ${bank.account_title||bank.account_number||''}`;
+      document.getElementById('br142Date').value=new Date().toISOString().slice(0,10);document.getElementById('br142Actual').value='';document.getElementById('br142Notes').value='';
+      try{
+        const {data,error}=await db.rpc('bank_reconciliation_transactions_v142',{p_bank_account_id:bankId,p_reconciliation_date:document.getElementById('br142Date').value});if(error)throw error;
+        bankReconTxV142=data||[];const book=bankReconTxV142.length?Number(bankReconTxV142[0].book_balance||0):Number(bank.current_balance||bank.opening_balance||0);document.getElementById('br142Book').value=book.toFixed(2);
+        document.getElementById('br142TxBody').innerHTML=bankReconTxV142.map(r=>`<tr class="border-t"><td class="p-3 text-center"><input type="checkbox" class="br142clear w-4 h-4" data-line="${r.journal_line_id}" data-debit="${r.debit||0}" data-credit="${r.credit||0}" onchange="calcBankReconciliationV142()"></td><td class="p-3">${escapeHtml(r.entry_date||'')}</td><td class="p-3">${escapeHtml(r.reference_number||r.entry_number||'-')}</td><td class="p-3">${escapeHtml(r.description||'-')}</td><td class="p-3 text-right">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="p-3 text-right">${Number(r.credit||0)?money(r.credit):'-'}</td></tr>`).join('')||'<tr><td colspan="6" class="p-6 text-center text-slate-400">No unreconciled transactions.</td></tr>';
+        calcBankReconciliationV142();
+      }catch(err){showToast(err.message||'Reconciliation data could not be loaded.','error');}
+    }
+    function closeBankReconciliationV142(){const m=document.getElementById('bankReconciliationV142Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function calcBankReconciliationV142(){
+      let deposits=0,payments=0;document.querySelectorAll('.br142clear:not(:checked)').forEach(x=>{deposits+=Number(x.dataset.debit||0);payments+=Number(x.dataset.credit||0);});
+      const book=Number(document.getElementById('br142Book')?.value||0),actual=Number(document.getElementById('br142Actual')?.value||0);
+      const adjusted=book-deposits+payments,diff=actual-adjusted;
+      document.getElementById('br142Deposits').textContent=money(deposits);document.getElementById('br142Payments').textContent=money(payments);document.getElementById('br142Adjusted').textContent=money(adjusted);document.getElementById('br142Difference').textContent=money(diff);
+    }
+    async function saveBankReconciliationV142(){
+      const bankId=document.getElementById('bankLedgerBank')?.value,date=document.getElementById('br142Date').value,actualRaw=document.getElementById('br142Actual').value;
+      if(!bankId||!date||actualRaw===''){showToast('Reconciliation date and actual bank balance are required.','error');return;}
+      const cleared=[...document.querySelectorAll('.br142clear:checked')].map(x=>x.dataset.line),btn=document.getElementById('br142Save');btn.disabled=true;btn.textContent='Saving...';
+      try{const {data,error}=await db.rpc('save_bank_reconciliation_v142',{p_bank_account_id:bankId,p_reconciliation_date:date,p_actual_bank_balance:Number(actualRaw),p_cleared_line_ids:cleared,p_notes:document.getElementById('br142Notes').value.trim()||null});if(error)throw error;showToast('Bank reconciliation saved successfully.');closeBankReconciliationV142();await loadBankReconciliationHistoryV142();}catch(err){showToast(err.message||'Could not save reconciliation.','error');}finally{btn.disabled=false;btn.textContent='Save Reconciliation';}
+    }
+    async function loadBankReconciliationHistoryV142(){
+      const bankId=document.getElementById('bankLedgerBank')?.value,body=document.getElementById('br142History');if(!body)return;if(!bankId){body.innerHTML='<tr><td colspan="7" class="p-6 text-center text-slate-400">Select a bank.</td></tr>';return;}
+      const {data,error}=await db.from('bank_reconciliations_v142').select('reconciliation_date,book_balance,pending_deposits,pending_payments,adjusted_balance,actual_bank_balance,difference').eq('bank_account_id',bankId).order('reconciliation_date',{ascending:false}).limit(12);
+      if(error){body.innerHTML=`<tr><td colspan="7" class="p-6 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
+      body.innerHTML=(data||[]).map(r=>`<tr class="border-t"><td class="p-3">${r.reconciliation_date}</td><td class="p-3 text-right">${money(r.book_balance)}</td><td class="p-3 text-right">${money(r.pending_deposits)}</td><td class="p-3 text-right">${money(r.pending_payments)}</td><td class="p-3 text-right font-bold">${money(r.adjusted_balance)}</td><td class="p-3 text-right">${money(r.actual_bank_balance)}</td><td class="p-3 text-right font-bold">${money(r.difference)}</td></tr>`).join('')||'<tr><td colspan="7" class="p-6 text-center text-slate-400">No reconciliation history yet.</td></tr>';
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='bankReconciliationV142Modal')closeBankReconciliationV142();});
+
     let bankLedgerRows=[];
     async function initBankLedger(){
       if(!liveBanks.length)await fetchBanks();
       const sel=document.getElementById('bankLedgerBank');if(!sel)return;
       const old=sel.value;sel.innerHTML='<option value="">Select bank</option>'+liveBanks.map(b=>`<option value="${b.id}">${escapeHtml(b.bank_name||'Bank')} · ${escapeHtml(b.account_title||b.account_number||'')}</option>`).join('');if(old)sel.value=old;
+      if(sel.value)loadBankReconciliationHistoryV142();
     }
     async function loadBankLedger(){
       const bankId=document.getElementById('bankLedgerBank')?.value,from=document.getElementById('bankLedgerFrom')?.value||null,to=document.getElementById('bankLedgerTo')?.value||null,body=document.getElementById('bankLedgerBody');
@@ -1809,6 +2021,7 @@
         document.getElementById('bankLedgerHeading').textContent=`${bank.bank_name||'Bank'} · ${bank.account_title||bank.account_number||''}`;
         document.getElementById('bankLedgerPeriod').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
         body.innerHTML=bankLedgerRows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.entry_date||'')}</td><td class="p-3"><b>${escapeHtml(r.reference_number||r.entry_number||'-')}</b><div class="text-[10px] text-slate-400">${escapeHtml(r.entry_number||'')}</div></td><td class="p-3">${escapeHtml(r.description||r.narration||'-')}</td><td class="p-3">${escapeHtml(r.party_name||'-')}</td><td class="p-3 text-right font-mono text-emerald-700">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="p-3 text-right font-mono text-red-700">${Number(r.credit||0)?money(r.credit):'-'}</td><td class="p-3 text-right font-mono font-bold">${money(r.running_balance)}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No posted bank transactions in selected period.</td></tr>';
+        await loadBankReconciliationHistoryV142();
       }catch(err){body.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
     }
     function printBankLedger(){
@@ -2281,11 +2494,12 @@
         const today=new Date();
         const yyyy=today.getFullYear(), mm=String(today.getMonth()+1).padStart(2,'0'), dd=String(today.getDate()).padStart(2,'0');
         const from=`${yyyy}-${mm}-01`, to=`${yyyy}-${mm}-${dd}`;
-        const [{data:tb,error:tbe},{data:recent,error:re},{data:coa,error:ce},{data:cargo,error:cge}] = await Promise.all([
+        const [{data:tb,error:tbe},{data:recent,error:re},{data:coa,error:ce},{data:cargo,error:cge},{data:ops,error:opse}] = await Promise.all([
           db.from('v_trial_balance').select('account_code,debit,credit,net_balance'),
           db.from('journal_entries').select('id,entry_date,entry_number,reference_type,reference_number,narration,created_at,journal_lines(debit,credit)').eq('status','POSTED').order('created_at',{ascending:false}).limit(10),
           db.from('chart_of_accounts').select('id,account_code,account_name'),
-          db.from('cargo_shipments').select('id,cargo_ref,status,total_landed_cost,goods_value,foreign_goods_value,exchange_rate')
+          db.from('cargo_shipments').select('id,cargo_ref,status,total_landed_cost,goods_value,foreign_goods_value,exchange_rate'),
+          db.rpc('dashboard_operational_kpis_v143')
         ]);
         if(tbe)throw tbe;if(ce)throw ce;
         const B=Object.fromEntries((tb||[]).map(r=>[r.account_code,r])), net=(code)=>Number(B[code]?.debit||0)-Number(B[code]?.credit||0);
@@ -2347,6 +2561,9 @@
           bankEl.title=bank<0?'Negative bank balance — review required':'';
         }put('dashMarketDue',money(ar));put('dashSupplierPayable',money(ap));put('dashStockVal',money(stockValue));put('dashStockUnits',stockUnits.toLocaleString());
         put('dashPeriodSales',money(sales));put('dashGrossProfit',money(gross));put('dashNetProfit',money(netProfit));put('dashGrossMargin',`Margin ${grossMargin.toFixed(2)}%`);put('dashNetMargin',`Margin ${netMargin.toFixed(2)}%`);put('dashLcExposure',money(exposure));put('dashLcCount',`${active.length} active shipment${active.length===1?'':'s'}`);put('dashPeriodLabel',`${from} to ${to}`);put('dashBankCount',`${liveBanks.length} bank${liveBanks.length===1?'':'s'} connected`);put('dashTotalSales',money(sales));
+        const k=ops?.[0]||ops||{};put('dash143UnpaidInvoices',Number(k.unpaid_invoice_count||0).toLocaleString());put('dash143UnpaidAmount',`${money(k.unpaid_invoice_amount||0)} outstanding`);put('dash143ActiveLc',Number(k.active_lc_count||active.length).toLocaleString());put('dash143LowStock',Number(k.low_stock_count??(low.length+out.length)).toLocaleString());put('dash143BankAlerts',Number(k.bank_attention_count||negativeBanks.length).toLocaleString());
+        if(Number(k.unpaid_invoice_count||0)>0)alerts.unshift({t:'Invoice Collection',d:`${k.unpaid_invoice_count} unpaid / partial invoice${Number(k.unpaid_invoice_count)===1?'':'s'} · ${money(k.unpaid_invoice_amount||0)} outstanding.`,v:'salesregister'});
+        if(Number(k.bank_attention_count||0)>0&&!negativeBanks.length)alerts.push({t:'Bank Reconciliation',d:`${k.bank_attention_count} bank account${Number(k.bank_attention_count)===1?'':'s'} require reconciliation attention.`,v:'bankledger'});
         put('dashAlertCount',`${alerts.length} Alert${alerts.length===1?'':'s'}`);
         const ab=document.getElementById('dashAlerts');if(ab)ab.innerHTML=alerts.length?alerts.map(x=>`<button onclick="${x.trace1200?'window.__traceBank1200=true;':''}navigate('${x.v}')" class="w-full text-left p-4 hover:bg-slate-50"><div class="flex justify-between gap-4"><div><b>${escapeHtml(x.t)}</b><p class="text-xs text-slate-500 mt-1">${escapeHtml(x.d)}</p></div><span class="text-brand-600 font-bold">View →</span></div></button>`).join(''):'<div class="p-5 text-sm text-emerald-700 font-bold">No management alerts right now.</div>';
 
@@ -2664,7 +2881,7 @@
           <table><thead><tr><th style="width:8%">#</th><th>Item Description</th><th class="num" style="width:18%">Quantity</th><th class="num" style="width:22%">Rate</th><th class="num" style="width:24%">Amount</th></tr></thead>
           <tbody><tr><td>1</td><td><b>${escapeHtml(itemName)}</b><div class="muted">${escapeHtml(item.category||'')}</div></td><td class="num">${qty?qty.toLocaleString():'—'} ${escapeHtml(uom)}</td><td class="num">${money(rate)}</td><td class="num">${money(amount)}</td></tr></tbody></table>
           <div class="summary"><div class="grand"><span>Total Purchase</span><span>${money(amount)}</span></div><div><span>Paid</span><b>${money(0)}</b></div><div><span>Supplier Payable</span><b>${money(amount)}</b></div></div>
-          <div class="footer"><b>ZB & SONS</b><br>Computer-generated purchase record · A Project by: XaviTech</div>
+          <div class="footer"><b>ZB & SONS</b><br>Computer-generated purchase record · A Project by: XaviSoft</div>
         </div>
 
 </body></html>`);
@@ -2899,15 +3116,26 @@
 
 async function loadSupplierLedger(){
       const partyId=document.getElementById('supplierLedgerSelector')?.value,tbody=document.getElementById('supplierLedgerBody');if(!tbody)return;
-      if(!partyId){tbody.innerHTML='<tr><td colspan="6" class="p-8 text-center text-slate-400">Select a supplier.</td></tr>';return;}
-      const {data:acc,error:ae}=await db.from('chart_of_accounts').select('id').eq('account_code','2100').limit(1);
-      if(ae||!acc?.[0]){tbody.innerHTML=`<tr><td colspan="5" class="p-8 text-center text-red-500">${escapeHtml(ae?.message||'Accounts Payable 2100 not found.')}</td></tr>`;return;}
-      const {data,error}=await db.from('journal_lines').select('debit,credit,description,created_at,journal_entries!inner(entry_number,entry_date,narration,status)').eq('account_id',acc[0].id).eq('party_id',partyId).eq('journal_entries.status','POSTED');
-      if(error){tbody.innerHTML=`<tr><td colspan="5" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
-      const rows=(data||[]).sort((a,b)=>String(a.journal_entries?.entry_date||'').localeCompare(String(b.journal_entries?.entry_date||''))||String(a.created_at||'').localeCompare(String(b.created_at||'')));
-      let bal=0,payable=0,paid=0;
-      tbody.innerHTML=rows.map(r=>{const cr=Number(r.credit||0),dr=Number(r.debit||0);payable+=cr;paid+=dr;bal+=cr-dr;const je=r.journal_entries||{},detail=r.description||je.narration||'';return `<tr><td class="py-3 px-4">${escapeHtml(je.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(je.entry_number||'')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(detail)}</span></td><td class="py-3 px-4">${escapeHtml(supplierLcRef(detail))}</td><td class="py-3 px-4 text-right">${money(cr)}</td><td class="py-3 px-4 text-right">${money(dr)}</td><td class="py-3 px-4 text-right font-bold">${money(bal)}</td></tr>`;}).join('')||'<tr><td colspan="6" class="p-8 text-center text-slate-400">No supplier transactions found.</td></tr>';
-      document.getElementById('slPayable').textContent=money(payable);document.getElementById('slPaid').textContent=money(paid);document.getElementById('slBalance').textContent=money(bal);
+      if(!partyId){tbody.innerHTML='<tr><td colspan="7" class="p-8 text-center text-slate-400">Select a supplier.</td></tr>';return;}
+      const from=document.getElementById('sl141From')?.value||null,to=document.getElementById('sl141To')?.value||null;
+      tbody.innerHTML='<tr><td colspan="7" class="p-8 text-center text-slate-400">Loading supplier ledger...</td></tr>';
+      try{
+        const {data,error}=await db.rpc('supplier_ledger_v141',{p_supplier_id:partyId,p_from_date:from,p_to_date:to});if(error)throw error;
+        supplierLedgerRowsV141=data||[];
+        const supplier=liveParties.find(p=>String(p.id)===String(partyId))||{},opening=supplierLedgerRowsV141.length?Number(supplierLedgerRowsV141[0].opening_balance||0):0;
+        let payable=0,paid=0;supplierLedgerRowsV141.forEach(r=>{payable+=Number(r.payable||0);paid+=Number(r.payment||0);});
+        const closing=supplierLedgerRowsV141.length?Number(supplierLedgerRowsV141[supplierLedgerRowsV141.length-1].running_balance||0):opening;
+        document.getElementById('sl141Opening').textContent=money(opening);document.getElementById('slPayable').textContent=money(payable);document.getElementById('slPaid').textContent=money(paid);document.getElementById('slBalance').textContent=money(closing);
+        document.getElementById('sl141Heading').textContent=supplier.name||'Supplier';document.getElementById('sl141Period').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
+        tbody.innerHTML=supplierLedgerRowsV141.map(r=>`<tr><td class="py-3 px-4">${escapeHtml(r.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(r.entry_number||'-')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||'-')}</span></td><td class="py-3 px-4">${escapeHtml(r.source_ref||'-')}</td><td class="py-3 px-4">${escapeHtml(r.paid_through||'-')}</td><td class="py-3 px-4 text-right">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="py-3 px-4 text-right text-emerald-700">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="py-3 px-4 text-right font-bold">${money(r.running_balance)}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No supplier transactions in selected period.</td></tr>';
+      }catch(err){tbody.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
+    let supplierLedgerRowsV141=[];
+    function printSupplierLedgerV141(){
+      const partyId=document.getElementById('supplierLedgerSelector')?.value;if(!partyId){showToast('Select supplier and generate ledger first.','error');return;}
+      const supplier=liveParties.find(p=>String(p.id)===String(partyId))||{},period=document.getElementById('sl141Period')?.textContent||'';
+      const rows=supplierLedgerRowsV141.map(r=>`<tr><td>${escapeHtml(r.entry_date||'')}</td><td>${escapeHtml(r.entry_number||'-')}<br><small>${escapeHtml(r.description||'')}</small></td><td>${escapeHtml(r.source_ref||'-')}</td><td>${escapeHtml(r.paid_through||'-')}</td><td class="num">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="num">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
+      const w=window.open('','_blank','width=1100,height=900');if(!w)return;w.document.write(`<!doctype html><html><head><title>Supplier Ledger</title><style>body{font-family:Arial;padding:28px}h1{margin:0}.muted{color:#666;font-size:12px;margin:6px 0 18px}.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}</style></head><body><h1>ZB & SONS ERP — Supplier Ledger</h1><div class="muted">${escapeHtml(supplier.name||'')} | ${escapeHtml(period)}</div><div class="sum"><div class="box"><small>Opening Balance</small><b>${document.getElementById('sl141Opening').textContent}</b></div><div class="box"><small>Payable Created</small><b>${document.getElementById('slPayable').textContent}</b></div><div class="box"><small>Payments</small><b>${document.getElementById('slPaid').textContent}</b></div><div class="box"><small>Current Payable</small><b>${document.getElementById('slBalance').textContent}</b></div></div><table><thead><tr><th>Date</th><th>Voucher / Particulars</th><th>Purchase / LC</th><th>Paid Through</th><th>Payable</th><th>Payment</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
     }
 
     async function loadCustomerLedger() {
@@ -3690,7 +3918,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       const r=currentProfitAnalysis;if(!r){showToast('Generate the report first.','error');return;}
       const w=window.open('','_blank','width=900,height=1100');if(!w){showToast('Please allow pop-ups.','error');return;}
       const ex=r.expRows.map(x=>`<tr><td>${escapeHtml(x.code)} — ${escapeHtml(x.name)}</td><td class="n">${money(x.amount)}</td><td class="n">${r.expenses?(x.amount/r.expenses*100).toFixed(1):'0.0'}%</td></tr>`).join('');
-      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Profit & Expense Analysis</title><style>@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#0f172a;margin:0;font-size:11px}.sheet{width:190mm;margin:auto}.top{display:flex;justify-content:space-between;border-bottom:3px solid #ea580c;padding-bottom:12px}.brand{font-size:25px;font-weight:900}.brand span{color:#ea580c}.title{text-align:right}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:16px 0}.k{border:1px solid #e2e8f0;padding:8px;border-radius:7px}.k small{color:#64748b}.k b{display:block;margin-top:4px;font-size:11px}table{width:100%;border-collapse:collapse}th,td{padding:7px;border-bottom:1px solid #e2e8f0}th{background:#f8fafc;text-align:left}.n{text-align:right}.summary{margin-top:18px;margin-left:auto;width:90mm}.summary div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e2e8f0}.footer{text-align:center;color:#64748b;border-top:1px solid #e2e8f0;margin-top:28px;padding-top:10px}.actions{text-align:right;margin-bottom:10px}.actions button{background:#0f172a;color:#fff;border:0;border-radius:7px;padding:9px 14px;font-weight:bold}@media print{.actions{display:none}.sheet{width:190mm!important}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><div class="sheet"><div class="top"><div><div class="brand"><span>ZB</span> & SONS</div><div>MANAGEMENT REPORT</div></div><div class="title"><h2>PROFIT & EXPENSE ANALYSIS</h2><div>${r.from} to ${r.to}</div></div></div><div class="kpis"><div class="k"><small>Sales</small><b>${money(r.sales)}</b></div><div class="k"><small>COGS</small><b>${money(r.cogs)}</b></div><div class="k"><small>Gross Profit</small><b>${money(r.gross)}</b></div><div class="k"><small>Expenses</small><b>${money(r.expenses)}</b></div><div class="k"><small>Net Profit</small><b>${money(r.net)}</b></div></div><h3>Profit Breakdown</h3><table><thead><tr><th>Date</th><th>Invoice / Ref</th><th>Customer / Particulars</th><th class="n">Sales</th><th class="n">COGS</th><th class="n">Gross Profit</th><th class="n">Margin</th></tr></thead><tbody>${r.profitRows.map(x=>`<tr><td>${escapeHtml(x.date)}</td><td>${escapeHtml(x.ref)}</td><td>${escapeHtml(x.customer||x.narration||'—')}</td><td class="n">${money(x.sales)}</td><td class="n">${money(x.cogs)}</td><td class="n"><b>${money(x.gross)}</b></td><td class="n">${x.margin.toFixed(2)}%</td></tr>`).join('')||'<tr><td colspan="7">No profit transactions.</td></tr>'}</tbody></table><h3>Expense Breakdown</h3><table><thead><tr><th>Account</th><th class="n">Amount</th><th class="n">%</th></tr></thead><tbody>${ex||'<tr><td colspan="3">No operating expenses.</td></tr>'}</tbody></table><div class="summary"><div><span>Sales</span><b>${money(r.sales)}</b></div><div><span>COGS</span><b>${money(r.cogs)}</b></div><div><span>Gross Profit</span><b>${money(r.gross)}</b></div><div><span>Gross Margin</span><b>${r.margin.toFixed(2)}%</b></div><div><span>Other Income</span><b>${money(r.other)}</b></div><div><span>Operating Expenses</span><b>${money(r.expenses)}</b></div><div><strong>NET PROFIT</strong><strong>${money(r.net)}</strong></div><div><span>Net Margin</span><b>${r.netMargin.toFixed(2)}%</b></div></div><div class="footer"><b>ZB & SONS</b><br>Computer-generated management report · A Project by: XaviTech</div></div></body></html>`);w.document.close();w.focus();
+      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Profit & Expense Analysis</title><style>@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#0f172a;margin:0;font-size:11px}.sheet{width:190mm;margin:auto}.top{display:flex;justify-content:space-between;border-bottom:3px solid #ea580c;padding-bottom:12px}.brand{font-size:25px;font-weight:900}.brand span{color:#ea580c}.title{text-align:right}.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:16px 0}.k{border:1px solid #e2e8f0;padding:8px;border-radius:7px}.k small{color:#64748b}.k b{display:block;margin-top:4px;font-size:11px}table{width:100%;border-collapse:collapse}th,td{padding:7px;border-bottom:1px solid #e2e8f0}th{background:#f8fafc;text-align:left}.n{text-align:right}.summary{margin-top:18px;margin-left:auto;width:90mm}.summary div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #e2e8f0}.footer{text-align:center;color:#64748b;border-top:1px solid #e2e8f0;margin-top:28px;padding-top:10px}.actions{text-align:right;margin-bottom:10px}.actions button{background:#0f172a;color:#fff;border:0;border-radius:7px;padding:9px 14px;font-weight:bold}@media print{.actions{display:none}.sheet{width:190mm!important}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><div class="sheet"><div class="top"><div><div class="brand"><span>ZB</span> & SONS</div><div>MANAGEMENT REPORT</div></div><div class="title"><h2>PROFIT & EXPENSE ANALYSIS</h2><div>${r.from} to ${r.to}</div></div></div><div class="kpis"><div class="k"><small>Sales</small><b>${money(r.sales)}</b></div><div class="k"><small>COGS</small><b>${money(r.cogs)}</b></div><div class="k"><small>Gross Profit</small><b>${money(r.gross)}</b></div><div class="k"><small>Expenses</small><b>${money(r.expenses)}</b></div><div class="k"><small>Net Profit</small><b>${money(r.net)}</b></div></div><h3>Profit Breakdown</h3><table><thead><tr><th>Date</th><th>Invoice / Ref</th><th>Customer / Particulars</th><th class="n">Sales</th><th class="n">COGS</th><th class="n">Gross Profit</th><th class="n">Margin</th></tr></thead><tbody>${r.profitRows.map(x=>`<tr><td>${escapeHtml(x.date)}</td><td>${escapeHtml(x.ref)}</td><td>${escapeHtml(x.customer||x.narration||'—')}</td><td class="n">${money(x.sales)}</td><td class="n">${money(x.cogs)}</td><td class="n"><b>${money(x.gross)}</b></td><td class="n">${x.margin.toFixed(2)}%</td></tr>`).join('')||'<tr><td colspan="7">No profit transactions.</td></tr>'}</tbody></table><h3>Expense Breakdown</h3><table><thead><tr><th>Account</th><th class="n">Amount</th><th class="n">%</th></tr></thead><tbody>${ex||'<tr><td colspan="3">No operating expenses.</td></tr>'}</tbody></table><div class="summary"><div><span>Sales</span><b>${money(r.sales)}</b></div><div><span>COGS</span><b>${money(r.cogs)}</b></div><div><span>Gross Profit</span><b>${money(r.gross)}</b></div><div><span>Gross Margin</span><b>${r.margin.toFixed(2)}%</b></div><div><span>Other Income</span><b>${money(r.other)}</b></div><div><span>Operating Expenses</span><b>${money(r.expenses)}</b></div><div><strong>NET PROFIT</strong><strong>${money(r.net)}</strong></div><div><span>Net Margin</span><b>${r.netMargin.toFixed(2)}%</b></div></div><div class="footer"><b>ZB & SONS</b><br>Computer-generated management report · A Project by: XaviSoft</div></div></body></html>`);w.document.close();w.focus();
     }
 
     let currentStatement=null;
@@ -3748,7 +3976,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       const st=currentStatement;if(!st){showToast('Generate a statement first.','error');return;}
       const w=window.open('','_blank','width=900,height=1100');if(!w){showToast('Please allow pop-ups.','error');return;}
       const rows=st.rows.map(x=>`<tr><td>${escapeHtml(x.date)}</td><td>${escapeHtml(x.ref)}</td><td>${escapeHtml(x.desc)}</td><td class="n">${x.debit?money(x.debit):'—'}</td><td class="n">${x.credit?money(x.credit):'—'}</td><td class="n"><b>${money(x.balance)}</b></td></tr>`).join('');
-      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(st.party.name||'Party')} Statement</title><style>@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#0f172a;margin:0;font-size:10.5px}.sheet{width:190mm;margin:auto}.top{display:flex;justify-content:space-between;border-bottom:3px solid #ea580c;padding-bottom:12px}.brand{font-size:25px;font-weight:900}.brand span{color:#ea580c}.title{text-align:right}.title h1{margin:0;font-size:21px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.box{border:1px solid #e2e8f0;border-radius:8px;padding:10px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:15px}.k{border:1px solid #e2e8f0;padding:8px;border-radius:7px}.k small{color:#64748b}.k b{display:block;margin-top:4px}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{padding:6px;border-bottom:1px solid #e2e8f0;word-break:break-word}th{background:#f8fafc;text-align:left}.n{text-align:right}.footer{text-align:center;color:#64748b;border-top:1px solid #e2e8f0;margin-top:25px;padding-top:10px}.actions{text-align:right;margin-bottom:10px}.actions button{background:#0f172a;color:#fff;border:0;border-radius:7px;padding:9px 14px;font-weight:bold}@media print{.actions{display:none}.sheet{width:190mm!important}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><div class="sheet"><div class="top"><div><div class="brand"><span>ZB</span> & SONS</div><div>ACCOUNT STATEMENT</div></div><div class="title"><h1>${st.type==='CUSTOMER'?'CUSTOMER':'SUPPLIER'} STATEMENT</h1><div>${escapeHtml(st.from)} to ${escapeHtml(st.to)}</div></div></div><div class="meta"><div class="box"><small>Party</small><br><b>${escapeHtml(st.party.name||'')}</b></div><div class="box"><small>Statement Type</small><br><b>${st.type}</b></div></div><div class="kpis"><div class="k"><small>Opening</small><b>${money(st.opening)}</b></div><div class="k"><small>Total Debit</small><b>${money(st.totalDebit)}</b></div><div class="k"><small>Total Credit</small><b>${money(st.totalCredit)}</b></div><div class="k"><small>Closing</small><b>${money(st.closing)}</b></div></div><table><thead><tr><th>Date</th><th>Reference</th><th>Particulars</th><th class="n">Debit</th><th class="n">Credit</th><th class="n">Balance</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No transactions in selected period.</td></tr>'}</tbody></table><div class="footer"><b>ZB & SONS</b><br>Computer-generated statement · A Project by: XaviTech</div></div></body></html>`);
+      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(st.party.name||'Party')} Statement</title><style>@page{size:A4 portrait;margin:10mm}*{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#0f172a;margin:0;font-size:10.5px}.sheet{width:190mm;margin:auto}.top{display:flex;justify-content:space-between;border-bottom:3px solid #ea580c;padding-bottom:12px}.brand{font-size:25px;font-weight:900}.brand span{color:#ea580c}.title{text-align:right}.title h1{margin:0;font-size:21px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}.box{border:1px solid #e2e8f0;border-radius:8px;padding:10px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:15px}.k{border:1px solid #e2e8f0;padding:8px;border-radius:7px}.k small{color:#64748b}.k b{display:block;margin-top:4px}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{padding:6px;border-bottom:1px solid #e2e8f0;word-break:break-word}th{background:#f8fafc;text-align:left}.n{text-align:right}.footer{text-align:center;color:#64748b;border-top:1px solid #e2e8f0;margin-top:25px;padding-top:10px}.actions{text-align:right;margin-bottom:10px}.actions button{background:#0f172a;color:#fff;border:0;border-radius:7px;padding:9px 14px;font-weight:bold}@media print{.actions{display:none}.sheet{width:190mm!important}}</style></head><body><div class="actions"><button onclick="window.print()">Print / Save as PDF</button></div><div class="sheet"><div class="top"><div><div class="brand"><span>ZB</span> & SONS</div><div>ACCOUNT STATEMENT</div></div><div class="title"><h1>${st.type==='CUSTOMER'?'CUSTOMER':'SUPPLIER'} STATEMENT</h1><div>${escapeHtml(st.from)} to ${escapeHtml(st.to)}</div></div></div><div class="meta"><div class="box"><small>Party</small><br><b>${escapeHtml(st.party.name||'')}</b></div><div class="box"><small>Statement Type</small><br><b>${st.type}</b></div></div><div class="kpis"><div class="k"><small>Opening</small><b>${money(st.opening)}</b></div><div class="k"><small>Total Debit</small><b>${money(st.totalDebit)}</b></div><div class="k"><small>Total Credit</small><b>${money(st.totalCredit)}</b></div><div class="k"><small>Closing</small><b>${money(st.closing)}</b></div></div><table><thead><tr><th>Date</th><th>Reference</th><th>Particulars</th><th class="n">Debit</th><th class="n">Credit</th><th class="n">Balance</th></tr></thead><tbody>${rows||'<tr><td colspan="6">No transactions in selected period.</td></tr>'}</tbody></table><div class="footer"><b>ZB & SONS</b><br>Computer-generated statement · A Project by: XaviSoft</div></div></body></html>`);
       w.document.close();w.focus();
     }
 
@@ -4303,7 +4531,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         <div class="grid"><div class="box"><div class="label">Bill To</div><div class="value">${escapeHtml(party.name||'Customer')}</div><div class="muted">${escapeHtml(party.city||'')}</div></div><div class="box"><div class="label">Payment Status</div><div class="value">${due<=.005?'PAID':received>0?'PARTIALLY PAID':'UNPAID'}</div><div class="muted">Received: ${money(received)} · Outstanding: ${money(due)}</div></div></div>
         <table><thead><tr><th>#</th><th>Item Description</th><th class="num">Quantity</th><th class="num">Rate</th><th class="num">Amount</th></tr></thead><tbody>${rows}${chargeRows}</tbody></table>
         <div class="summary"><div><span>Subtotal</span><b>${money(inv.subtotal)}</b></div><div><span>Other Charges</span><b>${money(chargeTotal)}</b></div><div><span>Discount</span><b>${money(inv.discount_amount)}</b></div><div><span>Tax</span><b>${money(inv.tax_amount)}</b></div><div class="grand"><span>Grand Total</span><span>${money(inv.grand_total)}</span></div><div><span>Received</span><b>${money(received)}</b></div><div class="due"><span>Balance Due</span><span>${money(due)}</span></div></div>
-        <div class="footer"><b>ZB & SONS</b><br>Computer-generated sales invoice · A Project by: XaviTech</div>
+        <div class="footer"><b>ZB & SONS</b><br>Computer-generated sales invoice · A Project by: XaviSoft</div>
         </div></body></html>`);
         w.document.close();w.focus();
       }catch(err){showToast(err.message||'Invoice could not be prepared for printing.','error');}
@@ -4384,7 +4612,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <script id="pin-favorites-script">
 (function(){
  const KEY='zb_erp_pinned_tabs_v2';
- const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',supplierpayments:'Supplier Payment Control',customerstatement:'Customer Statement',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
+ const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',supplierpayments:'Supplier Payment Control',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
  const pins=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}};
  const save=a=>localStorage.setItem(KEY,JSON.stringify([...new Set(a)]));
  window.togglePagePin=function(v){let a=pins();a=a.includes(v)?a.filter(x=>x!==v):[...a,v];save(a);renderPinnedShortcuts()};
@@ -4481,5 +4709,78 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><label class="text-xs font-bold">Reference / Cheque / Transfer No.</label><input id="sp139Ref" class="w-full border rounded-lg p-2.5 mt-1"></div><div><label class="text-xs font-bold">Notes</label><textarea id="sp139Notes" rows="2" class="w-full border rounded-lg p-2.5 mt-1"></textarea></div>
 <div class="flex justify-end gap-2"><button type="button" onclick="closeSupplierPaymentV139()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="sp139Save" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold">Pay Supplier</button></div>
 </form></div></div>
+<div id="bankReconciliationV142Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[160] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Bank Reconciliation</h3><p id="br142BankName" class="text-xs text-slate-400 mt-1"></p></div><button onclick="closeBankReconciliationV142()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 space-y-5">
+<div class="grid md:grid-cols-3 gap-3"><div><label class="text-xs font-bold">Reconciliation Date</label><input id="br142Date" type="date" class="w-full border rounded-lg p-2.5 mt-1"></div><div><label class="text-xs font-bold">ERP Book Balance</label><input id="br142Book" readonly class="w-full bg-slate-50 border rounded-lg p-2.5 mt-1 font-bold"></div><div><label class="text-xs font-bold">Actual Bank Balance *</label><input id="br142Actual" type="number" step=".01" oninput="calcBankReconciliationV142()" class="w-full border rounded-lg p-2.5 mt-1"></div></div>
+<div class="grid md:grid-cols-4 gap-3"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Pending Deposits</span><div id="br142Deposits" class="font-black mt-1">PKR 0.00</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Pending Payments</span><div id="br142Payments" class="font-black mt-1">PKR 0.00</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Adjusted Balance</span><div id="br142Adjusted" class="font-black mt-1">PKR 0.00</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Difference</span><div id="br142Difference" class="font-black mt-1">PKR 0.00</div></div></div>
+<div><div class="flex justify-between mb-2"><b>Unreconciled Transactions</b><span class="text-xs text-slate-400">Tick transactions already appearing on bank statement.</span></div><div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3">Cleared</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Reference</th><th class="p-3 text-left">Description</th><th class="p-3 text-right">Deposit</th><th class="p-3 text-right">Payment</th></tr></thead><tbody id="br142TxBody"></tbody></table></div></div>
+<div><label class="text-xs font-bold">Notes</label><textarea id="br142Notes" rows="2" class="w-full border rounded-lg p-2.5 mt-1"></textarea></div>
+<div class="flex justify-end gap-2"><button onclick="closeBankReconciliationV142()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="br142Save" onclick="saveBankReconciliationV142()" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold">Save Reconciliation</button></div>
+</div></div></div>
+<div id="bankTagRepairV1442Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[170] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Bank Tagging Repair</h3><p class="text-xs text-slate-400 mt-1">Assign a specific bank to legacy Account 1200 lines. Accounting amounts will not be changed.</p></div><button onclick="closeBankTagRepairV1442()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5"><div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 mb-4"><b>Safe repair:</b> this screen only fills missing <code>bank_account_id</code>. It does not change debit, credit, voucher, party, invoice, stock or journal status.</div>
+<div class="flex justify-between items-center mb-3"><div><b id="bt1442Count">0 legacy bank lines</b><p class="text-xs text-slate-400">Choose bank only where you can identify it confidently.</p></div><button onclick="loadBankTagRepairV1442()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh</button></div>
+<div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher</th><th class="p-3 text-left">Type / Reference</th><th class="p-3 text-left">Description</th><th class="p-3 text-right">Debit</th><th class="p-3 text-right">Credit</th><th class="p-3 text-left min-w-[220px]">Assign Bank</th><th class="p-3"></th></tr></thead><tbody id="bt1442Body"></tbody></table></div></div>
+</div></div>
+<div id="backupCenterV145Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[180] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Backup & Export Center</h3><p class="text-xs text-slate-400 mt-1">Create local, read-only copies of your ERP business data.</p></div><button onclick="closeBackupCenterV145()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 space-y-5">
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-900"><b>Safe Export:</b> downloads only. This screen does not delete, edit or restore database records.</div>
+<div class="grid md:grid-cols-3 gap-3">
+<div class="bg-slate-50 rounded-xl p-4"><span class="text-xs text-slate-400">Last Backup This Browser</span><div id="bk145Last" class="font-bold mt-1">Not recorded</div></div>
+<div class="bg-slate-50 rounded-xl p-4"><span class="text-xs text-slate-400">Tables in Full Backup</span><div id="bk145Tables" class="text-xl font-black mt-1">—</div></div>
+<div class="bg-slate-50 rounded-xl p-4"><span class="text-xs text-slate-400">Records Prepared</span><div id="bk145Records" class="text-xl font-black mt-1">—</div></div>
+</div>
+<div class="grid md:grid-cols-2 gap-4">
+<div class="border rounded-2xl p-5"><h4 class="font-black">Full ERP Backup</h4><p class="text-xs text-slate-500 mt-1 mb-4">JSON backup containing critical masters, transactions, stock and accounting records with metadata and record counts.</p><button id="bk145FullBtn" onclick="downloadFullBackupV145()" class="w-full bg-slate-900 text-white rounded-xl px-4 py-3 font-bold">Download Full Backup (.json)</button></div>
+<div class="border rounded-2xl p-5"><h4 class="font-black">Excel / CSV Exports</h4><p class="text-xs text-slate-500 mt-1 mb-4">Download Excel-compatible files for reporting and analysis.</p><button onclick="exportExcelWorkbookV1451()" class="w-full mb-3 bg-emerald-600 text-white rounded-xl px-4 py-3 font-bold">Download Complete Excel Workbook (.xlsx)</button><div class="grid grid-cols-2 gap-2"><button onclick="exportCsvV145('parties')" class="border rounded-lg p-2 text-xs font-bold">Customers / Suppliers</button><button onclick="exportCsvV145('invoices')" class="border rounded-lg p-2 text-xs font-bold">Sales Invoices</button><button onclick="exportCsvV145('items')" class="border rounded-lg p-2 text-xs font-bold">Inventory Items</button><button onclick="exportCsvV145('cargo_shipments')" class="border rounded-lg p-2 text-xs font-bold">Cargo / LC</button><button onclick="exportCsvV145('bank_accounts')" class="border rounded-lg p-2 text-xs font-bold">Bank Accounts</button><button onclick="exportCsvV145('journal_entries')" class="border rounded-lg p-2 text-xs font-bold">Journal Entries</button></div><p class="text-[10px] text-slate-400 mt-3">Individual buttons remain CSV; Complete Excel Workbook creates multiple sheets in one .xlsx file.</p></div>
+</div>
+<div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
+</div></div></div>
+<div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.49 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 space-y-5">
+<div class="grid md:grid-cols-3 gap-3">
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.49</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
+</div>
+<div class="grid md:grid-cols-2 gap-3">
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Last Local Backup</span><div id="gl146Backup" class="font-bold mt-1">Not recorded</div><button onclick="closeGoLiveStatusV146();openBackupCenterV145()" class="mt-3 text-xs font-bold underline">Open Backup Center</button></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System Health</span><div id="gl146Health" class="font-bold mt-1">Checking...</div><div id="gl146HealthSub" class="text-xs text-slate-500 mt-1"></div><button onclick="refreshGoLiveStatusV146()" class="mt-3 text-xs font-bold underline">Run Status Check Again</button></div>
+</div>
+<div id="gl146Banner" class="rounded-xl p-4 border text-sm">Preparing system status...</div>
+<div><h4 class="font-black mb-2">Readiness Checklist</h4><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><tbody id="gl146Checklist"></tbody></table></div></div>
+<div class="bg-slate-50 rounded-xl p-4 text-xs text-slate-600"><b>Production baseline:</b> future changes should be released as controlled versions. Go-Live Status is informational and does not modify business transactions.</div>
+</div></div></div>
+<div id="businessTimelineV147Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[195] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Business Activity Timeline</h3><p class="text-xs text-slate-400 mt-1">A simple chronological history of ERP activity · Powered By: XaviSoft</p></div><button onclick="closeBusinessTimelineV147()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5">
+<div class="grid md:grid-cols-6 gap-2 mb-4">
+<div><label class="text-[10px] font-bold text-slate-400">FROM</label><input id="tl147From" type="date" class="w-full border rounded-lg p-2 text-sm"></div>
+<div><label class="text-[10px] font-bold text-slate-400">TO</label><input id="tl147To" type="date" class="w-full border rounded-lg p-2 text-sm"></div>
+<div><label class="text-[10px] font-bold text-slate-400">USER</label><select id="tl147User" class="w-full border rounded-lg p-2 text-sm"><option value="">All Users</option></select></div>
+<div><label class="text-[10px] font-bold text-slate-400">MODULE</label><select id="tl147Module" class="w-full border rounded-lg p-2 text-sm"><option value="">All Modules</option></select></div>
+<div><label class="text-[10px] font-bold text-slate-400">ACTION</label><select id="tl147Action" class="w-full border rounded-lg p-2 text-sm"><option value="">All Actions</option><option>ADDED</option><option>EDITED</option><option>DELETED</option><option>CANCELLED</option><option>POSTED</option><option>REVERSED</option></select></div>
+<div class="flex items-end"><button onclick="loadBusinessTimelineV147()" class="w-full bg-slate-900 text-white rounded-lg p-2 text-sm font-bold">Apply Filters</button></div>
+</div>
+<div class="flex justify-between items-center mb-4"><div><b id="tl147Count">0 activities</b><p class="text-xs text-slate-400">Newest activity first.</p></div><button onclick="setTimelineTodayV147()" class="border rounded-lg px-3 py-2 text-xs font-bold">Today</button></div>
+<div id="tl147Body" class="relative pl-7 border-l-2 border-slate-200 ml-3 space-y-5"><div class="text-slate-400 py-6">Loading timeline...</div></div>
+</div></div></div>
+<div id="notificationCenterV148Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[210] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Notification & Action Center</h3><p class="text-xs text-slate-400 mt-1">Items that may need attention · Powered By: XaviSoft</p></div><button onclick="closeNotificationCenterV148()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Total Attention</span><div id="nc148Total" class="text-xl font-black">0</div></div><div class="bg-red-50 rounded-xl p-3"><span class="text-xs text-slate-400">High</span><div id="nc148High" class="text-xl font-black text-red-600">0</div></div><div class="bg-amber-50 rounded-xl p-3"><span class="text-xs text-slate-400">Medium</span><div id="nc148Medium" class="text-xl font-black text-amber-600">0</div></div><div class="bg-blue-50 rounded-xl p-3"><span class="text-xs text-slate-400">Info</span><div id="nc148Info" class="text-xl font-black text-blue-600">0</div></div></div>
+<div class="flex justify-between items-center mb-3"><div><b>Action Required</b><p class="text-xs text-slate-400">This list is read-only; use the relevant ERP module to take action.</p></div><button onclick="loadNotificationCenterV148()" class="border rounded-lg px-3 py-2 text-xs font-bold">Refresh</button></div>
+<div id="nc148Body" class="space-y-3"><div class="text-slate-400 py-8 text-center">Loading notifications...</div></div>
+</div></div></div>
+<div id="globalSearchV149Modal" class="fixed inset-0 bg-slate-950/55 hidden items-start justify-center z-[220] p-4 pt-[8vh]"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[82vh] overflow-hidden">
+<div class="p-4 border-b flex gap-3 items-center"><div class="text-xl">⌕</div><input id="gs149Input" oninput="scheduleGlobalSearchV149()" onkeydown="globalSearchKeyV149(event)" class="flex-1 outline-none text-lg font-bold" placeholder="Search invoice, customer, supplier, LC, item, voucher, payment reference..."><button onclick="closeGlobalSearchV149()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="px-5 py-3 bg-slate-50 border-b flex flex-wrap gap-2 text-[10px] font-bold text-slate-500"><span>INVOICES</span><span>•</span><span>PARTIES</span><span>•</span><span>LC / CARGO</span><span>•</span><span>ITEMS</span><span>•</span><span>VOUCHERS</span><span>•</span><span>PAYMENT REFERENCES</span></div>
+<div id="gs149Body" class="p-4 overflow-y-auto max-h-[62vh]"><div class="text-center text-slate-400 py-12">Type at least 2 characters to search across ZB & SONS ERP.</div></div>
+<div class="px-5 py-3 border-t text-[10px] text-slate-400 flex justify-between"><span>Enter = open first result · Esc = close</span><span>Powered By: XaviSoft</span></div>
+</div></div>
 </body>
 </html>
