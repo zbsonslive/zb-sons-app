@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By : XaviSoft)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2 (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -1124,7 +1124,26 @@
           </div>
         </div>
         <div class="mt-5 flex justify-end"><button id="postInvoiceBtn" type="button" onclick="postSalesInvoice()" class="px-5 py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl text-sm font-bold shadow-sm">Save Invoice</button></div>
-        <div class="mt-6 pt-5 border-t"><div class="flex justify-between items-center mb-3"><h3 class="font-bold text-slate-800">Recent Sales Invoices</h3><button onclick="fetchRecentInvoices()" class="text-xs font-bold text-brand-600">Refresh</button></div><div class="overflow-x-auto border rounded-xl"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Customer</th><th class="p-3 text-right">Amount</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="recentInvoicesBody"><tr><td colspan="6" class="p-6 text-center text-slate-400">No invoices loaded.</td></tr></tbody></table></div></div>
+        <div class="mt-6 pt-5 border-t">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-4">
+            <div><h3 class="font-extrabold text-slate-800">Sales Invoice Register</h3><p class="text-xs text-slate-400 mt-1">Complete sales invoice history with search and filters.</p></div>
+            <button onclick="fetchRecentInvoices()" class="text-xs font-bold text-brand-600">Refresh Register</button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-4">
+            <input id="salesRegSearch" oninput="renderSalesRegister()" class="border rounded-lg p-2.5 text-sm" placeholder="Search invoice / customer">
+            <input id="salesRegFrom" onchange="renderSalesRegister()" type="date" class="border rounded-lg p-2.5 text-sm">
+            <input id="salesRegTo" onchange="renderSalesRegister()" type="date" class="border rounded-lg p-2.5 text-sm">
+            <select id="salesRegStatus" onchange="renderSalesRegister()" class="border rounded-lg p-2.5 text-sm bg-white"><option value="">All Status</option><option value="UNPAID">Unpaid</option><option value="PARTIAL">Partially Paid</option><option value="PAID">Paid</option></select>
+            <button onclick="clearSalesRegisterFilters()" class="border rounded-lg p-2.5 text-xs font-bold bg-slate-50">Clear Filters</button>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 text-sm">
+            <div class="bg-slate-50 border rounded-xl p-3"><span class="text-xs text-slate-400">Invoices</span><div id="salesRegCount" class="font-black text-lg">0</div></div>
+            <div class="bg-slate-50 border rounded-xl p-3"><span class="text-xs text-slate-400">Total Sales</span><div id="salesRegTotal" class="font-black">PKR 0.00</div></div>
+            <div class="bg-slate-50 border rounded-xl p-3"><span class="text-xs text-slate-400">Received</span><div id="salesRegReceived" class="font-black text-emerald-700">PKR 0.00</div></div>
+            <div class="bg-slate-50 border rounded-xl p-3"><span class="text-xs text-slate-400">Outstanding</span><div id="salesRegDue" class="font-black text-amber-700">PKR 0.00</div></div>
+          </div>
+          <div class="overflow-x-auto border rounded-xl"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Customer</th><th class="p-3 text-left">LC / Cargo</th><th class="p-3 text-right">Amount</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Outstanding</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Actions</th></tr></thead><tbody id="recentInvoicesBody"><tr><td colspan="9" class="p-6 text-center text-slate-400">Loading sales invoices...</td></tr></tbody></table></div>
+        </div>
       </div>
     </div>
 
@@ -3991,13 +4010,35 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         btn.disabled=false; btn.textContent='Save Invoice';
       }
     }
+    let salesRegisterData=[];
     async function fetchRecentInvoices(){
       const tbody=document.getElementById('recentInvoicesBody');if(!tbody)return;
       if(!liveParties.length)await fetchParties();
-      const {data,error}=await db.from('invoices').select('id,invoice_number,invoice_date,grand_total,status,party_id').eq('type','SALE').order('created_at',{ascending:false}).limit(10);
-      if(error){tbody.innerHTML=`<tr><td colspan="5" class="p-5 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
-      tbody.innerHTML=(data||[]).map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.invoice_number)}</td><td class="p-3">${escapeHtml(i.invoice_date)}</td><td class="p-3">${escapeHtml(liveParties.find(p=>p.id===i.party_id)?.name||'-')}</td><td class="p-3 text-right font-mono">${money(i.grand_total)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${i.status==='PAID'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}">${escapeHtml(i.status||'UNPAID')}</span></td><td class="p-3 text-center"><div class="flex justify-center gap-1.5 flex-wrap"><button onclick="printSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold">Print</button><button onclick="editSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 text-[11px] font-bold">Edit</button><button onclick="cancelSalesInvoice('${i.id}','${escapeHtml(i.invoice_number)}')" class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-100 text-[11px] font-bold">Delete / Cancel</button></div></td></tr>`).join('')||'<tr><td colspan="6" class="p-6 text-center text-slate-400">No sales invoices found.</td></tr>';
+      const {data,error}=await db.from('invoices').select('id,invoice_number,invoice_date,grand_total,status,party_id,lc_number,created_at').eq('type','SALE').order('invoice_date',{ascending:false}).order('created_at',{ascending:false});
+      if(error){tbody.innerHTML=`<tr><td colspan="9" class="p-5 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
+      const ids=(data||[]).map(x=>x.id);
+      let pays=[];
+      if(ids.length){
+        const {data:pd,error:pe}=await db.from('customer_invoice_payments').select('invoice_id,amount').in('invoice_id',ids);
+        if(pe){showToast('Invoice payments could not be loaded: '+pe.message,'error');}
+        else pays=pd||[];
+      }
+      const paidMap={};pays.forEach(p=>paidMap[p.invoice_id]=(paidMap[p.invoice_id]||0)+Number(p.amount||0));
+      salesRegisterData=(data||[]).map(i=>{const received=Number(paidMap[i.id]||0),total=Number(i.grand_total||0),due=Math.max(0,total-received);return {...i,received,due,display_status:due<=.005?'PAID':received>0?'PARTIAL':'UNPAID'};});
+      renderSalesRegister();
     }
+    function renderSalesRegister(){
+      const tbody=document.getElementById('recentInvoicesBody');if(!tbody)return;
+      const q=(document.getElementById('salesRegSearch')?.value||'').trim().toLowerCase(),from=document.getElementById('salesRegFrom')?.value||'',to=document.getElementById('salesRegTo')?.value||'',st=document.getElementById('salesRegStatus')?.value||'';
+      const rows=salesRegisterData.filter(i=>{
+        const party=liveParties.find(p=>String(p.id)===String(i.party_id))?.name||'';
+        return (!q||String(i.invoice_number||'').toLowerCase().includes(q)||party.toLowerCase().includes(q))&&(!from||i.invoice_date>=from)&&(!to||i.invoice_date<=to)&&(!st||i.display_status===st);
+      });
+      let total=0,received=0,due=0;rows.forEach(i=>{total+=Number(i.grand_total||0);received+=i.received;due+=i.due;});
+      document.getElementById('salesRegCount').textContent=rows.length;document.getElementById('salesRegTotal').textContent=money(total);document.getElementById('salesRegReceived').textContent=money(received);document.getElementById('salesRegDue').textContent=money(due);
+      tbody.innerHTML=rows.map(i=>{const party=liveParties.find(p=>String(p.id)===String(i.party_id))?.name||'-';return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-semibold">${escapeHtml(i.invoice_number)}</td><td class="p-3">${escapeHtml(i.invoice_date)}</td><td class="p-3">${escapeHtml(party)}</td><td class="p-3 text-xs">${escapeHtml(i.lc_number||'-')}</td><td class="p-3 text-right font-mono">${money(i.grand_total)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(i.received)}</td><td class="p-3 text-right font-mono text-amber-700">${money(i.due)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${i.display_status==='PAID'?'bg-emerald-50 text-emerald-700':i.display_status==='PARTIAL'?'bg-blue-50 text-blue-700':'bg-amber-50 text-amber-700'}">${i.display_status==='PARTIAL'?'PARTIALLY PAID':i.display_status}</span></td><td class="p-3 text-center"><div class="flex justify-center gap-1.5 flex-wrap"><button onclick="printSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-bold">Print</button><button onclick="editSalesInvoice('${i.id}')" class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 text-[11px] font-bold">Edit</button><button onclick="cancelSalesInvoice('${i.id}','${escapeHtml(i.invoice_number)}')" class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 border border-red-100 text-[11px] font-bold">Delete / Cancel</button></div></td></tr>`}).join('')||'<tr><td colspan="9" class="p-8 text-center text-slate-400">No sales invoices match the selected filters.</td></tr>';
+    }
+    function clearSalesRegisterFilters(){['salesRegSearch','salesRegFrom','salesRegTo'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});const s=document.getElementById('salesRegStatus');if(s)s.value='';renderSalesRegister();}
 
     async function printSalesInvoice(invoiceId){
       try{
