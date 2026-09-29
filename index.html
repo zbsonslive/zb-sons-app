@@ -919,6 +919,34 @@
       </div>
     </div>
 
+    <!-- CUSTOMER RECEIPT HISTORY & STATEMENT -->
+    <div id="view-customerstatement" class="page-view hidden max-w-7xl">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Receivables Control</p><h1 class="text-3xl font-extrabold mt-1">Customer Receipt History & Statement</h1><p class="text-sm text-slate-500 mt-1">Complete invoice and receipt trail with customer running balance.</p></div>
+        <button onclick="printCustomerStatementV140()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Print / PDF</button>
+      </div>
+      <div class="bg-white border rounded-2xl p-5 mb-5"><div class="grid md:grid-cols-4 gap-3 items-end">
+        <div><label class="text-xs font-bold text-slate-500">CUSTOMER</label><select id="cs140Customer" class="mt-1 w-full border rounded-xl px-3 py-2.5"><option value="">Select customer</option></select></div>
+        <div><label class="text-xs font-bold text-slate-500">FROM DATE</label><input id="cs140From" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+        <div><label class="text-xs font-bold text-slate-500">TO DATE</label><input id="cs140To" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+        <button onclick="loadCustomerStatementV140()" class="bg-slate-900 text-white rounded-xl px-4 py-2.5 font-bold">Generate Statement</button>
+      </div></div>
+      <div class="grid md:grid-cols-4 gap-4 mb-5">
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL SALES</p><p id="cs140Sales" class="text-xl font-black mt-2">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL RECEIVED</p><p id="cs140Received" class="text-xl font-black mt-2 text-emerald-700">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">CURRENT OUTSTANDING</p><p id="cs140Outstanding" class="text-xl font-black mt-2 text-red-700">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">UNPAID / PARTIAL INVOICES</p><p id="cs140Unpaid" class="text-xl font-black mt-2">0</p></div>
+      </div>
+      <div class="bg-white border rounded-2xl overflow-hidden mb-5">
+        <div class="p-4 border-b"><b id="cs140Heading">Select a customer</b><div id="cs140Period" class="text-xs text-slate-500 mt-1"></div></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Type / Reference</th><th class="p-3 text-left">Details</th><th class="p-3 text-left">Received In</th><th class="p-3 text-right">Invoice</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Balance</th><th class="p-3 text-left">Action</th></tr></thead><tbody id="cs140Body"><tr><td colspan="8" class="p-8 text-center text-slate-400">Select customer and generate statement.</td></tr></tbody></table></div>
+      </div>
+      <div class="bg-white border rounded-2xl overflow-hidden">
+        <div class="p-4 border-b"><b>Invoice-wise Receipt History</b></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Invoice Date</th><th class="p-3 text-right">Invoice Amount</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Outstanding</th><th class="p-3 text-left">Status</th></tr></thead><tbody id="cs140InvoiceBody"></tbody></table></div>
+      </div>
+    </div>
+
     <!-- SUPPLIER PAYMENT & PAYABLE CONTROL -->
     <div id="view-supplierpayments" class="page-view hidden max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
@@ -969,6 +997,7 @@
         <button onclick="navigate('cashbook')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Cash & Bank" onclick="event.stopPropagation();togglePagePin('cashbook')">☆</span><div class="font-extrabold text-lg">Cash & Bank</div><div class="text-sm text-slate-500 mt-1">Receipts, payments, transfers and cash book.</div></button>
         <button onclick="navigate('bankledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Bank Ledger" onclick="event.stopPropagation();togglePagePin('bankledger')">☆</span><div class="font-extrabold text-lg">Bank Ledger & Statement</div><div class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance with print.</div></button>
         <button onclick="navigate('supplierpayments')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Supplier Payment Control</div><div class="text-sm text-slate-500 mt-1">Supplier payable, LC/Purchase allocation and complete payment register.</div></button>
+        <button onclick="navigate('customerstatement')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Customer Statement</div><div class="text-sm text-slate-500 mt-1">Invoices, receipt history, outstanding and running balance.</div></button>
         <button onclick="navigate('trialbalance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Trial Balance" onclick="event.stopPropagation();togglePagePin('trialbalance')">☆</span><div class="font-extrabold text-lg">Trial Balance</div><div class="text-sm text-slate-500 mt-1">Account balances and debit / credit position.</div></button>
         <button onclick="navigate('khata')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Customer Ledger" onclick="event.stopPropagation();togglePagePin('khata')">☆</span><div class="font-extrabold text-lg">Customer Ledger</div><div class="text-sm text-slate-500 mt-1">Customer receivables and transaction history.</div></button>
         <button onclick="navigate('supplierledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Supplier Ledger" onclick="event.stopPropagation();togglePagePin('supplierledger')">☆</span><div class="font-extrabold text-lg">Supplier Ledger</div><div class="text-sm text-slate-500 mt-1">Supplier payables and payment history.</div></button>
@@ -1673,6 +1702,7 @@
       if (view === 'cashbook') loadCashBook();
       if (view === 'bankledger') initBankLedger();
       if (view === 'supplierpayments') initSupplierPaymentControlV139();
+      if (view === 'customerstatement') initCustomerStatementV140();
       if (view === 'trialbalance') loadTrialBalance();
       if (view === 'khata') populateKhataPartySelector();
       if (view === 'supplierledger') populateSupplierLedgerSelector();
@@ -1692,6 +1722,30 @@
       if (view === 'reports') loadBusinessReports();
       if (view === 'finance') loadExpenses();
       if (view === 'lc-pl') loadCargoShipments();
+    }
+
+    let customerStatementRowsV140=[],customerStatementInvoicesV140=[];
+    async function initCustomerStatementV140(){
+      if(!liveParties.length)await fetchParties();
+      const el=document.getElementById('cs140Customer');if(!el)return;const old=el.value;
+      el.innerHTML='<option value="">Select customer</option>'+liveParties.filter(p=>isCustomerParty(p)).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');if(old)el.value=old;
+    }
+    async function loadCustomerStatementV140(){
+      const customerId=document.getElementById('cs140Customer')?.value,from=document.getElementById('cs140From')?.value||null,to=document.getElementById('cs140To')?.value||null,body=document.getElementById('cs140Body');
+      if(!customerId){showToast('Select a customer.','error');return;}body.innerHTML='<tr><td colspan="8" class="p-8 text-center text-slate-400">Loading customer statement...</td></tr>';
+      try{
+        const [{data:rows,error},{data:invs,error:ie}]=await Promise.all([db.rpc('customer_statement_v140',{p_customer_id:customerId,p_from_date:from,p_to_date:to}),db.rpc('customer_invoice_summary_v140',{p_customer_id:customerId})]);if(error)throw error;if(ie)throw ie;
+        customerStatementRowsV140=rows||[];customerStatementInvoicesV140=invs||[];
+        const customer=liveParties.find(p=>String(p.id)===String(customerId))||{},sales=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.invoice_amount||0),0),received=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.received||0),0),outstanding=customerStatementInvoicesV140.reduce((a,x)=>a+Number(x.outstanding||0),0),unpaid=customerStatementInvoicesV140.filter(x=>Number(x.outstanding||0)>.005).length;
+        document.getElementById('cs140Sales').textContent=money(sales);document.getElementById('cs140Received').textContent=money(received);document.getElementById('cs140Outstanding').textContent=money(outstanding);document.getElementById('cs140Unpaid').textContent=unpaid;document.getElementById('cs140Heading').textContent=customer.name||'Customer';document.getElementById('cs140Period').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
+        body.innerHTML=customerStatementRowsV140.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.tx_date||'')}</td><td class="p-3"><b>${escapeHtml(r.tx_type||'')}</b><div class="text-xs text-slate-400">${escapeHtml(r.reference||'-')}</div></td><td class="p-3">${escapeHtml(r.details||'-')}</td><td class="p-3">${escapeHtml(r.received_in||'-')}</td><td class="p-3 text-right font-mono">${Number(r.invoice_amount||0)?money(r.invoice_amount):'-'}</td><td class="p-3 text-right font-mono text-emerald-700">${Number(r.received_amount||0)?money(r.received_amount):'-'}</td><td class="p-3 text-right font-mono font-bold">${money(r.running_balance)}</td><td class="p-3">${r.invoice_id?`<button onclick="printInvoice('${r.invoice_id}')" class="text-xs font-bold text-brand-600">Print Invoice</button>`:'-'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No transactions in selected period.</td></tr>';
+        document.getElementById('cs140InvoiceBody').innerHTML=customerStatementInvoicesV140.map(x=>`<tr class="border-t"><td class="p-3 font-bold">${escapeHtml(x.invoice_number||'-')}</td><td class="p-3">${escapeHtml(x.invoice_date||'')}</td><td class="p-3 text-right font-mono">${money(x.invoice_amount)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(x.received)}</td><td class="p-3 text-right font-mono text-red-700">${money(x.outstanding)}</td><td class="p-3"><span class="text-xs font-bold">${escapeHtml(x.payment_status||'')}</span></td></tr>`).join('');
+      }catch(err){body.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
+    function printCustomerStatementV140(){
+      const customerId=document.getElementById('cs140Customer')?.value;if(!customerId){showToast('Generate customer statement first.','error');return;}const customer=liveParties.find(p=>String(p.id)===String(customerId))||{},period=document.getElementById('cs140Period').textContent;
+      const rows=customerStatementRowsV140.map(r=>`<tr><td>${escapeHtml(r.tx_date||'')}</td><td>${escapeHtml(r.tx_type||'')}<br><small>${escapeHtml(r.reference||'')}</small></td><td>${escapeHtml(r.details||'-')}</td><td>${escapeHtml(r.received_in||'-')}</td><td class="num">${Number(r.invoice_amount||0)?money(r.invoice_amount):'-'}</td><td class="num">${Number(r.received_amount||0)?money(r.received_amount):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
+      const w=window.open('','_blank','width=1100,height=900');if(!w)return;w.document.write(`<!doctype html><html><head><title>Customer Statement</title><style>body{font-family:Arial;padding:28px}h1{margin:0}.muted{color:#666;font-size:12px;margin:6px 0 18px}.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}</style></head><body><h1>ZB & SONS ERP — Customer Statement</h1><div class="muted">${escapeHtml(customer.name||'')} | ${escapeHtml(period)}</div><div class="sum"><div class="box"><small>Total Sales</small><b>${document.getElementById('cs140Sales').textContent}</b></div><div class="box"><small>Total Received</small><b>${document.getElementById('cs140Received').textContent}</b></div><div class="box"><small>Outstanding</small><b>${document.getElementById('cs140Outstanding').textContent}</b></div><div class="box"><small>Unpaid / Partial</small><b>${document.getElementById('cs140Unpaid').textContent}</b></div></div><table><thead><tr><th>Date</th><th>Type / Ref</th><th>Details</th><th>Received In</th><th>Invoice</th><th>Received</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
     }
 
     async function initSupplierPaymentControlV139(){
@@ -4330,7 +4384,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <script id="pin-favorites-script">
 (function(){
  const KEY='zb_erp_pinned_tabs_v2';
- const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',supplierpayments:'Supplier Payment Control',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
+ const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',supplierpayments:'Supplier Payment Control',customerstatement:'Customer Statement',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
  const pins=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}};
  const save=a=>localStorage.setItem(KEY,JSON.stringify([...new Set(a)]));
  window.togglePagePin=function(v){let a=pins();a=a.includes(v)?a.filter(x=>x!==v):[...a,v];save(a);renderPinnedShortcuts()};
