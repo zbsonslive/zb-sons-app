@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.38 | (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.31.1 | Simple Business v1.2</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -919,6 +919,19 @@
       </div>
     </div>
 
+    <!-- SUPPLIER PAYMENT & PAYABLE CONTROL -->
+    <div id="view-supplierpayments" class="page-view hidden max-w-7xl">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Payables Control</p><h1 class="text-3xl font-extrabold mt-1">Supplier Payment & Payable Control</h1><p class="text-sm text-slate-500 mt-1">Pay suppliers against total payable, a specific Purchase, or an LC / Cargo.</p></div>
+        <button onclick="openSupplierPaymentV139()" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold">+ Pay Supplier</button>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-5"><div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL SUPPLIER PAYABLE</p><p id="sp139Payable" class="text-xl font-black mt-2">PKR 0.00</p></div><div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">PAYMENTS SHOWN</p><p id="sp139Paid" class="text-xl font-black mt-2 text-red-700">PKR 0.00</p></div><div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">PAYMENT ENTRIES</p><p id="sp139Count" class="text-xl font-black mt-2">0</p></div></div>
+      <div class="bg-white border rounded-2xl overflow-hidden">
+        <div class="p-4 border-b flex flex-col md:flex-row gap-3 justify-between"><div><b>Supplier Payment Register</b><div class="text-xs text-slate-400">Purchase / LC allocation and bank details.</div></div><select id="sp139Filter" onchange="loadSupplierPaymentRegisterV139()" class="border rounded-lg px-3 py-2 text-sm"><option value="">All Suppliers</option></select></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Purchase / LC</th><th class="p-3 text-left">Reference</th><th class="p-3 text-left">Paid Through</th><th class="p-3 text-right">Amount</th><th class="p-3 text-left">Voucher</th></tr></thead><tbody id="sp139Body"><tr><td colspan="7" class="p-8 text-center text-slate-400">Loading...</td></tr></tbody></table></div>
+      </div>
+    </div>
+
     <!-- BANK LEDGER & STATEMENT -->
     <div id="view-bankledger" class="page-view hidden max-w-7xl">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
@@ -955,6 +968,7 @@
       <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
         <button onclick="navigate('cashbook')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Cash & Bank" onclick="event.stopPropagation();togglePagePin('cashbook')">☆</span><div class="font-extrabold text-lg">Cash & Bank</div><div class="text-sm text-slate-500 mt-1">Receipts, payments, transfers and cash book.</div></button>
         <button onclick="navigate('bankledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Bank Ledger" onclick="event.stopPropagation();togglePagePin('bankledger')">☆</span><div class="font-extrabold text-lg">Bank Ledger & Statement</div><div class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance with print.</div></button>
+        <button onclick="navigate('supplierpayments')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><div class="font-extrabold text-lg">Supplier Payment Control</div><div class="text-sm text-slate-500 mt-1">Supplier payable, LC/Purchase allocation and complete payment register.</div></button>
         <button onclick="navigate('trialbalance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Trial Balance" onclick="event.stopPropagation();togglePagePin('trialbalance')">☆</span><div class="font-extrabold text-lg">Trial Balance</div><div class="text-sm text-slate-500 mt-1">Account balances and debit / credit position.</div></button>
         <button onclick="navigate('khata')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Customer Ledger" onclick="event.stopPropagation();togglePagePin('khata')">☆</span><div class="font-extrabold text-lg">Customer Ledger</div><div class="text-sm text-slate-500 mt-1">Customer receivables and transaction history.</div></button>
         <button onclick="navigate('supplierledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Supplier Ledger" onclick="event.stopPropagation();togglePagePin('supplierledger')">☆</span><div class="font-extrabold text-lg">Supplier Ledger</div><div class="text-sm text-slate-500 mt-1">Supplier payables and payment history.</div></button>
@@ -1658,6 +1672,7 @@
       if (view === 'purchases') fetchLocalPurchases();
       if (view === 'cashbook') loadCashBook();
       if (view === 'bankledger') initBankLedger();
+      if (view === 'supplierpayments') initSupplierPaymentControlV139();
       if (view === 'trialbalance') loadTrialBalance();
       if (view === 'khata') populateKhataPartySelector();
       if (view === 'supplierledger') populateSupplierLedgerSelector();
@@ -1678,6 +1693,46 @@
       if (view === 'finance') loadExpenses();
       if (view === 'lc-pl') loadCargoShipments();
     }
+
+    async function initSupplierPaymentControlV139(){
+      if(!liveParties.length)await fetchParties();if(!liveBanks.length)await fetchBanks();
+      const sups=supplierParties(),f=document.getElementById('sp139Filter');if(f){const old=f.value;f.innerHTML='<option value="">All Suppliers</option>'+sups.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');if(old)f.value=old;}
+      await loadSupplierPaymentRegisterV139();
+      try{let total=0;for(const p of sups)total+=Math.max(0,await getAccountNetPayable('2100',p.id));document.getElementById('sp139Payable').textContent=money(total);}catch(e){}
+    }
+    async function loadSupplierPaymentRegisterV139(){
+      const body=document.getElementById('sp139Body');if(!body)return;body.innerHTML='<tr><td colspan="7" class="p-8 text-center text-slate-400">Loading payments...</td></tr>';
+      const supplierId=document.getElementById('sp139Filter')?.value||null;
+      const {data,error}=await db.rpc('supplier_payment_register_v139',{p_supplier_id:supplierId});
+      if(error){body.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
+      const rows=data||[];document.getElementById('sp139Count').textContent=rows.length;document.getElementById('sp139Paid').textContent=money(rows.reduce((a,r)=>a+Number(r.amount||0),0));
+      body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.payment_date||'')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3">${escapeHtml(r.allocation_ref||'General / Total Payable')}</td><td class="p-3">${escapeHtml(r.reference||'-')}</td><td class="p-3">${escapeHtml(r.paid_through||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.journal_entry_number||'-')}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No supplier payments found.</td></tr>';
+    }
+    async function openSupplierPaymentV139(preselect=null){
+      if(!liveParties.length)await fetchParties();if(!liveBanks.length)await fetchBanks();
+      const sel=document.getElementById('sp139Supplier');sel.innerHTML='<option value="">Select supplier</option>'+supplierParties().map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');if(preselect)sel.value=preselect;
+      document.getElementById('sp139Bank').innerHTML=liveBanks.map(b=>`<option value="${b.id}">${escapeHtml(b.bank_name||'Bank')} · ${escapeHtml(b.account_title||b.account_number||'')}</option>`).join('');
+      document.getElementById('sp139Date').value=new Date().toISOString().slice(0,10);document.getElementById('sp139Amount').value='';document.getElementById('sp139Ref').value='';document.getElementById('sp139Notes').value='';document.getElementById('sp139Method').value='CASH';supplierPaymentMethodChangedV139();
+      const m=document.getElementById('supplierPaymentV139Modal');m.classList.remove('hidden');m.classList.add('flex');if(preselect)await refreshSupplierPaymentContextV139();
+    }
+    function closeSupplierPaymentV139(){const m=document.getElementById('supplierPaymentV139Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function supplierPaymentMethodChangedV139(){document.getElementById('sp139BankWrap').classList.toggle('hidden',document.getElementById('sp139Method').value!=='BANK');}
+    async function refreshSupplierPaymentContextV139(){
+      const supplierId=document.getElementById('sp139Supplier').value,a=document.getElementById('sp139Allocation');a.innerHTML='<option value="">General / Total Payable</option>';if(!supplierId){document.getElementById('sp139Due').textContent=money(0);return;}
+      const total=Math.max(0,await getAccountNetPayable('2100',supplierId));document.getElementById('sp139Due').textContent=money(total);document.getElementById('sp139Amount').max=String(total);
+      try{const {data}=await db.rpc('supplier_purchase_outstanding',{p_supplier_id:supplierId});(data||[]).filter(x=>Number(x.due_amount||0)>.005).forEach(x=>{const o=document.createElement('option');o.value='PURCHASE:'+x.purchase_journal_id;o.dataset.due=x.due_amount;o.textContent=`Purchase · ${x.purchase_ref} · Due ${money(x.due_amount)}`;a.appendChild(o);});}catch(e){}
+      const {data:cargos}=await db.from('cargo_shipments').select('id,cargo_ref,goods_value,status').eq('supplier_id',supplierId).order('shipment_date',{ascending:false});
+      if(cargos?.length){const {data:paid}=await db.from('supplier_shipment_payments').select('cargo_id,amount').eq('supplier_id',supplierId).in('cargo_id',cargos.map(c=>c.id));const pm={};(paid||[]).forEach(x=>pm[x.cargo_id]=(pm[x.cargo_id]||0)+Number(x.amount||0));cargos.forEach(c=>{const due=Math.max(0,Number(c.goods_value||0)-(pm[c.id]||0));if(due>.005){const o=document.createElement('option');o.value='CARGO:'+c.id;o.dataset.due=due;o.textContent=`LC · ${c.cargo_ref} · ${c.status} · Due ${money(due)}`;a.appendChild(o);}});}
+    }
+    function supplierAllocationChangedV139(){const o=document.getElementById('sp139Allocation').selectedOptions[0],d=Number(o?.dataset.due||0);if(d>0){document.getElementById('sp139Due').textContent=money(d);document.getElementById('sp139Amount').value=d.toFixed(2);document.getElementById('sp139Amount').max=String(d);}else refreshSupplierPaymentContextV139();}
+    async function saveSupplierPaymentV139(e){
+      e.preventDefault();const supplierId=document.getElementById('sp139Supplier').value,allocation=document.getElementById('sp139Allocation').value,amount=Number(document.getElementById('sp139Amount').value||0),date=document.getElementById('sp139Date').value,method=document.getElementById('sp139Method').value,bankId=method==='BANK'?(document.getElementById('sp139Bank').value||null):null,ref=document.getElementById('sp139Ref').value.trim()||null,notes=document.getElementById('sp139Notes').value.trim()||null;
+      if(!supplierId||!date||amount<=0){showToast('Supplier, date and valid amount are required.','error');return;}if(method==='BANK'&&!bankId){showToast('Select bank account.','error');return;}
+      let purchaseId=null,cargoId=null;if(allocation.startsWith('PURCHASE:'))purchaseId=allocation.slice(9);if(allocation.startsWith('CARGO:'))cargoId=allocation.slice(6);
+      const btn=document.getElementById('sp139Save');btn.disabled=true;btn.textContent='Posting...';
+      try{const {data,error}=await db.rpc('post_supplier_payment_v139',{p_supplier_id:supplierId,p_amount:amount,p_payment_date:date,p_payment_method:method,p_bank_account_id:bankId,p_reference:ref,p_purchase_journal_id:purchaseId,p_cargo_id:cargoId,p_notes:notes});if(error)throw error;showToast(`Supplier payment posted successfully · ${data}`);closeSupplierPaymentV139();await fetchBanks();await initSupplierPaymentControlV139();await loadSupplierLedger();await loadTrialBalance();refreshDashboardMetrics();}catch(err){showToast(err.message||'Supplier payment failed.','error');}finally{btn.disabled=false;btn.textContent='Pay Supplier';}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='supplierPaymentV139Modal')closeSupplierPaymentV139();});
 
     let bankLedgerRows=[];
     async function initBankLedger(){
@@ -4275,7 +4330,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <script id="pin-favorites-script">
 (function(){
  const KEY='zb_erp_pinned_tabs_v2';
- const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
+ const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',supplierpayments:'Supplier Payment Control',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
  const pins=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}};
  const save=a=>localStorage.setItem(KEY,JSON.stringify([...new Set(a)]));
  window.togglePagePin=function(v){let a=pins();a=a.includes(v)?a.filter(x=>x!==v):[...a,v];save(a);renderPinnedShortcuts()};
@@ -4361,6 +4416,16 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><label class="block text-xs font-bold mb-1">Reference / Cheque / Transfer No.</label><input id="qirReference" class="w-full border rounded-lg p-2.5"></div>
 <div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="qirNotes" rows="2" class="w-full border rounded-lg p-2.5"></textarea></div>
 <div class="flex justify-end gap-2"><button type="button" onclick="closeQuickInvoiceReceipt()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="qirSaveBtn" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold">Receive Payment</button></div>
+</form></div></div>
+<div id="supplierPaymentV139Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[145] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden">
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Pay Supplier</h3><p class="text-xs text-slate-400 mt-1">Allocate payment to supplier, Purchase or LC / Cargo.</p></div><button onclick="closeSupplierPaymentV139()" class="text-2xl text-slate-400">&times;</button></div>
+<form onsubmit="saveSupplierPaymentV139(event)" class="p-5 space-y-4">
+<div><label class="text-xs font-bold">Supplier *</label><select id="sp139Supplier" onchange="refreshSupplierPaymentContextV139()" required class="w-full border rounded-lg p-2.5 mt-1"></select></div>
+<div class="grid md:grid-cols-2 gap-3"><div><label class="text-xs font-bold">Allocate Against</label><select id="sp139Allocation" onchange="supplierAllocationChangedV139()" class="w-full border rounded-lg p-2.5 mt-1"><option value="">General / Total Payable</option></select></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Available Payable</span><div id="sp139Due" class="font-black mt-1">PKR 0.00</div></div></div>
+<div class="grid md:grid-cols-2 gap-3"><div><label class="text-xs font-bold">Payment Date *</label><input id="sp139Date" type="date" required class="w-full border rounded-lg p-2.5 mt-1"></div><div><label class="text-xs font-bold">Amount *</label><input id="sp139Amount" type="number" min=".01" step=".01" required class="w-full border rounded-lg p-2.5 mt-1"></div></div>
+<div class="grid md:grid-cols-2 gap-3"><div><label class="text-xs font-bold">Paid Through *</label><select id="sp139Method" onchange="supplierPaymentMethodChangedV139()" class="w-full border rounded-lg p-2.5 mt-1"><option value="CASH">Cash on Hand</option><option value="BANK">Bank Account</option></select></div><div id="sp139BankWrap" class="hidden"><label class="text-xs font-bold">Bank Account *</label><select id="sp139Bank" class="w-full border rounded-lg p-2.5 mt-1"></select></div></div>
+<div><label class="text-xs font-bold">Reference / Cheque / Transfer No.</label><input id="sp139Ref" class="w-full border rounded-lg p-2.5 mt-1"></div><div><label class="text-xs font-bold">Notes</label><textarea id="sp139Notes" rows="2" class="w-full border rounded-lg p-2.5 mt-1"></textarea></div>
+<div class="flex justify-end gap-2"><button type="button" onclick="closeSupplierPaymentV139()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="sp139Save" class="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold">Pay Supplier</button></div>
 </form></div></div>
 </body>
 </html>
