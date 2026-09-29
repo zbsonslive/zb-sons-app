@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.37 | (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.38 | (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com">document.addEventListener('DOMContentLoaded',()=>initERPAuth());
 
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeInvestorEditModal();});
@@ -919,6 +919,32 @@
       </div>
     </div>
 
+    <!-- BANK LEDGER & STATEMENT -->
+    <div id="view-bankledger" class="page-view hidden max-w-7xl">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Banking Control</p><h1 class="text-3xl font-extrabold mt-1">Bank Ledger & Statement</h1><p class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance from posted accounting entries.</p></div>
+        <button onclick="printBankLedger()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Print / PDF</button>
+      </div>
+      <div class="bg-white border rounded-2xl p-5 mb-5">
+        <div class="grid md:grid-cols-4 gap-3 items-end">
+          <div><label class="text-xs font-bold text-slate-500">BANK ACCOUNT</label><select id="bankLedgerBank" class="mt-1 w-full border rounded-xl px-3 py-2.5"><option value="">Select bank</option></select></div>
+          <div><label class="text-xs font-bold text-slate-500">FROM DATE</label><input id="bankLedgerFrom" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+          <div><label class="text-xs font-bold text-slate-500">TO DATE</label><input id="bankLedgerTo" type="date" class="mt-1 w-full border rounded-xl px-3 py-2.5"></div>
+          <button onclick="loadBankLedger()" class="bg-slate-900 text-white rounded-xl px-4 py-2.5 font-bold">Generate Statement</button>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-4 gap-4 mb-5">
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">OPENING BALANCE</p><p id="bankLedgerOpening" class="text-xl font-black mt-2">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL RECEIVED</p><p id="bankLedgerDebit" class="text-xl font-black mt-2 text-emerald-700">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">TOTAL PAID</p><p id="bankLedgerCredit" class="text-xl font-black mt-2 text-red-700">PKR 0.00</p></div>
+        <div class="bg-white border rounded-xl p-4"><p class="text-xs font-bold text-slate-400">CLOSING BALANCE</p><p id="bankLedgerClosing" class="text-xl font-black mt-2">PKR 0.00</p></div>
+      </div>
+      <div class="bg-white border rounded-2xl overflow-hidden">
+        <div class="p-4 border-b"><b id="bankLedgerHeading">Select a bank account</b><div id="bankLedgerPeriod" class="text-xs text-slate-500 mt-1"></div></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher / Reference</th><th class="p-3 text-left">Description</th><th class="p-3 text-left">Party</th><th class="p-3 text-right">Received</th><th class="p-3 text-right">Paid</th><th class="p-3 text-right">Balance</th></tr></thead><tbody id="bankLedgerBody"><tr><td colspan="7" class="p-8 text-center text-slate-400">Select bank and generate statement.</td></tr></tbody></table></div>
+      </div>
+    </div>
+
     <!-- FINANCE & ACCOUNTS HUB -->
     <div id="view-financehub" class="page-view hidden max-w-7xl">
       <div class="mb-7">
@@ -928,6 +954,7 @@
       </div>
       <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
         <button onclick="navigate('cashbook')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Cash & Bank" onclick="event.stopPropagation();togglePagePin('cashbook')">☆</span><div class="font-extrabold text-lg">Cash & Bank</div><div class="text-sm text-slate-500 mt-1">Receipts, payments, transfers and cash book.</div></button>
+        <button onclick="navigate('bankledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Bank Ledger" onclick="event.stopPropagation();togglePagePin('bankledger')">☆</span><div class="font-extrabold text-lg">Bank Ledger & Statement</div><div class="text-sm text-slate-500 mt-1">Bank-wise receipts, payments and running balance with print.</div></button>
         <button onclick="navigate('trialbalance')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Trial Balance" onclick="event.stopPropagation();togglePagePin('trialbalance')">☆</span><div class="font-extrabold text-lg">Trial Balance</div><div class="text-sm text-slate-500 mt-1">Account balances and debit / credit position.</div></button>
         <button onclick="navigate('khata')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Customer Ledger" onclick="event.stopPropagation();togglePagePin('khata')">☆</span><div class="font-extrabold text-lg">Customer Ledger</div><div class="text-sm text-slate-500 mt-1">Customer receivables and transaction history.</div></button>
         <button onclick="navigate('supplierledger')" class="text-left bg-white border rounded-2xl p-5 hover:shadow-md transition"><span class="finance-card-pin" title="Pin Supplier Ledger" onclick="event.stopPropagation();togglePagePin('supplierledger')">☆</span><div class="font-extrabold text-lg">Supplier Ledger</div><div class="text-sm text-slate-500 mt-1">Supplier payables and payment history.</div></button>
@@ -1630,6 +1657,7 @@
       if (view === 'investors') fetchInvestorsAndInvestments();
       if (view === 'purchases') fetchLocalPurchases();
       if (view === 'cashbook') loadCashBook();
+      if (view === 'bankledger') initBankLedger();
       if (view === 'trialbalance') loadTrialBalance();
       if (view === 'khata') populateKhataPartySelector();
       if (view === 'supplierledger') populateSupplierLedgerSelector();
@@ -1649,6 +1677,37 @@
       if (view === 'reports') loadBusinessReports();
       if (view === 'finance') loadExpenses();
       if (view === 'lc-pl') loadCargoShipments();
+    }
+
+    let bankLedgerRows=[];
+    async function initBankLedger(){
+      if(!liveBanks.length)await fetchBanks();
+      const sel=document.getElementById('bankLedgerBank');if(!sel)return;
+      const old=sel.value;sel.innerHTML='<option value="">Select bank</option>'+liveBanks.map(b=>`<option value="${b.id}">${escapeHtml(b.bank_name||'Bank')} · ${escapeHtml(b.account_title||b.account_number||'')}</option>`).join('');if(old)sel.value=old;
+    }
+    async function loadBankLedger(){
+      const bankId=document.getElementById('bankLedgerBank')?.value,from=document.getElementById('bankLedgerFrom')?.value||null,to=document.getElementById('bankLedgerTo')?.value||null,body=document.getElementById('bankLedgerBody');
+      if(!bankId){showToast('Select a bank account.','error');return;}
+      body.innerHTML='<tr><td colspan="7" class="p-8 text-center text-slate-400">Loading bank ledger...</td></tr>';
+      try{
+        const {data,error}=await db.rpc('bank_statement_v138',{p_bank_account_id:bankId,p_from_date:from,p_to_date:to});if(error)throw error;
+        bankLedgerRows=data||[];
+        const bank=liveBanks.find(b=>String(b.id)===String(bankId))||{};
+        const opening=bankLedgerRows.length?Number(bankLedgerRows[0].opening_balance||0):Number(bank.current_balance??bank.opening_balance??0);
+        let dr=0,cr=0;bankLedgerRows.forEach(r=>{dr+=Number(r.debit||0);cr+=Number(r.credit||0);});
+        const closing=bankLedgerRows.length?Number(bankLedgerRows[bankLedgerRows.length-1].running_balance||0):opening;
+        document.getElementById('bankLedgerOpening').textContent=money(opening);document.getElementById('bankLedgerDebit').textContent=money(dr);document.getElementById('bankLedgerCredit').textContent=money(cr);document.getElementById('bankLedgerClosing').textContent=money(closing);
+        document.getElementById('bankLedgerHeading').textContent=`${bank.bank_name||'Bank'} · ${bank.account_title||bank.account_number||''}`;
+        document.getElementById('bankLedgerPeriod').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
+        body.innerHTML=bankLedgerRows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.entry_date||'')}</td><td class="p-3"><b>${escapeHtml(r.reference_number||r.entry_number||'-')}</b><div class="text-[10px] text-slate-400">${escapeHtml(r.entry_number||'')}</div></td><td class="p-3">${escapeHtml(r.description||r.narration||'-')}</td><td class="p-3">${escapeHtml(r.party_name||'-')}</td><td class="p-3 text-right font-mono text-emerald-700">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="p-3 text-right font-mono text-red-700">${Number(r.credit||0)?money(r.credit):'-'}</td><td class="p-3 text-right font-mono font-bold">${money(r.running_balance)}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No posted bank transactions in selected period.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
+    function printBankLedger(){
+      const bankId=document.getElementById('bankLedgerBank')?.value;if(!bankId){showToast('Generate a bank statement first.','error');return;}
+      const bank=liveBanks.find(b=>String(b.id)===String(bankId))||{},opening=document.getElementById('bankLedgerOpening').textContent,received=document.getElementById('bankLedgerDebit').textContent,paid=document.getElementById('bankLedgerCredit').textContent,closing=document.getElementById('bankLedgerClosing').textContent,period=document.getElementById('bankLedgerPeriod').textContent;
+      const rows=bankLedgerRows.map(r=>`<tr><td>${escapeHtml(r.entry_date||'')}</td><td>${escapeHtml(r.reference_number||r.entry_number||'-')}</td><td>${escapeHtml(r.description||r.narration||'-')}</td><td>${escapeHtml(r.party_name||'-')}</td><td class="num">${Number(r.debit||0)?money(r.debit):'-'}</td><td class="num">${Number(r.credit||0)?money(r.credit):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
+      const w=window.open('','_blank','width=1100,height=900');if(!w)return;
+      w.document.write(`<!doctype html><html><head><title>Bank Statement</title><style>body{font-family:Arial,sans-serif;padding:28px;color:#111}h1{margin:0;font-size:22px}.muted{color:#666;font-size:12px;margin-top:5px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}@media print{body{padding:10px}}</style></head><body><h1>ZB & SONS ERP — Bank Statement</h1><div class="muted">${escapeHtml(bank.bank_name||'')} · ${escapeHtml(bank.account_title||bank.account_number||'')} | ${escapeHtml(period)}</div><div class="summary"><div class="box"><small>Opening</small><b>${opening}</b></div><div class="box"><small>Received</small><b>${received}</b></div><div class="box"><small>Paid</small><b>${paid}</b></div><div class="box"><small>Closing</small><b>${closing}</b></div></div><table><thead><tr><th>Date</th><th>Reference</th><th>Description</th><th>Party</th><th>Received</th><th>Paid</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
     }
 
     // --------------------------------------------------------
@@ -2085,55 +2144,25 @@
     }
 
     async function fetchBanks() {
-      const { data, error } = await db.from('bank_accounts').select('*').order('created_at', { ascending: false });
-      liveBanks = data || [];
-
-      // Render Cards
-      const cardsContainer = document.getElementById('bankCardsGrid');
-      cardsContainer.innerHTML = '';
-
-      if (liveBanks.length === 0) {
-        cardsContainer.innerHTML = '<div class="col-span-3 bg-white p-6 rounded-xl border border-slate-200 text-center text-xs text-slate-400">No bank accounts added yet. Click "+ Add New Bank Account".</div>';
-      } else {
-        liveBanks.forEach(b => {
-          cardsContainer.innerHTML += `
-            <div class="erp-card bg-white/95 border border-slate-200 rounded-2xl p-5 shadow-sm">
-              <div class="flex justify-between items-center mb-2">
-                <span class="text-xs font-bold text-slate-800 uppercase">${b.bank_name}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded font-mono bg-blue-50 text-blue-700">Active</span>
-              </div>
-              <p class="text-sm font-semibold text-slate-900">${b.account_title}</p>
-              <p class="font-mono text-xs text-slate-400 mt-0.5">${b.account_number}</p>
-              <div class="border-t border-slate-100 mt-3 pt-2 flex justify-between items-center text-xs">
-                <span class="text-slate-500">Opening Balance:</span>
-                <strong class="font-mono text-slate-800">PKR ${parseFloat(b.opening_balance).toLocaleString('en-PK', {minimumFractionDigits: 2})}</strong>
-              </div>
-            </div>
-          `;
-        });
+      const {data,error}=await db.from('bank_accounts').select('*').order('created_at',{ascending:false});
+      if(error){showToast('Bank accounts could not load: '+error.message,'error');return;}
+      liveBanks=data||[];
+      let ledger={};
+      if(liveBanks.length){
+        const {data:bal,error:be}=await db.rpc('bank_live_balances_v1371');
+        if(!be)(bal||[]).forEach(x=>ledger[String(x.bank_account_id)]=Number(x.current_balance||0));
       }
+      liveBanks=liveBanks.map(b=>({...b,current_balance:(String(b.id) in ledger)?ledger[String(b.id)]:Number(b.opening_balance||0)}));
 
-      // Render Table
-      const tbody = document.getElementById('bankAccountsTableBody');
-      tbody.innerHTML = '';
-      if (liveBanks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="py-8 text-center text-slate-400 font-sans">No banks found.</td></tr>';
-      } else {
-        liveBanks.forEach(b => {
-          tbody.innerHTML += `
-            <tr class="hover:bg-slate-50 transition-colors">
-              <td class="py-3 px-4 font-bold text-slate-900 font-sans">${b.bank_name}</td>
-              <td class="py-3 px-4 font-sans">${b.account_title}</td>
-              <td class="py-3 px-4 font-mono text-slate-600">${b.account_number}</td>
-              <td class="py-3 px-4 font-sans text-slate-500">${b.branch_name || '-'}</td>
-              <td class="py-3 px-4 text-right font-mono font-medium text-slate-900">PKR ${parseFloat(b.opening_balance).toLocaleString('en-PK', {minimumFractionDigits: 2})}</td>
-            </tr>
-          `;
-        });
-      }
+      const cardsContainer=document.getElementById('bankCardsGrid');cardsContainer.innerHTML='';
+      if(!liveBanks.length)cardsContainer.innerHTML='<div class="col-span-3 bg-white p-6 rounded-xl border border-slate-200 text-center text-xs text-slate-400">No bank accounts added yet. Click "+ Add New Bank Account".</div>';
+      else liveBanks.forEach(b=>{cardsContainer.innerHTML+=`<div class="erp-card bg-white/95 border border-slate-200 rounded-2xl p-5 shadow-sm"><div class="flex justify-between items-center mb-2"><span class="text-xs font-bold text-slate-800 uppercase">${escapeHtml(b.bank_name||'Bank')}</span><span class="text-[10px] px-2 py-0.5 rounded font-mono bg-blue-50 text-blue-700">Active</span></div><p class="text-sm font-semibold text-slate-900">${escapeHtml(b.account_title||'')}</p><p class="font-mono text-xs text-slate-400 mt-0.5">${escapeHtml(b.account_number||'')}</p><div class="border-t border-slate-100 mt-3 pt-2 space-y-1 text-xs"><div class="flex justify-between"><span class="text-slate-500">Opening Balance:</span><strong class="font-mono">${money(b.opening_balance||0)}</strong></div><div class="flex justify-between"><span class="font-bold text-slate-700">Current Balance:</span><strong class="font-mono text-emerald-700">${money(b.current_balance||0)}</strong></div></div></div>`;});
+
+      const tbody=document.getElementById('bankAccountsTableBody');tbody.innerHTML='';
+      if(!liveBanks.length)tbody.innerHTML='<tr><td colspan="5" class="py-8 text-center text-slate-400">No banks found.</td></tr>';
+      else liveBanks.forEach(b=>{tbody.innerHTML+=`<tr class="hover:bg-slate-50"><td class="py-3 px-4 font-bold">${escapeHtml(b.bank_name||'')}</td><td class="py-3 px-4">${escapeHtml(b.account_title||'')}</td><td class="py-3 px-4 font-mono text-slate-600">${escapeHtml(b.account_number||'')}</td><td class="py-3 px-4 text-slate-500">${escapeHtml(b.branch_name||'-')}</td><td class="py-3 px-4 text-right"><div class="font-mono font-bold">${money(b.current_balance||0)}</div><div class="text-[10px] text-slate-400">Opening ${money(b.opening_balance||0)}</div></td></tr>`;});
     }
 
-    // --------------------------------------------------------
     // DASHBOARD & INVESTORS
     // --------------------------------------------------------
     async function refreshDashboardMetrics() {
@@ -4127,7 +4156,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         const {data,error}=await db.rpc('post_quick_invoice_receipt_v137',{p_invoice_id:invoiceId,p_payment_date:date,p_amount:amount,p_cash_account_code:accountCode,p_bank_account_id:bankId,p_reference:ref,p_notes:notes});
         if(error)throw error;
         showToast(`Payment received successfully${data?' · '+data:''}.`);closeQuickInvoiceReceipt();
-        await fetchRecentInvoices();await loadCashBook();await loadTrialBalance();refreshDashboardMetrics();
+        await fetchRecentInvoices();await fetchBanks();await loadCashBook();await loadTrialBalance();refreshDashboardMetrics();
       }catch(err){showToast(err.message||'Invoice payment could not be received.','error');}
       finally{btn.disabled=false;btn.textContent='Receive Payment';}
     }
@@ -4246,7 +4275,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <script id="pin-favorites-script">
 (function(){
  const KEY='zb_erp_pinned_tabs_v2';
- const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
+ const labels={home:'Executive Home',banks:'Bank Accounts',investors:'Investors & Partners',purchases:'Purchases',cashbook:'Cash & Bank',bankledger:'Bank Ledger & Statement',trialbalance:'Trial Balance',khata:'Customer Ledger',supplierledger:'Supplier Ledger',outstanding:'Outstanding Management',statements:'Party Statements','lc-pl':'Cargo / LC',financehub:'Finance & Accounts',inventory:'Inventory',stockledger:'Stock Ledger',stocksummary:'Stock Summary',sales:'Sales',vouchers:'Accounting Vouchers',accounts:'General Ledger',profitanalysis:'Profit & Expense Analysis',reports:'Financial Reports',finance:'Financial Management',audit:'Audit Trail'};
  const pins=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return[]}};
  const save=a=>localStorage.setItem(KEY,JSON.stringify([...new Set(a)]));
  window.togglePagePin=function(v){let a=pins();a=a.includes(v)?a.filter(x=>x!==v):[...a,v];save(a);renderPinnedShortcuts()};
