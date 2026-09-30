@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.52 | Secure Business ERP</title>
+  <title>ZB & SONS ERP v1.57 | Secure Business ERP (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -316,7 +316,7 @@
   .dashboard-top-tools{
     position:absolute; right:0; top:0;
     display:flex; gap:10px; align-items:stretch;
-    width:min(610px,49%);
+    width:min(520px,44%);
   }
   .dashboard-mini-clock-card,.dashboard-mini-calendar-card{
     background:#fff;border:1px solid #e2e8f0;border-radius:16px;
@@ -353,7 +353,132 @@
   body.erp-locked #authGate { display:flex !important; pointer-events:auto !important; }
   body:not(.erp-locked) #authGate { display:none !important; pointer-events:none !important; }
 </style>
-</head>
+
+<style id="dashboard-header-fix-v1541">
+.dashboard-action-row-v1541{width:100%;overflow:visible}
+.dashboard-action-row-v1541>button{white-space:nowrap;padding-left:14px!important;padding-right:14px!important;font-size:13px!important}
+@media(max-width:1200px){.dashboard-action-row-v1541{overflow-x:auto;padding-bottom:4px}}
+</style>
+
+<style id="dashboard-safe-layout-v1543">
+/* Keep dashboard header tools in normal flow; no JS/DOM restructuring */
+#home .dashboard-top-tools{
+  position:static !important;
+  width:100% !important;
+  display:flex !important;
+  justify-content:flex-end !important;
+  align-items:stretch !important;
+  gap:8px !important;
+  margin:8px 0 !important;
+}
+#home .dashboard-mini-clock-card{
+  min-width:300px !important;
+  max-width:360px !important;
+  padding:9px 12px !important;
+}
+#home .dashboard-mini-calendar-card{
+  width:205px !important;
+  min-width:205px !important;
+}
+#home .dashboard-action-row-v1541{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  gap:8px !important;
+  width:100% !important;
+  overflow-x:auto !important;
+  padding-bottom:3px !important;
+}
+#home .dashboard-action-row-v1541 > button{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+@media(max-width:900px){
+  #home .dashboard-top-tools{justify-content:flex-start !important;overflow-x:auto !important}
+}
+</style>
+
+<style id="dashboard-header-v1544-css">
+/* Exact two-row desktop header:
+   Row 1 = title + clock/user/calendar
+   Row 2 = all dashboard actions */
+#view-home .dashboard-header-v1544{
+  display:grid !important;
+  grid-template-columns:minmax(320px,1fr) auto !important;
+  align-items:center !important;
+  gap:18px !important;
+  margin-bottom:10px !important;
+}
+#view-home .dashboard-top-tools{
+  position:static !important;
+  inset:auto !important;
+  width:auto !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:stretch !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+}
+#view-home .dashboard-mini-clock-card{
+  width:330px !important;
+  min-width:330px !important;
+  padding:10px 12px !important;
+}
+#view-home .dashboard-mini-calendar-card{
+  width:205px !important;
+  min-width:205px !important;
+}
+#view-home .dashboard-actions-wrap-v1544{
+  width:100% !important;
+  margin:0 0 18px 0 !important;
+}
+#view-home .dashboard-action-row-v1541{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+  width:100% !important;
+  overflow-x:auto !important;
+  padding:0 0 3px 0 !important;
+}
+#view-home .dashboard-action-row-v1541>button{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+}
+@media(max-width:1180px){
+  #view-home .dashboard-header-v1544{grid-template-columns:1fr !important}
+  #view-home .dashboard-top-tools{justify-content:flex-start !important;overflow-x:auto !important}
+  #view-home .dashboard-action-row-v1541{justify-content:flex-start !important}
+}
+</style>
+
+<style id="dashboard-back-row-v1545">
+#view-home .dashboard-actions-wrap-v1544{margin-top:0 !important;}
+#view-home .dashboard-action-row-v1541{
+  justify-content:flex-start !important;
+  width:100% !important;
+}
+</style>
+
+<style id="dashboard-back-final-v1546">
+#view-home .dashboard-action-row-v1541{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  width:100% !important;
+}
+#view-home .dashboard-action-row-v1541 > button:first-child{margin-right:auto !important;}
+</style>
+<style id="cargo-fit-v1551">
+#view-cargo .cargo-register-fit-v1551{width:100%!important;table-layout:fixed!important}
+#view-cargo .cargo-register-fit-v1551 th,#view-cargo .cargo-register-fit-v1551 td{padding:7px 5px!important;font-size:11px!important;vertical-align:middle!important;line-height:1.25!important}
+#view-cargo .cargo-register-fit-v1551 th:nth-child(1){width:8%} #view-cargo .cargo-register-fit-v1551 th:nth-child(2){width:9%} #view-cargo .cargo-register-fit-v1551 th:nth-child(3){width:13%} #view-cargo .cargo-register-fit-v1551 th:nth-child(4){width:6%} #view-cargo .cargo-register-fit-v1551 th:nth-child(5){width:10%} #view-cargo .cargo-register-fit-v1551 th:nth-child(6){width:8%} #view-cargo .cargo-register-fit-v1551 th:nth-child(7){width:10%} #view-cargo .cargo-register-fit-v1551 th:nth-child(8){width:10%} #view-cargo .cargo-register-fit-v1551 th:nth-child(9){width:8%} #view-cargo .cargo-register-fit-v1551 th:nth-child(10){width:7%} #view-cargo .cargo-register-fit-v1551 th:nth-child(11){width:11%}
+#view-cargo .cargo-register-fit-v1551 td:nth-child(-n+3){overflow-wrap:anywhere!important}
+#view-cargo .cargo-register-fit-v1551 td:last-child{white-space:normal!important}
+#view-cargo .cargo-register-fit-v1551 td:last-child button{display:block!important;margin:2px 0 2px auto!important;font-size:10px!important}
+#view-cargo .lc-payment-link{cursor:pointer!important}
+</style></head>
 <body class="erp-locked text-slate-800 antialiased min-h-screen flex">
 
   <div id="authGate" class="fixed inset-0 z-[9999] bg-slate-950 flex items-center justify-center p-5">
@@ -361,7 +486,7 @@
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p>
         <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.52</span>
+          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.57</span>
         </div></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
@@ -463,30 +588,34 @@
   <div id="mobileTopbar">
     <button onclick="openMobileSidebar()" class="w-10 h-10 rounded-xl border bg-white text-xl">☰</button>
     <div class="font-black"><span class="text-orange-600">ZB</span> & SONS ERP</div>
-    <button onclick="goBackView()" class="px-3 py-2 rounded-xl border bg-white text-sm font-bold">← Back</button>
+    
   </div>
 
   <!-- MAIN WORKSPACE -->
   <main id="erpMain" class="flex-1 p-8 md:p-12 overflow-y-auto min-w-0">
     <div class="hidden md:flex items-center justify-between mb-4">
-      <button onclick="goBackView()" class="px-3 py-2 border bg-white rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50">← Back</button>
+      
     </div>
 
     <!-- VIEW 1: EXECUTIVE COMMAND CENTER -->
     <div id="view-home" class="page-view max-w-7xl">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-        <div><p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p><h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Executive Dashboard</h1><p class="text-sm text-slate-500 mt-1">Live financial, inventory and LC position from posted ERP transactions.</p></div>
-        <div class="flex gap-2"><button onclick="openGlobalSearchV149()" class="bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>⌕</span><span>Smart Search</span><span class="text-[10px] text-slate-400">Ctrl+K</span></button><button onclick="openNotificationCenterV148()" class="relative bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>🔔</span><span>Notifications</span><span id="notificationCountV148" class="hidden min-w-[20px] h-5 px-1 bg-red-600 text-white text-[10px] font-black rounded-full items-center justify-center">0</span></button><button onclick="navigate('profitanalysis')" class="px-4 py-2.5 border bg-white rounded-xl text-sm font-bold">Profit Analysis</button><button onclick="refreshDashboardMetrics()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh</button></div>
-      </div>
-
-
-
-      <div class="dashboard-top-tools">
+      <!-- v1.57 CLEAN DASHBOARD HEADER -->
+      <div class="dashboard-header-v1544">
+        <div class="dashboard-title-v1544">
+          <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p>
+          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Executive Dashboard</h1>
+          <p class="text-sm text-slate-500 mt-1">Live financial, inventory and LC position from posted ERP transactions.</p>
+        </div>
+        <div class="dashboard-top-tools">
         <div class="dashboard-mini-clock-card">
           <div>
             <div class="text-[9px] font-black uppercase tracking-[.16em] text-slate-400">Today</div>
             <div id="dashDateLong" class="text-sm font-black text-slate-900 mt-1 whitespace-nowrap">—</div>
             <div id="dashTimeDigital" class="text-xs text-slate-500 mt-0.5 font-mono">—</div>
+            <div class="mt-2 pt-2 border-t border-slate-200 flex items-center gap-2 max-w-[190px]">
+              <div id="dashCurrentUserV153" class="text-[9px] font-black text-slate-700 truncate flex-1">—</div>
+              <button onclick="erpLogout()" class="bg-slate-900 text-white rounded-md px-2 py-1 text-[8px] font-black shrink-0">Logout</button>
+            </div>
           </div>
           <div class="dash-clock dash-clock-small"><div id="clockHour" class="clock-hand"></div><div id="clockMinute" class="clock-hand"></div><div id="clockSecond" class="clock-hand"></div><div class="clock-center"></div></div>
         </div>
@@ -500,18 +629,25 @@
           <div id="dashCalendarGrid" class="grid grid-cols-7 gap-[2px]"></div>
         </div>
       </div>
+      </div>
+      <div class="dashboard-actions-wrap-v1544">
+        <div class="flex gap-2 items-center flex-nowrap dashboard-action-row-v1541"><button onclick="goBackView()" class="mr-auto px-4 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl text-sm font-bold hover:bg-slate-50 shrink-0">← Back</button>
+        <button id="attentionBtnV154" onclick="openPaymentRepairV153()" class="relative bg-amber-50 border border-amber-300 text-amber-900 rounded-xl px-4 py-3 text-sm font-black hover:shadow-sm flex items-center gap-2"><span id="attentionIconV154">⚠</span><span id="attentionLabelV154">Attention Please</span><span id="repairCountV153" class="min-w-[20px] h-5 px-1 bg-red-600 text-white text-[10px] font-black rounded-full inline-flex items-center justify-center">19</span></button>
+        <button onclick="openGlobalSearchV149()" class="bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>⌕</span><span>Smart Search</span><span class="text-[10px] text-slate-400">Ctrl+K</span></button><button onclick="openNotificationCenterV148()" class="relative bg-white border rounded-xl px-4 py-3 text-sm font-bold hover:shadow-sm flex items-center gap-2"><span>🔔</span><span>Notifications</span><span id="notificationCountV148" class="hidden min-w-[20px] h-5 px-1 bg-red-600 text-white text-[10px] font-black rounded-full items-center justify-center">0</span></button><button onclick="navigate('profitanalysis')" class="px-4 py-2.5 border bg-white rounded-xl text-sm font-bold">Profit Analysis</button><button onclick="refreshDashboardMetrics()" class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold">↻ Refresh</button></div>
+      </div>
+
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">LIQUID FUNDS</p><p id="dashCashBalance" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2"><span id="dashCashOnly">PKR 0.00</span> Cash · <span id="dashBankOnly">PKR 0.00</span> Bank</p></div>
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">CUSTOMER RECEIVABLE</p><p id="dashMarketDue" class="text-2xl font-black font-mono text-red-600 mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Party balances · Account 1300</p></div>
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">SUPPLIER PAYABLE</p><p id="dashSupplierPayable" class="text-2xl font-black font-mono text-amber-600 mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Party balances · Account 2100</p></div>
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">INVENTORY VALUE</p><p id="dashStockVal" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Qty <b id="dashStockUnits">0</b></p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('LIQUID')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">LIQUID FUNDS</p><p id="dashCashBalance" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2"><span id="dashCashOnly">PKR 0.00</span> Cash · <span id="dashBankOnly">PKR 0.00</span> Bank</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('AR')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">CUSTOMER RECEIVABLE</p><p id="dashMarketDue" class="text-2xl font-black font-mono text-red-600 mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Party balances · Account 1300</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('AP')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">SUPPLIER PAYABLE</p><p id="dashSupplierPayable" class="text-2xl font-black font-mono text-amber-600 mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Party balances · Account 2100</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('STOCK')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">INVENTORY VALUE</p><p id="dashStockVal" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p class="text-[11px] text-slate-400 mt-2">Qty <b id="dashStockUnits">0</b></p></div>
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">PERIOD SALES</p><p id="dashPeriodSales" class="text-2xl font-black font-mono text-emerald-700 mt-2">PKR 0.00</p><p id="dashPeriodLabel" class="text-[11px] text-slate-400 mt-2">Current month</p></div>
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">GROSS PROFIT</p><p id="dashGrossProfit" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p id="dashGrossMargin" class="text-[11px] text-slate-400 mt-2">Margin 0.00%</p></div>
-        <div class="erp-card bg-slate-900 text-white rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">NET PROFIT</p><p id="dashNetProfit" class="text-2xl font-black font-mono text-emerald-300 mt-2">PKR 0.00</p><p id="dashNetMargin" class="text-[11px] text-slate-400 mt-2">Margin 0.00%</p></div>
-        <div class="erp-card bg-white border rounded-2xl p-5"><p class="text-xs font-bold text-slate-400">ACTIVE LC / CARGO</p><p id="dashLcExposure" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p id="dashLcCount" class="text-[11px] text-slate-400 mt-2">0 active shipments</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('SALES')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">PERIOD SALES</p><p id="dashPeriodSales" class="text-2xl font-black font-mono text-emerald-700 mt-2">PKR 0.00</p><p id="dashPeriodLabel" class="text-[11px] text-slate-400 mt-2">Current month</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('GROSS')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">GROSS PROFIT</p><p id="dashGrossProfit" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p id="dashGrossMargin" class="text-[11px] text-slate-400 mt-2">Margin 0.00%</p></div>
+        <div class="erp-card bg-slate-900 text-white rounded-2xl p-5" onclick="openKpiDetailV157('NET')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">NET PROFIT</p><p id="dashNetProfit" class="text-2xl font-black font-mono text-emerald-300 mt-2">PKR 0.00</p><p id="dashNetMargin" class="text-[11px] text-slate-400 mt-2">Margin 0.00%</p></div>
+        <div class="erp-card bg-white border rounded-2xl p-5" onclick="openKpiDetailV157('LC')" title="Click to view details" role="button" tabindex="0" style="cursor:pointer"><p class="text-xs font-bold text-slate-400">ACTIVE LC / CARGO</p><p id="dashLcExposure" class="text-2xl font-black font-mono mt-2">PKR 0.00</p><p id="dashLcCount" class="text-[11px] text-slate-400 mt-2">0 active shipments</p></div>
       </div>
 
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
@@ -875,7 +1011,7 @@
       </div>
       <div class="bg-white border rounded-2xl overflow-hidden shadow-sm">
         <div class="p-4 border-b flex justify-between items-center"><div><h3 class="font-extrabold">Cargo / LC Register</h3><p class="text-xs text-slate-400 mt-1">Click a shipment to view full landed-cost breakdown.</p></div><button onclick="loadCargoShipments()" class="text-xs font-bold text-brand-600">Refresh</button></div>
-        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo Ref</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Goods</th><th class="p-3 text-right">Supplier Paid</th><th class="p-3 text-right">Supplier Balance</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Unit Cost</th><th class="p-3 text-center">Status</th><th class="p-3"></th></tr></thead><tbody id="cargoTableBody"><tr><td colspan="11" class="p-8 text-center text-slate-400">No shipments loaded.</td></tr></tbody></table></div>
+        <div class="w-full overflow-hidden"><table class="w-full text-sm cargo-register-fit-v1551"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo Ref</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Goods</th><th class="p-3 text-right">Supplier Paid</th><th class="p-3 text-right">Supplier Balance</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Unit Cost</th><th class="p-3 text-center">Status</th><th class="p-3"></th></tr></thead><tbody id="cargoTableBody"><tr><td colspan="11" class="p-8 text-center text-slate-400">No shipments loaded.</td></tr></tbody></table></div>
       </div>
       <div class="bg-white border rounded-2xl overflow-hidden shadow-sm mt-5">
         <div class="p-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -1049,12 +1185,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.52</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.57</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.52 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.57 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1211,10 +1347,11 @@
         <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Sales</h1>
       </div>
       <div id="sub-billing" class="bg-white border rounded-xl p-6 shadow-sm">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 text-sm">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 text-sm">
           <div><label class="block font-medium mb-1">Customer</label><select id="invParty" class="w-full border rounded-lg p-2.5 bg-white text-sm"></select></div>
           <div><label class="block font-medium mb-1">Invoice No</label><input type="text" id="invNo" value="INV-9901" class="w-full border rounded-lg p-2.5" /></div>
-          <div><label class="block font-medium mb-1">LC / Cargo Batch</label><select id="invLc" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="">Auto / Unallocated</option></select><p class="text-[10px] text-slate-400 mt-1">Select the cleared LC supplying this sale for LC-wise profit.</p></div>
+          <div><label class="block font-medium mb-1">Payment Type</label><select id="invPaymentType" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="CREDIT">Credit Sale</option><option value="CASH">Cash Sale</option></select><p class="text-[10px] text-slate-400 mt-1">Cash Sale posts receipt automatically.</p></div>
+          <div><label class="block font-medium mb-1">LC / Cargo Batch</label><select id="invLc" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="">Auto / Unallocated</option></select><p class="text-[10px] text-slate-400 mt-1">Select cleared LC for LC-wise profit.</p></div>
           <div><label class="block font-medium mb-1">Date</label><input type="date" id="invDate" class="w-full border rounded-lg p-2.5" /></div>
         </div>
         <table class="w-full text-left text-sm mb-6 border-collapse">
@@ -1286,7 +1423,7 @@
     </div>
 
 
-    <!-- v1.52 ITEM MASTER SAFE EDIT -->
+    <!-- v1.57 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -1642,7 +1779,7 @@
   </div>
 
   <!-- Simple Receipt / Payment Modal -->
-  <div id="moneyModal" class="fixed inset-0 bg-slate-900/40 hidden items-center justify-center p-4 z-50">
+  <div id="kpiDetailV157Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[225] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] overflow-hidden flex flex-col"><div class="p-5 border-b flex justify-between"><div><h3 id="kpi157Title" class="text-xl font-black">Figure Details</h3><p id="kpi157Subtitle" class="text-xs text-slate-400 mt-1">Source breakdown</p></div><button onclick="closeKpiDetailV157()" class="text-2xl text-slate-400">&times;</button></div><div class="p-5 overflow-y-auto"><div id="kpi157Summary" class="mb-4"></div><div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead id="kpi157Head" class="bg-slate-50"></thead><tbody id="kpi157Body"></tbody></table></div><div id="kpi157Foot" class="text-xs text-slate-400 mt-3"></div></div></div></div><div id="moneyModal" class="fixed inset-0 bg-slate-900/40 hidden items-center justify-center p-4 z-50">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl">
       <form onsubmit="saveMoneyTransaction(event)" class="space-y-4">
         <div class="flex justify-between border-b pb-4"><div><h3 id="moneyModalTitle" class="text-xl font-extrabold">Receive Payment</h3><p id="moneyModalHint" class="text-xs text-slate-500 mt-1"></p></div><button type="button" onclick="closeMoneyModal()" class="text-2xl text-slate-400">×</button></div>
@@ -1859,6 +1996,120 @@
     }
     document.addEventListener('click',e=>{if(e.target?.id==='businessTimelineV147Modal')closeBusinessTimelineV147();});
 
+    let paymentRepairRowsV153=[];
+    async function openPaymentRepairV153(){
+      const m=document.getElementById('paymentRepairV153Modal');m.classList.remove('hidden');m.classList.add('flex');await loadPaymentRepairV153();
+    }
+    function closePaymentRepairV153(){const m=document.getElementById('paymentRepairV153Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    let paymentRepairTabV154='PENDING';
+    function setPaymentRepairTabV154(tab){
+      paymentRepairTabV154=tab;
+      ['PENDING','RESOLVED'].forEach(x=>{const b=document.getElementById('prTab'+x);if(b)b.className='px-4 py-2 rounded-lg text-xs font-black '+(x===tab?'bg-slate-900 text-white':'bg-white border text-slate-600');});
+      renderPaymentRepairV154();
+    }
+    function renderPaymentRepairV154(){
+      const body=document.getElementById('pr153Body');if(!body)return;
+      const rows=paymentRepairRowsV153.filter(r=>paymentRepairTabV154==='PENDING'?!r.mapping_type:!!r.mapping_type);
+      body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td class="p-3 font-mono text-xs">${escapeHtml(r.voucher||'-')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.reference_number||r.narration||'-')}</td><td class="p-3">${r.mapping_type?`<span class="text-emerald-700 font-bold">${escapeHtml(r.mapping_type==='LC'?'LC / Cargo Payment':r.mapping_type==='GENERAL'?'General Supplier Payment':'Import / Other Charge')}</span>${r.cargo_ref?`<div class="text-xs font-bold">${escapeHtml(r.cargo_ref)}</div>`:''}${r.mapped_by_name?`<div class="text-[10px] text-slate-400 mt-1">Resolved by ${escapeHtml(r.mapped_by_name)}${r.mapped_at?' · '+escapeHtml(new Date(r.mapped_at).toLocaleString()):''}</div>`:''}`:'<span class="text-amber-700 font-bold">Pending</span>'}</td><td class="p-3 text-right"><button onclick="editPaymentMappingV153('${r.journal_entry_id}')" class="text-blue-700 font-bold text-xs">${r.mapping_type?'Change':'Map Payment'}</button></td></tr>`).join('')||`<tr><td colspan="7" class="p-8 text-center text-slate-400">${paymentRepairTabV154==='PENDING'?'No pending issues. All clear.':'No resolved history yet.'}</td></tr>`;
+    }
+
+    // v1.57 Customer receipt attention: known real invoice requiring staff action.
+    let customerReceiptIssueV156=null;
+    let actionCenterTabV1562='CUSTOMER';
+    function setActionCenterTabV1562(tab){
+      actionCenterTabV1562=tab;
+      const panels={CUSTOMER:'acCustomerPanelV1562',SUPPLIER:'acSupplierPanelV1562',RESOLVED:'acResolvedPanelV1562'};
+      Object.entries(panels).forEach(([k,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle('hidden',k!==tab);});
+      const buttons={CUSTOMER:'acTabCustomerV1562',SUPPLIER:'acTabSupplierV1562',RESOLVED:'acTabResolvedV1562'};
+      Object.entries(buttons).forEach(([k,id])=>{
+        const b=document.getElementById(id);if(!b)return;const on=k===tab;
+        b.classList.toggle('bg-slate-900',on);b.classList.toggle('text-white',on);
+        b.classList.toggle('bg-white',!on);b.classList.toggle('text-slate-600',!on);b.classList.toggle('border',!on);
+      });
+      if(tab==='SUPPLIER'){
+        paymentRepairTabV154='PENDING';
+        renderPaymentRepairV154();
+      }
+    }
+    async function loadCustomerReceiptAttentionV156(){
+      customerReceiptIssueV156=null;
+      try{
+        const {data:inv,error}=await db.from('invoices').select('id,invoice_number,invoice_date,party_id,grand_total').eq('invoice_number','INV-20260929-181638-624').maybeSingle();
+        if(error)throw error;
+        if(!inv)return 0;
+        const {data:pays,error:pe}=await db.from('customer_invoice_payments').select('amount').eq('invoice_id',inv.id);
+        if(pe)throw pe;
+        const paid=(pays||[]).reduce((a,x)=>a+Number(x.amount||0),0),due=Math.max(0,Number(inv.grand_total||0)-paid);
+        if(due>.005){
+          const party=liveParties.find(p=>String(p.id)===String(inv.party_id));
+          customerReceiptIssueV156={...inv,due,party_name:party?.name||'Customer',target_party_id:'394270f7-962b-43fe-95cf-21b5f2d50cac',target_party_name:'BILAL MAHANGA'};
+          return 1;
+        }
+      }catch(e){console.warn('Customer receipt attention check:',e);}
+      return 0;
+    }
+    function renderCustomerReceiptAttentionV156(){
+      const box=document.getElementById('customerReceiptAttentionV156');if(!box)return;
+      if(!customerReceiptIssueV156){box.classList.add('hidden');return;}
+      box.classList.remove('hidden');
+      document.getElementById('customerReceiptAttentionTextV156').textContent=`${customerReceiptIssueV156.invoice_number} · Move ${customerReceiptIssueV156.party_name} → ${customerReceiptIssueV156.target_party_name} · Receive ${money(customerReceiptIssueV156.due)}`;
+    }
+    async function fixCustomerReceiptAttentionV156(){
+      const x=customerReceiptIssueV156;if(!x)return;
+      if(String(x.party_id)!==String(x.target_party_id)){
+        if(!confirm(`This invoice is currently under ${x.party_name}.\n\nMove it safely to ${x.target_party_name} before receiving payment?`))return;
+        const {error:moveErr}=await db.rpc('repair_invoice_customer_v1561',{p_invoice_id:x.id,p_new_party_id:x.target_party_id});
+        if(moveErr){showToast('Customer correction failed: '+moveErr.message,'error');return;}
+        x.party_id=x.target_party_id;x.party_name=x.target_party_name;
+      }
+      closePaymentRepairV153();
+      await openMoneyModal('RECEIPT');
+      const party=document.getElementById('moneyParty');party.value=x.target_party_id;
+      await moneyPartyChanged();
+      const inv=document.getElementById('moneyInvoice');inv.value=x.id;moneyInvoiceChanged();
+      document.getElementById('moneyAccount').value='1100';
+      document.getElementById('moneyAmount').value=Number(x.due||0).toFixed(2);
+      document.getElementById('moneyDate').value=x.invoice_date||new Date().toISOString().slice(0,10);
+      document.getElementById('moneyReference').value=`Cash received against ${x.invoice_number}`;
+    }
+    async function loadPaymentRepairV153(){
+      const body=document.getElementById('pr153Body');body.innerHTML='<tr><td colspan="7" class="p-8 text-center text-slate-400">Loading attention items...</td></tr>';
+      const {data,error}=await db.rpc('supplier_payment_attention_v154');
+      if(error){body.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-600">${escapeHtml(error.message)}</td></tr>`;return;}
+      paymentRepairRowsV153=data||[];
+      const supplierPending=paymentRepairRowsV153.filter(r=>!r.mapping_type).length,resolved=paymentRepairRowsV153.length-supplierPending;
+      const customerPending=await loadCustomerReceiptAttentionV156();
+      const pending=supplierPending+customerPending;
+      document.getElementById('pr153Pending').textContent=pending;
+      const cc=document.getElementById('acCustomerCountV1562');if(cc)cc.textContent=customerPending;
+      const sc=document.getElementById('acSupplierCountV1562');if(sc)sc.textContent=supplierPending;
+      const clear=document.getElementById('acCustomerClearV1562');if(clear)clear.classList.toggle('hidden',customerPending>0);
+      renderCustomerReceiptAttentionV156();setActionCenterTabV1562(actionCenterTabV1562);
+      const rc=document.getElementById('prResolvedCountV154');if(rc)rc.textContent=resolved;
+      const badge=document.getElementById('repairCountV153'),label=document.getElementById('attentionLabelV154'),icon=document.getElementById('attentionIconV154'),btn=document.getElementById('attentionBtnV154');
+      if(badge){badge.textContent=pending;badge.classList.toggle('hidden',pending===0);}
+      if(label)label.textContent=pending?'Attention Please':'All Clear';
+      if(icon)icon.textContent=pending?'⚠':'✓';
+      if(btn){btn.classList.toggle('bg-amber-50',pending>0);btn.classList.toggle('border-amber-300',pending>0);btn.classList.toggle('text-amber-900',pending>0);btn.classList.toggle('bg-emerald-50',pending===0);btn.classList.toggle('border-emerald-300',pending===0);btn.classList.toggle('text-emerald-800',pending===0);}
+      renderPaymentRepairV154();
+    }
+    function editPaymentMappingV153(jid){
+      const r=paymentRepairRowsV153.find(x=>String(x.journal_entry_id)===String(jid));if(!r)return;
+      document.getElementById('pr153Journal').value=jid;document.getElementById('pr153Info').textContent=`${r.supplier_name} · ${money(r.amount)} · ${r.voucher}`;
+      const t=document.getElementById('pr153Type');t.value=r.mapping_type||'LC';
+      const sel=document.getElementById('pr153Cargo');sel.innerHTML='<option value="">Select LC / Cargo</option>'+liveLcs.filter(c=>String(c.supplier_id)===String(r.supplier_id)).map(c=>`<option value="${c.id}">${escapeHtml(c.cargo_ref)} · ${money(c.goods_value)}</option>`).join('');
+      if(r.cargo_id)sel.value=r.cargo_id;paymentRepairTypeChangedV153();
+      document.getElementById('pr153Editor').classList.remove('hidden');
+    }
+    function paymentRepairTypeChangedV153(){document.getElementById('pr153CargoWrap').classList.toggle('hidden',document.getElementById('pr153Type').value!=='LC');}
+    async function savePaymentMappingV153(){
+      const jid=document.getElementById('pr153Journal').value,type=document.getElementById('pr153Type').value,cargo=type==='LC'?(document.getElementById('pr153Cargo').value||null):null;
+      if(type==='LC'&&!cargo){showToast('Select the correct LC / Cargo.','error');return;}
+      const {error}=await db.rpc('save_supplier_payment_mapping_v153',{p_journal_entry_id:jid,p_mapping_type:type,p_cargo_id:cargo});
+      if(error){showToast(error.message,'error');return;}showToast('Payment mapping saved. Accounting amounts were not changed.');document.getElementById('pr153Editor').classList.add('hidden');await loadPaymentRepairV153();await loadSupplierPaymentRegisterV139();await loadSupplierLedger();await loadCargoShipments();
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='paymentRepairV153Modal')closePaymentRepairV153();});
+
     function openNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.remove('hidden');m.classList.add('flex');loadNotificationCenterV148();}
     function closeNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.add('hidden');m.classList.remove('flex');}
     function notificationIconV148(type){return ({RECEIVABLE:'Customer',PAYABLE:'Supplier',CARGO:'LC / Cargo',STOCK:'Inventory',BANK:'Bank',SYSTEM:'System',BACKUP:'Backup'})[type]||'Attention';}
@@ -1934,7 +2185,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.52',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.57',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -1959,7 +2210,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.52'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.57'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2285,11 +2536,49 @@
       try{const {data:ps,error:pe}=await db.rpc('lc_supplier_payment_summary_v152');if(pe)throw pe;(ps||[]).forEach(r=>paymentMap[String(r.cargo_id)]={paid:Number(r.paid_amount||0),balance:Number(r.balance_amount||0)});}catch(e){console.warn('LC payment summary:',e);}
       tb.innerHTML=liveLcs.map(x=>{goods+=Number(x.goods_value||0);landed+=Number(x.total_landed_cost||0);charges+=Number(x.total_landed_cost||0)-Number(x.goods_value||0);if(x.status!=='CLOSED')open++;
         const sup=liveParties.find(p=>String(p.id)===String(x.supplier_id))?.name||'-',item=liveProducts.find(p=>String(p.id)===String(x.item_id))?.name||'-',pm=paymentMap[String(x.id)]||{paid:0,balance:Number(x.goods_value||0)};
-        return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold">${escapeHtml(x.cargo_ref)}</td><td class="p-3">${escapeHtml(sup)}</td><td class="p-3">${escapeHtml(item)}</td><td class="p-3 text-right font-mono">${Number(x.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono">${money(x.goods_value)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(pm.paid)}</td><td class="p-3 text-right font-mono font-bold">${money(pm.balance)}</td><td class="p-3 text-right font-mono font-bold">${money(x.total_landed_cost)}</td><td class="p-3 text-right font-mono">${money(x.landed_cost_per_unit)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status)}</span></td><td class="p-3 text-right whitespace-nowrap"><button onclick="openLcSupplierPayment('${x.id}')" class="text-amber-600 font-bold text-xs mr-3">Pay Supplier</button><button onclick="editCargoShipment('${x.id}')" class="text-emerald-600 font-bold text-xs mr-3">Edit</button><button onclick="showCargoDetail('${x.id}')" class="text-brand-600 font-bold text-xs">View</button></td></tr>`;
+        return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold"><button type="button" data-lc-payment-id="${escapeHtml(String(x.id))}" class="lc-payment-link text-brand-600 hover:text-brand-800 hover:underline font-extrabold text-left" title="View all payments">${escapeHtml(x.cargo_ref)}</button></td><td class="p-3">${escapeHtml(sup)}</td><td class="p-3">${escapeHtml(item)}</td><td class="p-3 text-right font-mono">${Number(x.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono">${money(x.goods_value)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(pm.paid)}</td><td class="p-3 text-right font-mono font-bold">${money(pm.balance)}</td><td class="p-3 text-right font-mono font-bold">${money(x.total_landed_cost)}</td><td class="p-3 text-right font-mono">${money(x.landed_cost_per_unit)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status)}</span></td><td class="p-3 text-right whitespace-nowrap"><button onclick="openLcSupplierPayment('${x.id}')" class="text-amber-600 font-bold text-xs mr-3">Pay Supplier</button><button onclick="editCargoShipment('${x.id}')" class="text-emerald-600 font-bold text-xs mr-3">Edit</button><button onclick="showCargoDetail('${x.id}')" class="text-brand-600 font-bold text-xs">View</button></td></tr>`;
       }).join('')||'<tr><td colspan="11" class="p-8 text-center text-slate-400">No Cargo / LC recorded yet.</td></tr>';
       document.getElementById('cargoOpenCount').textContent=open;document.getElementById('cargoGoodsTotal').textContent=money(goods);document.getElementById('cargoLandedTotal').textContent=money(landed);document.getElementById('cargoChargesTotal').textContent=money(charges);
       if(document.getElementById('lcReconBody')) await loadLcAllocationReconciliation();
     }
+
+
+    // v1.57 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
+    function closeLcPaymentHistory(){
+      const m=document.getElementById('lcPaymentHistoryModal');
+      if(m){m.style.display='none';m.classList.add('hidden');m.classList.remove('flex');}
+    }
+    async function openLcPaymentHistory(cargoId){
+      const cargo=liveLcs.find(v=>String(v.id)===String(cargoId));
+      if(!cargo){showToast('LC / Cargo not found.','error');return;}
+      const supplier=liveParties.find(p=>String(p.id)===String(cargo.supplier_id))?.name||'Supplier';
+      document.getElementById('lcPaymentHistoryTitle').textContent=cargo.cargo_ref||'LC / Cargo';
+      document.getElementById('lcPaymentHistorySub').textContent=supplier;
+      document.getElementById('lcHistGoods').textContent=money(cargo.goods_value||0);
+      document.getElementById('lcHistPaid').textContent='Loading...';
+      document.getElementById('lcHistBalance').textContent='Loading...';
+      document.getElementById('lcPaymentHistoryBody').innerHTML='<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading all payments...</td></tr>';
+      const m=document.getElementById('lcPaymentHistoryModal');if(!m){showToast('Payment History window is unavailable.','error');return;}m.classList.remove('hidden');m.classList.add('flex');m.style.display='flex';
+      try{
+        const {data,error}=await db.rpc('lc_payment_history_v155',{p_cargo_id:cargoId});
+        if(error)throw error;
+        const rows=data||[],paid=rows.reduce((a,r)=>a+Number(r.amount||0),0),goods=Number(cargo.goods_value||0);
+        document.getElementById('lcHistPaid').textContent=money(paid);
+        document.getElementById('lcHistBalance').textContent=money(Math.max(0,goods-paid));
+        document.getElementById('lcPaymentHistoryBody').innerHTML=rows.map(r=>`<tr class="border-b hover:bg-slate-50">
+          <td class="p-3 whitespace-nowrap">${escapeHtml(r.payment_date||'-')}</td>
+          <td class="p-3 font-semibold whitespace-nowrap">${escapeHtml(r.voucher||'-')}</td>
+          <td class="p-3">${escapeHtml(r.reference||'-')}</td>
+          <td class="p-3">${escapeHtml(r.paid_through||'-')}</td>
+          <td class="p-3"><span class="px-2 py-1 rounded-full text-[10px] font-bold ${r.source_type==='DIRECT LC PAYMENT'?'bg-emerald-50 text-emerald-700':'bg-blue-50 text-blue-700'}">${escapeHtml(r.source_type||'LC PAYMENT')}</span></td>
+          <td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td>
+        </tr>`).join('')||'<tr><td colspan="6" class="p-8 text-center text-slate-400">No payment recorded against this LC yet.</td></tr>';
+      }catch(err){
+        document.getElementById('lcHistPaid').textContent='—';document.getElementById('lcHistBalance').textContent='—';
+        document.getElementById('lcPaymentHistoryBody').innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-600"><b>Payment history could not load.</b><br><span class="text-xs">${escapeHtml(err.message||String(err))}</span></td></tr>`;
+      }
+    }
+    document.addEventListener('click',e=>{const b=e.target.closest?.('[data-lc-payment-id]');if(b){e.preventDefault();e.stopPropagation();openLcPaymentHistory(b.dataset.lcPaymentId);return;}if(e.target?.id==='lcPaymentHistoryModal')closeLcPaymentHistory();});
 
     let lcPayOutstanding=0;
     function closeLcSupplierPayment(){const m=document.getElementById('lcSupplierPaymentModal');if(m){m.classList.add('hidden');m.classList.remove('flex');}}
@@ -2537,6 +2826,28 @@
 
     // DASHBOARD & INVESTORS
     // --------------------------------------------------------
+
+    function closeKpiDetailV157(){const m=document.getElementById('kpiDetailV157Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    function kpiTableV157(head,rows,foot=''){document.getElementById('kpi157Head').innerHTML='<tr>'+head.map((h,i)=>`<th class="p-3 ${i?'text-right':'text-left'}">${h}</th>`).join('')+'</tr>';document.getElementById('kpi157Body').innerHTML=rows.length?rows.map(r=>'<tr class="border-t">'+r.map((v,i)=>`<td class="p-3 ${i?'text-right':'text-left'}">${v}</td>`).join('')+'</tr>').join(''):`<tr><td colspan="${head.length}" class="p-8 text-center text-slate-400">No detail rows found.</td></tr>`;document.getElementById('kpi157Foot').textContent=foot;}
+    async function openKpiDetailV157(type){
+      const m=document.getElementById('kpiDetailV157Modal'),t=document.getElementById('kpi157Title'),sub=document.getElementById('kpi157Subtitle'),sum=document.getElementById('kpi157Summary');m.classList.remove('hidden');m.classList.add('flex');t.textContent='Loading...';sum.innerHTML='<div class="p-4 bg-slate-50 rounded-xl text-slate-400">Tracing source records...</div>';
+      try{
+        if(!liveParties.length)await fetchParties();if(!liveProducts.length)await fetchProducts();
+        if(type==='LIQUID'){
+          t.textContent='Liquid Funds';sub.textContent='Cash on Hand (1100) + Bank Accounts (1200)';
+          const {data,error}=await db.from('v_trial_balance').select('account_code,debit,credit').in('account_code',['1100','1200']);if(error)throw error;const B=Object.fromEntries((data||[]).map(x=>[x.account_code,x])),bal=c=>Number(B[c]?.debit||0)-Number(B[c]?.credit||0),cash=bal('1100'),bank=bal('1200');
+          sum.innerHTML=`<div class="grid md:grid-cols-3 gap-3"><div class="bg-slate-50 p-4 rounded-xl"><small>TOTAL</small><div class="text-xl font-black">${money(cash+bank)}</div></div><div class="bg-slate-50 p-4 rounded-xl"><small>CASH</small><div class="text-xl font-black">${money(cash)}</div></div><div class="bg-slate-50 p-4 rounded-xl"><small>BANK</small><div class="text-xl font-black">${money(bank)}</div></div></div>`;kpiTableV157(['SOURCE','BALANCE'],[['Cash on Hand · 1100',money(cash)],['Bank Accounts · 1200',money(bank)]],'Calculated from posted Trial Balance balances.');
+        }else if(type==='AR'||type==='AP'){
+          const code=type==='AR'?'1300':'2100',name=type==='AR'?'Customer Receivable':'Supplier Payable';t.textContent=name;sub.textContent=`Party-wise balance · Account ${code}`;const map=await getPartyAccountBalances(code);const rows=Object.entries(map).filter(([,v])=>Number(v)>.005).map(([id,v])=>[escapeHtml(liveParties.find(p=>String(p.id)===String(id))?.name||'Unknown Party'),money(v)]);const total=Object.values(map).reduce((a,v)=>a+(Number(v)>.005?Number(v):0),0);sum.innerHTML=`<div class="bg-slate-50 p-4 rounded-xl"><small>TOTAL</small><div class="text-2xl font-black">${money(total)}</div></div>`;kpiTableV157(['PARTY','BALANCE'],rows,`Positive party balances from Account ${code}.`);
+        }else if(type==='STOCK'){
+          t.textContent='Inventory Value';sub.textContent='Current Qty × Average/Purchase Cost';let total=0,qty=0;const rows=liveProducts.map(i=>{const q=Number(i.current_stock??i.stock??0),c=Number(i.purchase_price??i.cost_price??i.unit_price??0),v=q*c;qty+=q;total+=v;return[escapeHtml(i.name||'Item'),q.toLocaleString(),money(c),money(v)]}).filter(r=>r[1]!=='0');sum.innerHTML=`<div class="grid grid-cols-2 gap-3"><div class="bg-slate-50 p-4 rounded-xl"><small>VALUE</small><div class="text-xl font-black">${money(total)}</div></div><div class="bg-slate-50 p-4 rounded-xl"><small>QTY</small><div class="text-xl font-black">${qty.toLocaleString()}</div></div></div>`;kpiTableV157(['ITEM','QTY','COST','VALUE'],rows,'Calculated from current item stock and stored cost.');
+        }else if(type==='LC'){
+          t.textContent='Active LC / Cargo';sub.textContent='Open shipment exposure';const {data,error}=await db.from('cargo_shipments').select('cargo_ref,status,total_landed_cost,goods_value,foreign_goods_value,exchange_rate').order('created_at',{ascending:false});if(error)throw error;const active=(data||[]).filter(x=>!['CLOSED','COMPLETED','CANCELLED'].includes(String(x.status||'').toUpperCase())),val=x=>Number(x.total_landed_cost||x.goods_value||(Number(x.foreign_goods_value||0)*Number(x.exchange_rate||0))||0),total=active.reduce((a,x)=>a+val(x),0);sum.innerHTML=`<div class="bg-slate-50 p-4 rounded-xl"><small>ACTIVE EXPOSURE</small><div class="text-2xl font-black">${money(total)}</div></div>`;kpiTableV157(['LC / CARGO','STATUS','VALUE'],active.map(x=>[escapeHtml(x.cargo_ref||'—'),escapeHtml(x.status||'—'),money(val(x))]),`${active.length} active shipments.`);
+        }else{
+          const txt=document.getElementById('dashPeriodLabel')?.textContent||'',parts=txt.split(' to '),from=parts[0]||new Date().toISOString().slice(0,10),to=parts[1]||from;const {data:coa,error:ce}=await db.from('chart_of_accounts').select('id,account_code,account_name');if(ce)throw ce;const wanted=(coa||[]).filter(a=>['4100','4200','5100'].includes(a.account_code)||/^6\d{3}$/.test(a.account_code||''));const {data:lines,error}=await db.from('journal_lines').select('account_id,debit,credit,journal_entries!inner(entry_date,status,entry_number)').in('account_id',wanted.map(a=>a.id)).eq('journal_entries.status','POSTED').gte('journal_entries.entry_date',from).lte('journal_entries.entry_date',to);if(error)throw error;const A=new Map(wanted.map(a=>[String(a.id),a]));let sales=0,cogs=0,other=0,exp=0;for(const l of(lines||[])){const c=A.get(String(l.account_id))?.account_code,d=+l.debit||0,cr=+l.credit||0;if(c==='4100')sales+=cr-d;else if(c==='5100')cogs+=d-cr;else if(c==='4200')other+=cr-d;else if(/^6/.test(c||''))exp+=d-cr}const gross=sales-cogs,net=gross+other-exp;t.textContent=type==='SALES'?'Period Sales':type==='GROSS'?'Gross Profit':'Net Profit';sub.textContent=`${from} to ${to}`;sum.innerHTML=`<div class="grid grid-cols-2 md:grid-cols-4 gap-3"><div class="bg-slate-50 p-3 rounded-xl">Sales<br><b>${money(sales)}</b></div><div class="bg-slate-50 p-3 rounded-xl">COGS<br><b>${money(cogs)}</b></div><div class="bg-slate-50 p-3 rounded-xl">Other Income<br><b>${money(other)}</b></div><div class="bg-slate-50 p-3 rounded-xl">Expenses<br><b>${money(exp)}</b></div></div>`;kpiTableV157(['ACCOUNT','VOUCHER','DEBIT','CREDIT'],(lines||[]).map(l=>{const a=A.get(String(l.account_id))||{};return[escapeHtml(`${a.account_code||''} ${a.account_name||''}`),escapeHtml(l.journal_entries?.entry_number||''),money(l.debit),money(l.credit)]}),type==='SALES'?'Sales = net credit of 4100.':type==='GROSS'?'Gross Profit = Sales − COGS.':'Net Profit = Gross Profit + Other Income − Expenses.');
+        }
+      }catch(e){t.textContent='Figure Details';sum.innerHTML=`<div class="p-4 bg-red-50 text-red-700 rounded-xl">${escapeHtml(e.message||'Could not load details.')}</div>`;}
+    }
     async function refreshDashboardMetrics() {
       try {
         if(!liveProducts.length) await fetchProducts();
@@ -3729,15 +4040,22 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.52 Strict Login: every fresh app load requires credentials.
+      // v1.57 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
-      gate.classList.remove('hidden');
-      try{ await db.auth.signOut({scope:'local'}); }catch(_){}
+      gate.classList.remove('hidden'); gate.classList.add('flex');
+      const msg=document.getElementById('authMessage'); if(msg)msg.classList.add('hidden');
+      try{
+        const {data,error}=await db.auth.getSession();
+        const session=data?.session;
+        if(!error && session?.user){
+          await loadCurrentERPUser(session.user);
+          if(currentERPUser)return;
+        }
+      }catch(e){ console.warn('Session restore:',e); }
       const email=document.getElementById('loginEmail'),password=document.getElementById('loginPassword');
-      if(email) email.value='';
-      if(password) password.value='';
+      if(password)password.value='';
       setTimeout(()=>email?.focus(),80);
     }
     async function erpLogin(){
@@ -3783,6 +4101,8 @@ async function loadAuditTrail(){
       const box=document.getElementById('currentUserBox');if(box)box.classList.remove('hidden');
       if(document.getElementById('currentUserName'))document.getElementById('currentUserName').textContent=data.full_name||data.email;
       if(document.getElementById('currentUserRole'))document.getElementById('currentUserRole').textContent=data.role;
+      const du=document.getElementById('dashCurrentUserV153');
+      if(du)du.textContent=`${data.full_name||data.email} · ${data.role}`;
       applyRoleUI();await initializeERPDataV1496();
     }
     function applyRoleUI(){
@@ -4434,6 +4754,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       let invoiceNo=document.getElementById('invNo').value.trim();
       const invoiceDate=document.getElementById('invDate').value;
       const lcCargoId=document.getElementById('invLc').value||null;
+      const paymentType=document.getElementById('invPaymentType')?.value||'CREDIT';
       const selectedCargo=lcCargoId?(liveLcs||[]).find(x=>String(x.id)===String(lcCargoId)):null;
       const lc=selectedCargo?.cargo_ref||null;
       if(!partyId||!invoiceDate){showToast('Customer and date are required.','error');return;}
@@ -4487,7 +4808,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
           grand_total:grand,
           paid_amount:0,
           status:'UNPAID',
-          notes:'Posted through ZB & SONS ERP automated sales workflow',
+          notes:paymentType==='CASH'?'Cash Sale — automatic receipt through Cash on Hand':'Credit Sale — posted through ZB & SONS ERP automated sales workflow',
           lc_number:lc
         }]).select('id').single();
         if(e1) throw e1;
@@ -4563,12 +4884,18 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         const {data:valid,error:ve}=await db.rpc('validate_journal_balance',{p_entry_id:journalId});
         if(ve||!valid) throw new Error(ve?.message||'Sales accounting entry is not balanced.');
 
+        if(paymentType==='CASH'){
+          const {error:cashErr}=await db.rpc('record_invoice_cash_receipt_v156',{p_invoice_id:invoiceId});
+          if(cashErr)throw new Error('Cash Sale receipt could not be posted: '+cashErr.message);
+        }
+
         if(selectedCargo && typeof loadLcProfitability==='function')await loadLcProfitability();
         showToast(`Sales Invoice ${invoiceNo} saved successfully.`);
         document.getElementById('invoiceItemsBody').innerHTML='';
         document.getElementById('invoiceDiscount').value=0;
         invoiceCharges=[];renderInvoiceCharges();
         document.getElementById('invLc').value='';
+        if(document.getElementById('invPaymentType'))document.getElementById('invPaymentType').value='CREDIT';
         document.getElementById('invNo').value=nextInvoiceNumber();
         addInvoiceRow();
         await fetchProducts();
@@ -4740,7 +5067,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.52: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.57: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -4812,6 +5139,34 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
   </div>
 
 <div id="warehouseModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[110] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"><div class="p-5 border-b flex items-center justify-between"><div><h3 id="warehouseModalTitle" class="text-xl font-black">Add Warehouse</h3><p class="text-xs text-slate-400 mt-1">Create or update a stock location.</p></div><button type="button" onclick="closeWarehouseModal()" class="text-slate-400 text-2xl">&times;</button></div><form onsubmit="saveWarehouse(event)" class="p-5 space-y-4"><input type="hidden" id="warehouseEditId"><div><label class="block text-xs font-bold mb-1">Warehouse Name *</label><input id="warehouseName" required class="w-full border rounded-lg p-2.5" placeholder="Main Godown"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Warehouse Code</label><input id="warehouseCode" class="w-full border rounded-lg p-2.5" placeholder="WH-01"></div><div><label class="block text-xs font-bold mb-1">Location</label><input id="warehouseLocation" class="w-full border rounded-lg p-2.5" placeholder="Karachi"></div></div><div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="warehouseNotes" rows="3" class="w-full border rounded-lg p-2.5"></textarea></div><label class="flex items-center gap-2 text-sm font-semibold"><input id="warehouseActive" type="checkbox" checked> Active Warehouse</label><div class="flex justify-end gap-2"><button type="button" onclick="closeWarehouseModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Warehouse</button></div></form></div></div>
+
+<!-- v1.57 LC PAYMENT HISTORY -->
+<div id="lcPaymentHistoryModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[125] p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] overflow-hidden flex flex-col">
+    <div class="p-5 border-b flex items-start justify-between gap-4">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[.16em] text-brand-600">LC / Cargo Payment History</p>
+        <h3 id="lcPaymentHistoryTitle" class="text-xl font-extrabold text-slate-900 mt-1">Payments</h3>
+        <p id="lcPaymentHistorySub" class="text-xs text-slate-500 mt-1"></p>
+      </div>
+      <button onclick="closeLcPaymentHistory()" class="w-9 h-9 rounded-xl border bg-white font-bold text-slate-500 hover:bg-slate-50">✕</button>
+    </div>
+    <div class="grid grid-cols-3 gap-3 p-5 bg-slate-50 border-b">
+      <div class="bg-white border rounded-xl p-3"><p class="text-[10px] font-bold text-slate-400">GOODS VALUE</p><p id="lcHistGoods" class="font-black font-mono mt-1">PKR 0.00</p></div>
+      <div class="bg-white border rounded-xl p-3"><p class="text-[10px] font-bold text-slate-400">TOTAL PAID</p><p id="lcHistPaid" class="font-black font-mono text-emerald-700 mt-1">PKR 0.00</p></div>
+      <div class="bg-white border rounded-xl p-3"><p class="text-[10px] font-bold text-slate-400">BALANCE</p><p id="lcHistBalance" class="font-black font-mono text-amber-700 mt-1">PKR 0.00</p></div>
+    </div>
+    <div class="overflow-auto flex-1">
+      <table class="w-full text-sm">
+        <thead class="bg-white sticky top-0 border-b text-xs text-slate-500">
+          <tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher</th><th class="p-3 text-left">Reference</th><th class="p-3 text-left">Paid Through</th><th class="p-3 text-left">Source</th><th class="p-3 text-right">Amount</th></tr>
+        </thead>
+        <tbody id="lcPaymentHistoryBody"><tr><td colspan="6" class="p-8 text-center text-slate-400">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div id="lcSupplierPaymentModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[120] p-4">
 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
 <div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">LC Supplier Payment</h3><p id="lcPaySub" class="text-xs text-slate-400 mt-1">Allocate payment to this LC / Cargo.</p></div><button type="button" onclick="closeLcSupplierPayment()" class="text-2xl text-slate-400">&times;</button></div>
@@ -4893,10 +5248,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.52 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.57 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.52</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.57</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -4922,6 +5277,29 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div class="flex justify-between items-center mb-4"><div><b id="tl147Count">0 activities</b><p class="text-xs text-slate-400">Newest activity first.</p></div><button onclick="setTimelineTodayV147()" class="border rounded-lg px-3 py-2 text-xs font-bold">Today</button></div>
 <div id="tl147Body" class="relative pl-7 border-l-2 border-slate-200 ml-3 space-y-5"><div class="text-slate-400 py-6">Loading timeline...</div></div>
 </div></div></div>
+<div id="paymentRepairV153Modal" class="fixed inset-0 bg-slate-950/55 hidden items-center justify-center z-[215] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[92vh] overflow-y-auto">
+<div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Attention Please</h3><p class="text-sm text-slate-500 mt-1">Action Center · Pending items requiring review or correction</p><p class="text-xs text-slate-400 mt-2">Customer and supplier issues are separated below for a cleaner workflow.</p></div><button onclick="closePaymentRepairV153()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5">
+<div class="flex flex-wrap justify-between items-center gap-3 mb-5 pb-5 border-b">
+ <div class="flex items-center gap-8"><div><span class="text-xs font-bold text-slate-400">TOTAL PENDING</span><div id="pr153Pending" class="text-3xl font-black text-red-600">—</div></div><div><span class="text-xs font-bold text-slate-400">RESOLVED</span><div id="prResolvedCountV154" class="text-3xl font-black text-emerald-700">—</div></div></div>
+ <button onclick="loadPaymentRepairV153()" class="border rounded-lg px-3 py-2 text-xs font-bold">↻ Refresh</button>
+</div>
+<div class="flex flex-wrap gap-2 mb-5">
+ <button type="button" id="acTabCustomerV1562" onclick="setActionCenterTabV1562('CUSTOMER')" class="px-4 py-2.5 rounded-xl text-xs font-black bg-slate-900 text-white">Customer Issues <span id="acCustomerCountV1562">0</span></button>
+ <button type="button" id="acTabSupplierV1562" onclick="setActionCenterTabV1562('SUPPLIER')" class="px-4 py-2.5 rounded-xl text-xs font-black bg-white border text-slate-600">Supplier Payment Mapping <span id="acSupplierCountV1562">0</span></button>
+ <button type="button" id="acTabResolvedV1562" onclick="setActionCenterTabV1562('RESOLVED')" class="px-4 py-2.5 rounded-xl text-xs font-black bg-white border text-slate-600">Resolved History</button>
+</div>
+<div id="acCustomerPanelV1562">
+ <div class="mb-3"><h4 class="font-black">Customer Issues</h4><p class="text-xs text-slate-400">Customer receipts and account corrections requiring action.</p></div>
+ <div id="customerReceiptAttentionV156" class="hidden rounded-xl border border-red-200 bg-red-50 p-4"><div class="flex flex-col md:flex-row md:items-center justify-between gap-4"><div><div class="font-black text-red-800">Cash Receipt / Customer Correction <span class="ml-2 px-2 py-0.5 rounded-full bg-red-600 text-white text-[10px]">PENDING</span></div><p id="customerReceiptAttentionTextV156" class="text-sm font-semibold text-red-700 mt-2"></p><p class="text-xs text-slate-500 mt-1">Existing invoice only — do not create another sale.</p></div><button onclick="fixCustomerReceiptAttentionV156()" class="shrink-0 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-black">Fix & Receive Payment</button></div></div>
+ <div id="acCustomerClearV1562" class="hidden rounded-xl border bg-slate-50 p-8 text-center text-sm text-slate-400">No pending customer issues.</div>
+</div>
+<div id="acSupplierPanelV1562" class="hidden">
+ <div class="mb-3 rounded-xl bg-amber-50 border border-amber-200 p-3"><h4 class="font-black">Supplier Payment Mapping</h4><p class="text-xs text-amber-700 mt-1">Safe repair: links existing payments only; amounts and accounting debit/credit are not changed.</p></div>
+ <div class="flex gap-2 justify-end mb-3"><button id="prTabPENDING" onclick="setPaymentRepairTabV154('PENDING')" class="px-4 py-2 rounded-lg text-xs font-black bg-slate-900 text-white">Pending</button><button id="prTabRESOLVED" onclick="setPaymentRepairTabV154('RESOLVED')" class="px-4 py-2 rounded-lg text-xs font-black bg-white border text-slate-600">Mapped History</button></div>
+ <div id="pr153Editor" class="hidden mb-5 bg-amber-50 border border-amber-200 rounded-2xl p-4"><input type="hidden" id="pr153Journal"><div id="pr153Info" class="font-black mb-3"></div><div class="grid md:grid-cols-3 gap-3"><div><label class="text-xs font-bold">Classify Payment</label><select id="pr153Type" onchange="paymentRepairTypeChangedV153()" class="w-full border rounded-lg p-2.5 mt-1"><option value="LC">LC / Cargo Payment</option><option value="GENERAL">General Supplier Payment</option><option value="IMPORT_CHARGE">Import / Other Charge</option></select></div><div id="pr153CargoWrap"><label class="text-xs font-bold">Correct LC / Cargo</label><select id="pr153Cargo" class="w-full border rounded-lg p-2.5 mt-1"></select></div><div class="flex items-end"><button onclick="savePaymentMappingV153()" class="w-full bg-slate-900 text-white rounded-lg p-2.5 font-bold">Save Mapping</button></div></div></div>
+<div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-right">Amount</th><th class="p-3 text-left">Reference</th><th class="p-3 text-left">Mapping</th><th class="p-3"></th></tr></thead><tbody id="pr153Body"></tbody></table></div></div><div id="acResolvedPanelV1562" class="hidden rounded-xl border bg-slate-50 p-8 text-center"><div class="font-black">Resolved History</div><p class="text-xs text-slate-400 mt-1">Resolved customer issues clear automatically. Supplier history is available under Supplier Payment Mapping → Mapped History.</p></div></div>
+</div></div>
 <div id="notificationCenterV148Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[210] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
 <div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Notification & Action Center</h3><p class="text-xs text-slate-400 mt-1">Items that may need attention · Powered By: XaviSoft</p></div><button onclick="closeNotificationCenterV148()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5">
@@ -4937,16 +5315,9 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.52: this MUST be a normal inline script; inline code in a script tag
+  // v1.57: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
-    const gate=document.getElementById('authGate');
-    if(gate){ gate.classList.remove('hidden'); gate.classList.add('flex'); }
-    currentERPUser=null;
-    const email=document.getElementById('loginEmail');
-    const password=document.getElementById('loginPassword');
-    if(email) email.value='';
-    if(password) password.value='';
     await initERPAuth();
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape' && typeof closeInvestorEditModal==='function')closeInvestorEditModal();});
