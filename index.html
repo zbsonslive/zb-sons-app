@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.51.2 | Secure Business ERP</title>
+  <title>ZB & SONS ERP v1.52 | Secure Business ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -361,7 +361,7 @@
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p>
         <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.51.2</span>
+          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.52</span>
         </div></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
@@ -875,7 +875,7 @@
       </div>
       <div class="bg-white border rounded-2xl overflow-hidden shadow-sm">
         <div class="p-4 border-b flex justify-between items-center"><div><h3 class="font-extrabold">Cargo / LC Register</h3><p class="text-xs text-slate-400 mt-1">Click a shipment to view full landed-cost breakdown.</p></div><button onclick="loadCargoShipments()" class="text-xs font-bold text-brand-600">Refresh</button></div>
-        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo Ref</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Goods</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Unit Cost</th><th class="p-3 text-center">Status</th><th class="p-3"></th></tr></thead><tbody id="cargoTableBody"><tr><td colspan="9" class="p-8 text-center text-slate-400">No shipments loaded.</td></tr></tbody></table></div>
+        <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">LC / Cargo Ref</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty</th><th class="p-3 text-right">Goods</th><th class="p-3 text-right">Supplier Paid</th><th class="p-3 text-right">Supplier Balance</th><th class="p-3 text-right">Landed Cost</th><th class="p-3 text-right">Unit Cost</th><th class="p-3 text-center">Status</th><th class="p-3"></th></tr></thead><tbody id="cargoTableBody"><tr><td colspan="11" class="p-8 text-center text-slate-400">No shipments loaded.</td></tr></tbody></table></div>
       </div>
       <div class="bg-white border rounded-2xl overflow-hidden shadow-sm mt-5">
         <div class="p-4 border-b flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -1049,12 +1049,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.51.2</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.52</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.51.2 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.52 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1286,7 +1286,7 @@
     </div>
 
 
-    <!-- v1.51.2 ITEM MASTER SAFE EDIT -->
+    <!-- v1.52 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -1807,7 +1807,7 @@
       const {data,error}=await db.rpc('supplier_payment_register_v139',{p_supplier_id:supplierId});
       if(error){body.innerHTML=`<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
       const rows=data||[];document.getElementById('sp139Count').textContent=rows.length;document.getElementById('sp139Paid').textContent=money(rows.reduce((a,r)=>a+Number(r.amount||0),0));
-      body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(r.payment_date||'')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3">${escapeHtml(r.allocation_ref||'General / Total Payable')}</td><td class="p-3">${escapeHtml(r.reference||'-')}</td><td class="p-3">${escapeHtml(r.paid_through||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.journal_entry_number||'-')}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No supplier payments found.</td></tr>';
+      body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3">${escapeHtml(formatLedgerDateV1513(r.payment_date))}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3">${escapeHtml(r.allocation_ref||'General / Total Payable')}</td><td class="p-3">${escapeHtml(r.reference||'-')}</td><td class="p-3">${escapeHtml(r.paid_through||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.journal_entry_number||'-')}</td></tr>`).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No supplier payments found.</td></tr>';
     }
     async function openSupplierPaymentV139(preselect=null){
       if(!liveParties.length)await fetchParties();if(!liveBanks.length)await fetchBanks();
@@ -1934,7 +1934,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.51.2',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.52',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -1959,7 +1959,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.51.2'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.52'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2280,12 +2280,13 @@
       const tb=document.getElementById('cargoTableBody');if(!tb)return;
       if(!liveParties.length)await fetchParties();if(!liveProducts.length)await fetchProducts();
       const {data,error}=await db.from('cargo_shipments').select('*').order('shipment_date',{ascending:false}).limit(100);
-      if(error){tb.innerHTML=`<tr><td colspan="9" class="p-8 text-center text-amber-600"><b>v1.9 setup required:</b> Run the Cargo/LC SQL migration in Supabase, then Refresh.</td></tr>`;return;}
-      liveLcs=data||[];let open=0,goods=0,landed=0,charges=0;
+      if(error){tb.innerHTML=`<tr><td colspan="11" class="p-8 text-center text-amber-600"><b>Cargo/LC setup issue:</b> ${escapeHtml(error.message)}</td></tr>`;return;}
+      liveLcs=data||[];let open=0,goods=0,landed=0,charges=0,paymentMap={};
+      try{const {data:ps,error:pe}=await db.rpc('lc_supplier_payment_summary_v152');if(pe)throw pe;(ps||[]).forEach(r=>paymentMap[String(r.cargo_id)]={paid:Number(r.paid_amount||0),balance:Number(r.balance_amount||0)});}catch(e){console.warn('LC payment summary:',e);}
       tb.innerHTML=liveLcs.map(x=>{goods+=Number(x.goods_value||0);landed+=Number(x.total_landed_cost||0);charges+=Number(x.total_landed_cost||0)-Number(x.goods_value||0);if(x.status!=='CLOSED')open++;
-        const sup=liveParties.find(p=>String(p.id)===String(x.supplier_id))?.name||'-',item=liveProducts.find(p=>String(p.id)===String(x.item_id))?.name||'-';
-        return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold">${escapeHtml(x.cargo_ref)}</td><td class="p-3">${escapeHtml(sup)}</td><td class="p-3">${escapeHtml(item)}</td><td class="p-3 text-right font-mono">${Number(x.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono">${money(x.goods_value)}</td><td class="p-3 text-right font-mono font-bold">${money(x.total_landed_cost)}</td><td class="p-3 text-right font-mono">${money(x.landed_cost_per_unit)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status)}</span></td><td class="p-3 text-right whitespace-nowrap"><button onclick="openLcSupplierPayment('${x.id}')" class="text-amber-600 font-bold text-xs mr-3">Pay Supplier</button><button onclick="editCargoShipment('${x.id}')" class="text-emerald-600 font-bold text-xs mr-3">Edit</button><button onclick="showCargoDetail('${x.id}')" class="text-brand-600 font-bold text-xs">View</button></td></tr>`;
-      }).join('')||'<tr><td colspan="9" class="p-8 text-center text-slate-400">No Cargo / LC recorded yet.</td></tr>';
+        const sup=liveParties.find(p=>String(p.id)===String(x.supplier_id))?.name||'-',item=liveProducts.find(p=>String(p.id)===String(x.item_id))?.name||'-',pm=paymentMap[String(x.id)]||{paid:0,balance:Number(x.goods_value||0)};
+        return `<tr class="border-t hover:bg-slate-50"><td class="p-3 font-bold">${escapeHtml(x.cargo_ref)}</td><td class="p-3">${escapeHtml(sup)}</td><td class="p-3">${escapeHtml(item)}</td><td class="p-3 text-right font-mono">${Number(x.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono">${money(x.goods_value)}</td><td class="p-3 text-right font-mono text-emerald-700">${money(pm.paid)}</td><td class="p-3 text-right font-mono font-bold">${money(pm.balance)}</td><td class="p-3 text-right font-mono font-bold">${money(x.total_landed_cost)}</td><td class="p-3 text-right font-mono">${money(x.landed_cost_per_unit)}</td><td class="p-3 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(x.status)}</span></td><td class="p-3 text-right whitespace-nowrap"><button onclick="openLcSupplierPayment('${x.id}')" class="text-amber-600 font-bold text-xs mr-3">Pay Supplier</button><button onclick="editCargoShipment('${x.id}')" class="text-emerald-600 font-bold text-xs mr-3">Edit</button><button onclick="showCargoDetail('${x.id}')" class="text-brand-600 font-bold text-xs">View</button></td></tr>`;
+      }).join('')||'<tr><td colspan="11" class="p-8 text-center text-slate-400">No Cargo / LC recorded yet.</td></tr>';
       document.getElementById('cargoOpenCount').textContent=open;document.getElementById('cargoGoodsTotal').textContent=money(goods);document.getElementById('cargoLandedTotal').textContent=money(landed);document.getElementById('cargoChargesTotal').textContent=money(charges);
       if(document.getElementById('lcReconBody')) await loadLcAllocationReconciliation();
     }
@@ -3199,6 +3200,7 @@
       if(current)sel.value=current;
       if(sel.value)loadSupplierLedger();
     }
+    function formatLedgerDateV1513(v){if(!v)return '';const p=String(v).slice(0,10).split('-');return p.length===3?`${p[2]}:${p[1]}:${p[0].slice(-2)}`:String(v);}
     function supplierLcRef(text){
       const m=String(text||'').match(/LC-\d{4}-\d+/i); return m?m[0]:'—';
     }
@@ -3229,18 +3231,19 @@ async function loadSupplierLedger(){
         const {data,error}=await db.rpc('supplier_ledger_v141',{p_supplier_id:partyId,p_from_date:from,p_to_date:to});if(error)throw error;
         supplierLedgerRowsV141=data||[];
         const supplier=liveParties.find(p=>String(p.id)===String(partyId))||{},opening=supplierLedgerRowsV141.length?Number(supplierLedgerRowsV141[0].opening_balance||0):0;
-        let payable=0,paid=0;supplierLedgerRowsV141.forEach(r=>{payable+=Number(r.payable||0);paid+=Number(r.payment||0);});
-        const closing=supplierLedgerRowsV141.length?Number(supplierLedgerRowsV141[supplierLedgerRowsV141.length-1].running_balance||0):opening;
+        supplierLedgerRowsV141.sort((a,b)=>String(a.entry_date||'').localeCompare(String(b.entry_date||''))||String(a.entry_number||'').localeCompare(String(b.entry_number||'')));
+        let payable=0,paid=0,running=opening;supplierLedgerRowsV141.forEach(r=>{payable+=Number(r.payable||0);paid+=Number(r.payment||0);running+=Number(r.payable||0)-Number(r.payment||0);r.running_balance=running;});
+        const closing=running;
         document.getElementById('sl141Opening').textContent=money(opening);document.getElementById('slPayable').textContent=money(payable);document.getElementById('slPaid').textContent=money(paid);document.getElementById('slBalance').textContent=money(closing);
         document.getElementById('sl141Heading').textContent=supplier.name||'Supplier';document.getElementById('sl141Period').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
-        tbody.innerHTML=supplierLedgerRowsV141.map(r=>`<tr><td class="py-3 px-4">${escapeHtml(r.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(r.entry_number||'-')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||'-')}</span></td><td class="py-3 px-4">${escapeHtml(r.source_ref||'-')}</td><td class="py-3 px-4">${escapeHtml(r.paid_through||'-')}</td><td class="py-3 px-4 text-right">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="py-3 px-4 text-right text-emerald-700">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="py-3 px-4 text-right font-bold">${money(r.running_balance)}</td><td class="py-3 px-4 text-right whitespace-nowrap">${Number(r.payment||0)>0?`<button onclick="openSupplierLedgerPaymentEditV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="cancelSupplierLedgerPaymentV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-red-600 font-bold text-xs">Cancel</button>`:'<span class="text-slate-300">—</span>'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No supplier transactions in selected period.</td></tr>';
+        tbody.innerHTML=supplierLedgerRowsV141.map(r=>`<tr><td class="py-3 px-4 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(r.entry_number||'-')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||'-')}</span></td><td class="py-3 px-4">${escapeHtml(r.source_ref||'-')}</td><td class="py-3 px-4">${escapeHtml(r.paid_through||'-')}</td><td class="py-3 px-4 text-right">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="py-3 px-4 text-right text-emerald-700">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="py-3 px-4 text-right font-bold">${money(r.running_balance)}</td><td class="py-3 px-4 text-right whitespace-nowrap">${Number(r.payment||0)>0?`<button onclick="openSupplierLedgerPaymentEditV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="cancelSupplierLedgerPaymentV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-red-600 font-bold text-xs">Cancel</button>`:'<span class="text-slate-300">—</span>'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No supplier transactions in selected period.</td></tr>';
       }catch(err){tbody.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
     }
     let supplierLedgerRowsV141=[];
     function printSupplierLedgerV141(){
       const partyId=document.getElementById('supplierLedgerSelector')?.value;if(!partyId){showToast('Select supplier and generate ledger first.','error');return;}
       const supplier=liveParties.find(p=>String(p.id)===String(partyId))||{},period=document.getElementById('sl141Period')?.textContent||'';
-      const rows=supplierLedgerRowsV141.map(r=>`<tr><td>${escapeHtml(r.entry_date||'')}</td><td>${escapeHtml(r.entry_number||'-')}<br><small>${escapeHtml(r.description||'')}</small></td><td>${escapeHtml(r.source_ref||'-')}</td><td>${escapeHtml(r.paid_through||'-')}</td><td class="num">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="num">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
+      const rows=supplierLedgerRowsV141.map(r=>`<tr><td style="white-space:nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td>${escapeHtml(r.entry_number||'-')}<br><small>${escapeHtml(r.description||'')}</small></td><td>${escapeHtml(r.source_ref||'-')}</td><td>${escapeHtml(r.paid_through||'-')}</td><td class="num">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="num">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="num">${money(r.running_balance)}</td></tr>`).join('');
       const w=window.open('','_blank','width=1100,height=900');if(!w)return;w.document.write(`<!doctype html><html><head><title>Supplier Ledger</title><style>body{font-family:Arial;padding:28px}h1{margin:0}.muted{color:#666;font-size:12px;margin:6px 0 18px}.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}.box{border:1px solid #ddd;padding:10px}.box small{color:#777}.box b{display:block;margin-top:5px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{border-bottom:1px solid #ddd;padding:8px;text-align:left}th{background:#f5f5f5}.num{text-align:right;white-space:nowrap}</style></head><body><h1>ZB & SONS ERP — Supplier Ledger</h1><div class="muted">${escapeHtml(supplier.name||'')} | ${escapeHtml(period)}</div><div class="sum"><div class="box"><small>Opening Balance</small><b>${document.getElementById('sl141Opening').textContent}</b></div><div class="box"><small>Payable Created</small><b>${document.getElementById('slPayable').textContent}</b></div><div class="box"><small>Payments</small><b>${document.getElementById('slPaid').textContent}</b></div><div class="box"><small>Current Payable</small><b>${document.getElementById('slBalance').textContent}</b></div></div><table><thead><tr><th>Date</th><th>Voucher / Particulars</th><th>Purchase / LC</th><th>Paid Through</th><th>Payable</th><th>Payment</th><th>Balance</th></tr></thead><tbody>${rows}</tbody></table><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();
     }
 
@@ -3726,7 +3729,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.51.2 Strict Login: every fresh app load requires credentials.
+      // v1.52 Strict Login: every fresh app load requires credentials.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -4737,7 +4740,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.51.2: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.52: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -4890,10 +4893,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.51.2 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.52 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.51.2</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.52</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -4934,7 +4937,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.51.2: this MUST be a normal inline script; inline code in a script tag
+  // v1.52: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     const gate=document.getElementById('authGate');
