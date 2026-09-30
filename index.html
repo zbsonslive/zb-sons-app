@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.49.6 | Secure Business ERP (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.50 | Secure Business ERP (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1035,12 +1035,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.49.6</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.50</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.49.6 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.50 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1122,7 +1122,7 @@
       </div>
       <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
         <table class="w-full text-left border-collapse text-sm">
-          <thead><tr class="border-b border-slate-200 text-xs font-semibold bg-slate-50 text-slate-500"><th class="py-3 px-4">Item</th><th class="py-3 px-4">Category</th><th class="py-3 px-4">Unit</th><th class="py-3 px-4 text-center">Quantity</th><th class="py-3 px-4 text-right">Average Cost</th><th class="py-3 px-4 text-right">Sale Price</th></tr></thead>
+          <thead><tr class="border-b border-slate-200 text-xs font-semibold bg-slate-50 text-slate-500"><th class="py-3 px-4">Item</th><th class="py-3 px-4">Category</th><th class="py-3 px-4">Unit</th><th class="py-3 px-4 text-center">Quantity</th><th class="py-3 px-4 text-right">Average Cost</th><th class="py-3 px-4 text-right">Sale Price</th><th class="py-3 px-4 text-right">Action</th></tr></thead>
           <tbody id="inventoryTableBody" class="divide-y divide-slate-100"></tbody>
         </table>
       </div>
@@ -1267,6 +1267,36 @@
           <div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Quantity *</label><input id="simpleItemQty" required type="number" min="0" step="0.001" value="0" class="w-full border rounded-xl p-3"></div>
           <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold text-slate-600 mb-1">Opening Cost / Unit</label><input id="simpleItemPurchase" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div><div><label class="block text-xs font-bold text-slate-600 mb-1">Sale Price</label><input id="simpleItemSale" type="number" min="0" step="0.01" value="0" class="w-full border rounded-xl p-3"></div></div>
           <div class="flex justify-end gap-2 pt-3 border-t"><button type="button" onclick="closeSimpleItemModal()" class="px-4 py-2.5 text-slate-600 font-semibold">Cancel</button><button id="simpleItemSaveBtn" class="px-5 py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl font-bold">Save Item</button></div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- v1.50 ITEM MASTER SAFE EDIT -->
+    <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
+        <div class="p-5 border-b flex items-center justify-between">
+          <div><h3 class="text-xl font-black">Edit Item</h3><p class="text-xs text-slate-400 mt-1">Edit master details without changing stock quantity or average cost.</p></div>
+          <button type="button" onclick="closeItemEditV150()" class="text-slate-400 hover:text-slate-900 text-2xl leading-none">&times;</button>
+        </div>
+        <form onsubmit="saveItemEditV150(event)" class="p-5 space-y-4">
+          <input type="hidden" id="itemEditIdV150">
+          <div><label class="block text-xs font-bold text-slate-600 mb-1">Item Name *</label><input id="itemEditNameV150" required class="w-full border rounded-xl p-3"></div>
+          <div class="grid grid-cols-2 gap-3">
+            <div><label class="block text-xs font-bold text-slate-600 mb-1">Category</label><input id="itemEditCategoryV150" class="w-full border rounded-xl p-3"></div>
+            <div><label class="block text-xs font-bold text-slate-600 mb-1">Unit</label>
+              <select id="itemEditUnitV150" class="w-full border rounded-xl p-3">
+                <option>PCS</option><option>KG</option><option>MT</option><option>ROLL</option><option>REAM</option><option>SHEET</option><option>CARTON</option><option>PALLET</option><option>BOX</option><option>SET</option><option>PAIR</option><option>METER</option><option>LITER</option>
+              </select>
+            </div>
+          </div>
+          <div><label class="block text-xs font-bold text-slate-600 mb-1">Sale Price</label><input id="itemEditSaleV150" type="number" min="0" step="0.01" class="w-full border rounded-xl p-3"></div>
+          <div class="grid grid-cols-2 gap-3 bg-slate-50 border rounded-xl p-3">
+            <div><div class="text-[10px] font-bold text-slate-400">CURRENT STOCK</div><div id="itemEditStockV150" class="font-black mt-1">0</div></div>
+            <div><div class="text-[10px] font-bold text-slate-400">AVERAGE COST</div><div id="itemEditCostV150" class="font-black mt-1">PKR 0.00</div></div>
+          </div>
+          <div class="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-xl p-3">Stock quantity and average cost are protected here. Use <b>Stock / Opening</b> for stock correction so inventory/accounting remain synchronized.</div>
+          <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeItemEditV150()" class="px-4 py-2.5 border rounded-xl font-bold">Cancel</button><button id="itemEditSaveV150" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold">Save Changes</button></div>
         </form>
       </div>
     </div>
@@ -1890,7 +1920,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.49.6',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.50',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -1915,7 +1945,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.49.6'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.50'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2997,7 +3027,7 @@
         document.getElementById('masterInvestorCount').textContent=(investors||[]).length;
         document.getElementById('masterPartyBody').innerHTML=liveParties.map(p=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(p.name||'')}</td><td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${isCustomerParty(p)&&isSupplierParty(p)?'bg-violet-50 text-violet-700':isSupplierParty(p)?'bg-amber-50 text-amber-700':'bg-emerald-50 text-emerald-700'}">${escapeHtml((p.type||'').toUpperCase())}</span></td><td class="p-3 text-right"><button onclick="setPartyOpening('${p.id}','${escapeHtml(p.name||'').replace(/'/g,"&#39;")}','${partyKind(p)}',${Number(p.opening_receivable||0)},${Number(p.opening_payable||0)})" class="text-violet-600 font-bold text-xs mr-3">Opening</button><button onclick="editMasterParty('${p.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="deleteMasterParty('${p.id}')" class="text-red-600 font-bold text-xs">Delete</button></td></tr>`).join('')||'<tr><td colspan="3" class="p-8 text-center text-slate-400">No parties added.</td></tr>';
         document.getElementById('masterBankBody').innerHTML=(banks||[]).map(b=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(b.bank_name||'')}</td><td class="p-3"><div>${escapeHtml(b.account_title||'')}</div><div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.account_number||b.iban||'')}</div></td><td class="p-3 text-right font-mono">${money(b.opening_balance||0)}</td><td class="p-3 text-right"><button onclick="setBankOpening('${b.id}','${escapeHtml(b.bank_name||'').replace(/'/g,"&#39;")}',${Number(b.opening_balance||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No bank accounts added.</td></tr>';
-        document.getElementById('masterItemBody').innerHTML=liveProducts.map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3">${escapeHtml(i.unit||'PCS')}</td><td class="p-3 text-right font-bold">${Number(i.current_stock??i.stock??0).toLocaleString()}</td><td class="p-3 text-right"><button onclick="setItemOpening('${i.id}','${escapeHtml(i.name||'').replace(/'/g,"&#39;")}',${Number(i.current_stock??i.stock??0)},${Number(i.purchase_price||i.cost_price||0)})" class="text-violet-600 font-bold text-xs">Set Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No items added.</td></tr>';
+        document.getElementById('masterItemBody').innerHTML=liveProducts.map(i=>`<tr class="border-t"><td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td><td class="p-3">${escapeHtml(i.unit||'PCS')}</td><td class="p-3 text-right font-bold">${Number(i.current_stock??i.stock??0).toLocaleString()}</td><td class="p-3 text-right whitespace-nowrap"><button onclick="openItemEditV150('${i.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="setItemOpening('${i.id}','${escapeHtml(i.name||'').replace(/'/g,"&#39;")}',${Number(i.current_stock??i.stock??0)},${Number(i.purchase_price||i.cost_price||0)})" class="text-violet-600 font-bold text-xs">Stock / Opening</button></td></tr>`).join('')||'<tr><td colspan="4" class="p-8 text-center text-slate-400">No items added.</td></tr>';
         let invCurrent={};
         try{
           const [{data:ci},{data:po}]=await Promise.all([
@@ -3060,7 +3090,7 @@
       liveProducts = data || [];
       const tbody=document.getElementById('inventoryTableBody');
       if(tbody){
-        tbody.innerHTML = liveProducts.map(i=>{const qty=Number(i.current_stock ?? i.stock ?? 0), purchase=Number(i.purchase_price ?? i.cost_price ?? i.unit_price ?? 0), sale=Number(i.selling_price ?? i.sale_price ?? i.unit_price ?? 0);return `<tr><td class="py-3 px-4 font-semibold">${escapeHtml(i.name||'Unnamed Item')}</td><td class="py-3 px-4 text-slate-500">${escapeHtml(i.category||'-')}</td><td class="py-3 px-4">${escapeHtml(i.unit||'PCS')}</td><td class="py-3 px-4 text-center font-bold">${qty}</td><td class="py-3 px-4 text-right font-mono">${money(purchase)}</td><td class="py-3 px-4 text-right font-mono font-bold">${money(sale)}</td></tr>`}).join('') || '<tr><td colspan="6" class="p-10 text-center text-slate-400">No items yet. Click <b>+ Add Item</b> to create your first item.</td></tr>';
+        tbody.innerHTML = liveProducts.map(i=>{const qty=Number(i.current_stock ?? i.stock ?? 0), purchase=Number(i.purchase_price ?? i.cost_price ?? i.unit_price ?? 0), sale=Number(i.selling_price ?? i.sale_price ?? i.unit_price ?? 0);return `<tr><td class="py-3 px-4 font-semibold">${escapeHtml(i.name||'Unnamed Item')}</td><td class="py-3 px-4 text-slate-500">${escapeHtml(i.category||'-')}</td><td class="py-3 px-4">${escapeHtml(i.unit||'PCS')}</td><td class="py-3 px-4 text-center font-bold">${qty}</td><td class="py-3 px-4 text-right font-mono">${money(purchase)}</td><td class="py-3 px-4 text-right font-mono font-bold">${money(sale)}</td><td class="py-3 px-4 text-right"><button onclick="openItemEditV150('${i.id}')" class="text-blue-600 font-bold text-xs">Edit</button></td></tr>`}).join('') || '<tr><td colspan="7" class="p-10 text-center text-slate-400">No items yet. Click <b>+ Add Item</b> to create your first item.</td></tr>';
       }
       const count=document.getElementById('simpleItemCount'), qtyEl=document.getElementById('simpleStockQty'), valEl=document.getElementById('simpleStockValue');
       if(count) count.textContent=liveProducts.length;
@@ -3082,6 +3112,56 @@
       }catch(err){showToast(err.message||'Item could not be saved.','error');}
       finally{btn.disabled=false;btn.textContent='Save Item';}
     }
+
+
+    function closeItemEditV150(){
+      const m=document.getElementById('itemEditModalV150'); if(m){m.classList.add('hidden');m.classList.remove('flex');}
+    }
+    async function openItemEditV150(id){
+      let item=liveProducts.find(x=>String(x.id)===String(id));
+      if(!item){
+        const {data,error}=await db.from('items').select('*').eq('id',id).single();
+        if(error){showToast(error.message,'error');return;} item=data;
+      }
+      document.getElementById('itemEditIdV150').value=item.id;
+      document.getElementById('itemEditNameV150').value=item.name||'';
+      document.getElementById('itemEditCategoryV150').value=item.category||'';
+      const unit=document.getElementById('itemEditUnitV150'), unitVal=String(item.unit||'PCS').toUpperCase();
+      if(![...unit.options].some(o=>o.value===unitVal)){const o=document.createElement('option');o.value=unitVal;o.textContent=unitVal;unit.appendChild(o);}
+      unit.value=unitVal;
+      document.getElementById('itemEditSaleV150').value=Number(item.selling_price ?? item.sale_price ?? item.unit_price ?? 0);
+      document.getElementById('itemEditStockV150').textContent=Number(item.current_stock ?? item.stock ?? 0).toLocaleString();
+      document.getElementById('itemEditCostV150').textContent=money(Number(item.purchase_price ?? item.cost_price ?? item.unit_price ?? 0));
+      const m=document.getElementById('itemEditModalV150');m.classList.remove('hidden');m.classList.add('flex');
+      setTimeout(()=>document.getElementById('itemEditNameV150')?.focus(),50);
+    }
+    async function saveItemEditV150(e){
+      e.preventDefault();
+      const id=document.getElementById('itemEditIdV150').value;
+      const name=document.getElementById('itemEditNameV150').value.trim();
+      const category=document.getElementById('itemEditCategoryV150').value.trim();
+      const unit=document.getElementById('itemEditUnitV150').value;
+      const sale=Number(document.getElementById('itemEditSaleV150').value||0);
+      if(!id||!name||sale<0){showToast('Enter valid item details.','error');return;}
+      const btn=document.getElementById('itemEditSaveV150');btn.disabled=true;btn.textContent='Saving...';
+      try{
+        // Only master fields are changed. Stock and purchase/average cost are intentionally excluded.
+        const payload={name,category:category||null,unit,selling_price:sale};
+        let {error}=await db.from('items').update(payload).eq('id',id);
+        // Legacy schema fallback: some older builds use sale_price instead of selling_price.
+        if(error && /selling_price/i.test(error.message||'')){
+          delete payload.selling_price; payload.sale_price=sale;
+          ({error}=await db.from('items').update(payload).eq('id',id));
+        }
+        if(error)throw error;
+        closeItemEditV150();
+        showToast('Item master updated.');
+        await fetchProducts();
+        if(document.getElementById('view-masters')&&!document.getElementById('view-masters').classList.contains('hidden'))await loadMasterData();
+      }catch(err){showToast(err.message||'Item could not be updated.','error');}
+      finally{btn.disabled=false;btn.textContent='Save Changes';}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='itemEditModalV150')closeItemEditV150();});
 
     function refreshInvoiceItemDropdowns() {
       document.querySelectorAll('#invoiceItemsBody .inv-item').forEach(sel => {
@@ -3625,7 +3705,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.49.6 Strict Login: every fresh app load requires credentials.
+      // v1.50 Strict Login: every fresh app load requires credentials.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -4636,7 +4716,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.49.6: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.50: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -4789,10 +4869,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.49.6 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.50 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.49.6</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.50</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -4833,7 +4913,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.49.6: this MUST be a normal inline script; inline code in a script tag
+  // v1.50: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     const gate=document.getElementById('authGate');
