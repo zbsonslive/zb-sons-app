@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.51 | Secure Business ERP</title>
+  <title>ZB & SONS ERP v1.51.1 | Secure Business ERP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1045,12 +1045,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.51</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.51.1</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.51 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.51.1 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1282,7 +1282,7 @@
     </div>
 
 
-    <!-- v1.51 ITEM MASTER SAFE EDIT -->
+    <!-- v1.51.1 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -1930,7 +1930,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.51',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.51.1',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -1955,7 +1955,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.51'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.51.1'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -3229,7 +3229,7 @@ async function loadSupplierLedger(){
         const closing=supplierLedgerRowsV141.length?Number(supplierLedgerRowsV141[supplierLedgerRowsV141.length-1].running_balance||0):opening;
         document.getElementById('sl141Opening').textContent=money(opening);document.getElementById('slPayable').textContent=money(payable);document.getElementById('slPaid').textContent=money(paid);document.getElementById('slBalance').textContent=money(closing);
         document.getElementById('sl141Heading').textContent=supplier.name||'Supplier';document.getElementById('sl141Period').textContent=`${from||'Beginning'} to ${to||'Latest'}`;
-        tbody.innerHTML=supplierLedgerRowsV141.map(r=>`<tr><td class="py-3 px-4">${escapeHtml(r.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(r.entry_number||'-')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||'-')}</span></td><td class="py-3 px-4">${escapeHtml(r.source_ref||'-')}</td><td class="py-3 px-4">${escapeHtml(r.paid_through||'-')}</td><td class="py-3 px-4 text-right">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="py-3 px-4 text-right text-emerald-700">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="py-3 px-4 text-right font-bold">${money(r.running_balance)}</td><td class="py-3 px-4 text-right whitespace-nowrap">${Number(r.payment||0)>0?`<button onclick="openSupplierLedgerPaymentEditV151(\'${String(r.entry_number||\'\').replace(/\'/g,"&#39;")}\')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="cancelSupplierLedgerPaymentV151(\'${String(r.entry_number||\'\').replace(/\'/g,"&#39;")}\')" class="text-red-600 font-bold text-xs">Cancel</button>`:'<span class="text-slate-300">—</span>'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No supplier transactions in selected period.</td></tr>';
+        tbody.innerHTML=supplierLedgerRowsV141.map(r=>`<tr><td class="py-3 px-4">${escapeHtml(r.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(r.entry_number||'-')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||'-')}</span></td><td class="py-3 px-4">${escapeHtml(r.source_ref||'-')}</td><td class="py-3 px-4">${escapeHtml(r.paid_through||'-')}</td><td class="py-3 px-4 text-right">${Number(r.payable||0)?money(r.payable):'-'}</td><td class="py-3 px-4 text-right text-emerald-700">${Number(r.payment||0)?money(r.payment):'-'}</td><td class="py-3 px-4 text-right font-bold">${money(r.running_balance)}</td><td class="py-3 px-4 text-right whitespace-nowrap">${Number(r.payment||0)>0?`<button onclick="openSupplierLedgerPaymentEditV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button><button onclick="cancelSupplierLedgerPaymentV151('${String(r.entry_number||'').replace(/'/g,"&#39;")}')" class="text-red-600 font-bold text-xs">Cancel</button>`:'<span class="text-slate-300">—</span>'}</td></tr>`).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No supplier transactions in selected period.</td></tr>';
       }catch(err){tbody.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-500">${escapeHtml(err.message||String(err))}</td></tr>`;}
     }
     let supplierLedgerRowsV141=[];
@@ -3722,7 +3722,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.51 Strict Login: every fresh app load requires credentials.
+      // v1.51.1 Strict Login: every fresh app load requires credentials.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -4733,7 +4733,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.51: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.51.1: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -4886,10 +4886,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.51 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.51.1 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.51</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.51.1</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -4930,7 +4930,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.51: this MUST be a normal inline script; inline code in a script tag
+  // v1.51.1: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     const gate=document.getElementById('authGate');
