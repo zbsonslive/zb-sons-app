@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.57.1 | Secure Business ERP (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.57.2 | Secure Business ERP (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,7 +486,7 @@
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p>
         <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.57.1</span>
+          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.57.2</span>
         </div></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
@@ -599,7 +599,7 @@
 
     <!-- VIEW 1: EXECUTIVE COMMAND CENTER -->
     <div id="view-home" class="page-view max-w-7xl">
-      <!-- v1.57.1 CLEAN DASHBOARD HEADER -->
+      <!-- v1.57.2 CLEAN DASHBOARD HEADER -->
       <div class="dashboard-header-v1544">
         <div class="dashboard-title-v1544">
           <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p>
@@ -926,6 +926,7 @@
             <tr class="border-b border-slate-200 text-xs font-semibold text-slate-500 bg-white">
               <th class="py-3 px-4">Date</th>
               <th class="py-3 px-4">Particulars</th>
+              <th class="py-3 px-4">Details / Against</th>
               <th class="py-3 px-4 text-right">Debit</th>
               <th class="py-3 px-4 text-right">Credit</th>
               <th class="py-3 px-4 text-right">Balance</th>
@@ -1185,12 +1186,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.57.1</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.57.2</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.57.1 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.57.2 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1423,7 +1424,7 @@
     </div>
 
 
-    <!-- v1.57.1 ITEM MASTER SAFE EDIT -->
+    <!-- v1.57.2 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -2013,7 +2014,7 @@
       body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td class="p-3 font-mono text-xs">${escapeHtml(r.voucher||'-')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.reference_number||r.narration||'-')}</td><td class="p-3">${r.mapping_type?`<span class="text-emerald-700 font-bold">${escapeHtml(r.mapping_type==='LC'?'LC / Cargo Payment':r.mapping_type==='GENERAL'?'General Supplier Payment':'Import / Other Charge')}</span>${r.cargo_ref?`<div class="text-xs font-bold">${escapeHtml(r.cargo_ref)}</div>`:''}${r.mapped_by_name?`<div class="text-[10px] text-slate-400 mt-1">Resolved by ${escapeHtml(r.mapped_by_name)}${r.mapped_at?' · '+escapeHtml(new Date(r.mapped_at).toLocaleString()):''}</div>`:''}`:'<span class="text-amber-700 font-bold">Pending</span>'}</td><td class="p-3 text-right"><button onclick="editPaymentMappingV153('${r.journal_entry_id}')" class="text-blue-700 font-bold text-xs">${r.mapping_type?'Change':'Map Payment'}</button></td></tr>`).join('')||`<tr><td colspan="7" class="p-8 text-center text-slate-400">${paymentRepairTabV154==='PENDING'?'No pending issues. All clear.':'No resolved history yet.'}</td></tr>`;
     }
 
-    // v1.57.1 Customer receipt attention: known real invoice requiring staff action.
+    // v1.57.2 Customer receipt attention: known real invoice requiring staff action.
     let customerReceiptIssueV156=null;
     function renderResolvedHistoryV1571(){
       const body=document.getElementById('acResolvedBodyV1571');if(!body)return;
@@ -2207,7 +2208,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.57.1',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.57.2',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -2232,7 +2233,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.57.1'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.57.2'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2565,7 +2566,7 @@
     }
 
 
-    // v1.57.1 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
+    // v1.57.2 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
     function closeLcPaymentHistory(){
       const m=document.getElementById('lcPaymentHistoryModal');
       if(m){m.style.display='none';m.classList.add('hidden');m.classList.remove('flex');}
@@ -3582,13 +3583,27 @@ async function loadSupplierLedger(){
 
     async function loadCustomerLedger() {
       const partyId=document.getElementById('khataPartySelector')?.value, tbody=document.getElementById('ledgerTableBody'); if(!tbody) return;
-      if(!partyId){tbody.innerHTML='<tr><td colspan="5" class="p-8 text-center text-slate-400">Select a customer to view its ledger.</td></tr>';return;}
+      if(!partyId){tbody.innerHTML='<tr><td colspan="6" class="p-8 text-center text-slate-400">Select a customer to view its ledger.</td></tr>';return;}
       const {data:acc,error:ae}=await db.from('chart_of_accounts').select('id').eq('account_code','1300').limit(1);
-      if(ae||!acc?.[0]){tbody.innerHTML=`<tr><td colspan="5" class="p-8 text-center text-red-500">${escapeHtml(ae?.message||'Accounts Receivable 1300 not found.')}</td></tr>`;return;}
-      const {data,error}=await db.from('journal_lines').select('debit,credit,description,created_at,journal_entries!inner(entry_number,entry_date,narration,status)').eq('account_id',acc[0].id).eq('party_id',partyId).eq('journal_entries.status','POSTED');
-      if(error){tbody.innerHTML=`<tr><td colspan="5" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
+      if(ae||!acc?.[0]){tbody.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-500">${escapeHtml(ae?.message||'Accounts Receivable 1300 not found.')}</td></tr>`;return;}
+      const {data,error}=await db.from('journal_lines').select('debit,credit,description,created_at,journal_entries!inner(id,entry_number,entry_date,narration,status,reference_type,reference_id,reference_number)').eq('account_id',acc[0].id).eq('party_id',partyId).eq('journal_entries.status','POSTED');
+      if(error){tbody.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;return;}
       const rows=(data||[]).sort((a,b)=>String(a.journal_entries?.entry_date||'').localeCompare(String(b.journal_entries?.entry_date||''))||String(a.created_at||'').localeCompare(String(b.created_at||'')));
-      let bal=0; tbody.innerHTML=rows.map(r=>{bal+=Number(r.debit||0)-Number(r.credit||0);const je=r.journal_entries||{};return `<tr><td class="py-3 px-4">${escapeHtml(je.entry_date||'')}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(je.entry_number||'')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||je.narration||'')}</span></td><td class="py-3 px-4 text-right">${money(r.debit)}</td><td class="py-3 px-4 text-right">${money(r.credit)}</td><td class="py-3 px-4 text-right font-bold">${money(bal)}</td></tr>`;}).join('')||'<tr><td colspan="5" class="p-8 text-center text-slate-400">No customer transactions found.</td></tr>';
+      const receiptEntries=rows.filter(r=>Number(r.credit||0)>0).map(r=>r.journal_entries?.entry_number).filter(Boolean);
+      let allocMap={};
+      if(receiptEntries.length){
+        const {data:alloc}=await db.from('customer_invoice_payments').select('journal_entry_number,invoice_id,amount,reference,invoices(invoice_number)').in('journal_entry_number',receiptEntries);
+        for(const x of (alloc||[])){const k=x.journal_entry_number;(allocMap[k]??=[]).push(x);}
+      }
+      let bal=0; tbody.innerHTML=rows.map(r=>{
+        bal+=Number(r.debit||0)-Number(r.credit||0);const je=r.journal_entries||{};let detail='';
+        const allocs=allocMap[je.entry_number]||[];
+        if(allocs.length) detail=allocs.map(x=>`Against <b>${escapeHtml(x.invoices?.invoice_number||'Invoice')}</b> · ${money(x.amount)}${x.reference?`<br><span class="text-slate-400">${escapeHtml(x.reference)}</span>`:''}`).join('<br>');
+        else if(String(je.reference_type||'').toUpperCase()==='SALES_INVOICE') detail=`Invoice <b>${escapeHtml(je.reference_number||'')}</b>`;
+        else if(je.reference_number) detail=`Ref: <b>${escapeHtml(je.reference_number)}</b>`;
+        else detail=escapeHtml(je.narration||r.description||'—');
+        return `<tr><td class="py-3 px-4 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(je.entry_date||''))}</td><td class="py-3 px-4"><span class="font-semibold">${escapeHtml(je.entry_number||'')}</span><br><span class="text-[11px] text-slate-400">${escapeHtml(r.description||je.narration||'')}</span></td><td class="py-3 px-4 text-[11px]">${detail}</td><td class="py-3 px-4 text-right">${money(r.debit)}</td><td class="py-3 px-4 text-right">${money(r.credit)}</td><td class="py-3 px-4 text-right font-bold">${money(bal)}</td></tr>`;
+      }).join('')||'<tr><td colspan="6" class="p-8 text-center text-slate-400">No customer transactions found.</td></tr>';
     }
 
     async function getPartyAccountBalances(code){
@@ -4062,7 +4077,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.57.1 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
+      // v1.57.2 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -5089,7 +5104,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.57.1: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.57.2: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -5162,7 +5177,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
 <div id="warehouseModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[110] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"><div class="p-5 border-b flex items-center justify-between"><div><h3 id="warehouseModalTitle" class="text-xl font-black">Add Warehouse</h3><p class="text-xs text-slate-400 mt-1">Create or update a stock location.</p></div><button type="button" onclick="closeWarehouseModal()" class="text-slate-400 text-2xl">&times;</button></div><form onsubmit="saveWarehouse(event)" class="p-5 space-y-4"><input type="hidden" id="warehouseEditId"><div><label class="block text-xs font-bold mb-1">Warehouse Name *</label><input id="warehouseName" required class="w-full border rounded-lg p-2.5" placeholder="Main Godown"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Warehouse Code</label><input id="warehouseCode" class="w-full border rounded-lg p-2.5" placeholder="WH-01"></div><div><label class="block text-xs font-bold mb-1">Location</label><input id="warehouseLocation" class="w-full border rounded-lg p-2.5" placeholder="Karachi"></div></div><div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="warehouseNotes" rows="3" class="w-full border rounded-lg p-2.5"></textarea></div><label class="flex items-center gap-2 text-sm font-semibold"><input id="warehouseActive" type="checkbox" checked> Active Warehouse</label><div class="flex justify-end gap-2"><button type="button" onclick="closeWarehouseModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Warehouse</button></div></form></div></div>
 
-<!-- v1.57.1 LC PAYMENT HISTORY -->
+<!-- v1.57.2 LC PAYMENT HISTORY -->
 <div id="lcPaymentHistoryModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[125] p-4">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] overflow-hidden flex flex-col">
     <div class="p-5 border-b flex items-start justify-between gap-4">
@@ -5270,10 +5285,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.57.1 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.57.2 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.57.1</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.57.2</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -5340,7 +5355,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.57.1: this MUST be a normal inline script; inline code in a script tag
+  // v1.57.2: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     await initERPAuth();
