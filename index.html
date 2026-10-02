@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.60 | Secure Business ERP (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.61.1 | Secure Business ERP (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,7 +486,7 @@
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p>
         <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.60</span>
+          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.61.1</span>
         </div></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
@@ -599,7 +599,7 @@
 
     <!-- VIEW 1: EXECUTIVE COMMAND CENTER -->
     <div id="view-home" class="page-view max-w-7xl">
-      <!-- v1.60 CLEAN DASHBOARD HEADER -->
+      <!-- v1.61.1 CLEAN DASHBOARD HEADER -->
       <div class="dashboard-header-v1544">
         <div class="dashboard-title-v1544">
           <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p>
@@ -794,7 +794,7 @@
         <div class="p-4 border-b flex items-center justify-between">
           <div>
             <h3 class="font-extrabold text-slate-900">All Investors</h3>
-            <p class="text-xs text-slate-400">Registered investors, opening balance and current position</p>
+            <p class="text-xs text-slate-400">Registered investors, opening funds, utilization and remaining fund position</p>
           </div>
           <button onclick="openInvestorModal()" class="px-3 py-2 rounded-lg bg-violet-600 text-white text-xs font-bold">+ Add Investor</button>
         </div>
@@ -807,7 +807,7 @@
                 <th class="p-3 text-right">Opening Balance</th>
                 <th class="p-3 text-right">Cargo Allocation</th>
                 <th class="p-3 text-right">Direct Utilization</th>
-                <th class="p-3 text-right">Current Balance</th>
+                <th class="p-3 text-right">Remaining Fund Balance</th>
                 <th class="p-3 text-right">Action</th>
               </tr>
             </thead>
@@ -1189,12 +1189,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.60</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.61.1</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.60 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.61.1 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1354,9 +1354,23 @@
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6 text-sm">
           <div><label class="block font-medium mb-1">Customer</label><select id="invParty" class="w-full border rounded-lg p-2.5 bg-white text-sm"></select></div>
           <div><label class="block font-medium mb-1">Invoice No</label><input type="text" id="invNo" value="INV-9901" class="w-full border rounded-lg p-2.5" /></div>
-          <div><label class="block font-medium mb-1">Payment Type</label><select id="invPaymentType" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="CREDIT">Credit Sale</option><option value="CASH">Cash Sale</option></select><p class="text-[10px] text-slate-400 mt-1">Cash Sale posts receipt automatically.</p></div>
+          <div><label class="block font-medium mb-1">Payment Type</label><select id="invPaymentType" onchange="salesPaymentTypeChangedV161()" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="CREDIT">Credit Sale</option><option value="CASH">Cash Sale</option></select><p class="text-[10px] text-slate-400 mt-1">Cash Sale posts receipt automatically.</p></div>
           <div><label class="block font-medium mb-1">LC / Cargo Batch</label><select id="invLc" class="w-full border rounded-lg p-2.5 bg-white text-sm"><option value="">Auto / Unallocated</option></select><p class="text-[10px] text-slate-400 mt-1">Select cleared LC for LC-wise profit.</p></div>
           <div><label class="block font-medium mb-1">Date</label><input type="date" id="invDate" class="w-full border rounded-lg p-2.5" /></div>
+        </div>
+        <div id="cashSaleDestinationV161" class="hidden mb-6 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+            <div>
+              <label class="block font-bold text-slate-800 mb-1">Cash Sale Received In *</label>
+              <select id="invCashDestinationV161" class="w-full border rounded-lg p-2.5 bg-white text-sm">
+                <option value="CASH">Cash on Hand</option>
+              </select>
+              <p class="text-[10px] text-slate-500 mt-1">Select where the customer payment actually arrived. This controls Cash/Bank balance.</p>
+            </div>
+            <div class="text-xs text-emerald-900 bg-white/70 border border-emerald-100 rounded-lg p-3">
+              <b>Accounting:</b> Cash on Hand → Dr 1100. Selected company bank → Dr 1200 with that bank account. Customer A/R → Cr 1300.
+            </div>
+          </div>
         </div>
         <table class="w-full text-left text-sm mb-6 border-collapse">
           <thead>
@@ -1427,7 +1441,7 @@
     </div>
 
 
-    <!-- v1.60 ITEM MASTER SAFE EDIT -->
+    <!-- v1.61.1 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -1681,8 +1695,8 @@
           <input type="text" id="bAccountTitle" required placeholder="e.g. ZB & SONS" class="w-full border rounded-lg p-2.5 outline-none" />
         </div>
         <div>
-          <label class="block font-medium text-slate-700 mb-1">Account Number / IBAN *</label>
-          <input type="text" id="bAccountNumber" required placeholder="PK00MEZN00000000000000" class="w-full border rounded-lg p-2.5 font-mono text-xs outline-none" />
+          <label class="block font-medium text-slate-700 mb-1">Account Number / IBAN <span class="text-slate-400">(Optional)</span></label>
+          <input type="text" id="bAccountNumber" placeholder="Leave blank if not available" class="w-full border rounded-lg p-2.5 font-mono text-xs outline-none" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -1691,7 +1705,7 @@
           </div>
           <div>
             <label class="block font-medium text-slate-700 mb-1">Opening Balance (PKR)</label>
-            <input type="number" id="bOpeningBal" value="0.00" step="0.01" class="w-full border rounded-lg p-2.5 font-mono text-xs outline-none" />
+            <input type="number" id="bOpeningBal" value="0.00" step="0.01" class="w-full border rounded-lg p-2.5 font-mono text-xs outline-none" /><p class="text-[10px] text-amber-700 mt-1">For a partner funding account, normally keep this 0. Investor opening balance belongs in Partner Fund Control.</p>
           </div>
         </div>
         <div class="flex justify-end gap-2 pt-3 border-t">
@@ -2017,7 +2031,7 @@
       body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td class="p-3 font-mono text-xs">${escapeHtml(r.voucher||'-')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.reference_number||r.narration||'-')}</td><td class="p-3">${r.mapping_type?`<span class="text-emerald-700 font-bold">${escapeHtml(r.mapping_type==='LC'?'LC / Cargo Payment':r.mapping_type==='GENERAL'?'General Supplier Payment':'Import / Other Charge')}</span>${r.cargo_ref?`<div class="text-xs font-bold">${escapeHtml(r.cargo_ref)}</div>`:''}${r.mapped_by_name?`<div class="text-[10px] text-slate-400 mt-1">Resolved by ${escapeHtml(r.mapped_by_name)}${r.mapped_at?' · '+escapeHtml(new Date(r.mapped_at).toLocaleString()):''}</div>`:''}`:'<span class="text-amber-700 font-bold">Pending</span>'}</td><td class="p-3 text-right"><button onclick="editPaymentMappingV153('${r.journal_entry_id}')" class="text-blue-700 font-bold text-xs">${r.mapping_type?'Change':'Map Payment'}</button></td></tr>`).join('')||`<tr><td colspan="7" class="p-8 text-center text-slate-400">${paymentRepairTabV154==='PENDING'?'No pending issues. All clear.':'No resolved history yet.'}</td></tr>`;
     }
 
-    // v1.60 Customer receipt attention: known real invoice requiring staff action.
+    // v1.61.1 Customer receipt attention: known real invoice requiring staff action.
     let customerReceiptIssueV156=null;
     function renderResolvedHistoryV1571(){
       const body=document.getElementById('acResolvedBodyV1571');if(!body)return;
@@ -2137,7 +2151,7 @@
     document.addEventListener('click',e=>{if(e.target?.id==='paymentRepairV153Modal')closePaymentRepairV153();});
 
 
-    // v1.60 — Partner Fund Source Reconciliation
+    // v1.61.1 — Partner Fund Source Reconciliation
     let partnerFundRowsV159=[];
     async function openPartnerFundReconV159(){
       const m=document.getElementById('partnerFundReconV159Modal');m.classList.remove('hidden');m.classList.add('flex');
@@ -2283,7 +2297,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.60',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.61.1',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -2308,7 +2322,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.60'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.61.1'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2641,7 +2655,7 @@
     }
 
 
-    // v1.60 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
+    // v1.61.1 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
     function closeLcPaymentHistory(){
       const m=document.getElementById('lcPaymentHistoryModal');
       if(m){m.style.display='none';m.classList.add('hidden');m.classList.remove('flex');}
@@ -2930,7 +2944,7 @@
       const bankPayload = {
         bank_name: document.getElementById('bBankName').value.trim(),
         account_title: document.getElementById('bAccountTitle').value.trim(),
-        account_number: document.getElementById('bAccountNumber').value.trim(),
+        account_number: document.getElementById('bAccountNumber').value.trim() || null,
         branch_name: document.getElementById('bBranch').value.trim(),
         opening_balance: parseFloat(document.getElementById('bOpeningBal').value) || 0
       };
@@ -2973,6 +2987,7 @@
       const tbody=document.getElementById('bankAccountsTableBody');tbody.innerHTML='';
       if(!liveBanks.length)tbody.innerHTML='<tr><td colspan="5" class="py-8 text-center text-slate-400">No banks found.</td></tr>';
       else liveBanks.forEach(b=>{tbody.innerHTML+=`<tr class="hover:bg-slate-50"><td class="py-3 px-4 font-bold">${escapeHtml(b.bank_name||'')}</td><td class="py-3 px-4">${escapeHtml(b.account_title||'')}</td><td class="py-3 px-4 font-mono text-slate-600">${escapeHtml(b.account_number||'')}</td><td class="py-3 px-4 text-slate-500">${escapeHtml(b.branch_name||'-')}</td><td class="py-3 px-4 text-right"><div class="font-mono font-bold">${money(b.current_balance||0)}</div><div class="text-[10px] text-slate-400">Opening ${money(b.opening_balance||0)}</div></td></tr>`;});
+      populateCashSaleDestinationsV161();
     }
 
     // DASHBOARD & INVESTORS
@@ -4232,7 +4247,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.60 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
+      // v1.61.1 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -4970,6 +4985,20 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast(err.message||'Invoice could not be cancelled.','error');}
     }
 
+
+    function salesPaymentTypeChangedV161(){
+      const isCash=(document.getElementById('invPaymentType')?.value||'CREDIT')==='CASH';
+      const box=document.getElementById('cashSaleDestinationV161');
+      if(box)box.classList.toggle('hidden',!isCash);
+      if(isCash)populateCashSaleDestinationsV161();
+    }
+    function populateCashSaleDestinationsV161(){
+      const sel=document.getElementById('invCashDestinationV161');if(!sel)return;
+      const keep=sel.value||'CASH';
+      sel.innerHTML='<option value="CASH">Cash on Hand</option>'+(liveBanks||[]).map(b=>`<option value="BANK:${b.id}">${escapeHtml(b.bank_name||'Bank')} · ${escapeHtml(b.account_title||b.account_number||'')}</option>`).join('');
+      if([...sel.options].some(o=>o.value===keep))sel.value=keep;
+    }
+
     async function postSalesInvoice(){
       if(editingSalesInvoiceId) return saveSafeSalesEdit();
       const partyId=document.getElementById('invParty').value;
@@ -4977,6 +5006,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       const invoiceDate=document.getElementById('invDate').value;
       const lcCargoId=document.getElementById('invLc').value||null;
       const paymentType=document.getElementById('invPaymentType')?.value||'CREDIT';
+      const cashDestination=paymentType==='CASH'?(document.getElementById('invCashDestinationV161')?.value||'CASH'):null;
       const selectedCargo=lcCargoId?(liveLcs||[]).find(x=>String(x.id)===String(lcCargoId)):null;
       const lc=selectedCargo?.cargo_ref||null;
       if(!partyId||!invoiceDate){showToast('Customer and date are required.','error');return;}
@@ -5030,7 +5060,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
           grand_total:grand,
           paid_amount:0,
           status:'UNPAID',
-          notes:paymentType==='CASH'?'Cash Sale — automatic receipt through Cash on Hand':'Credit Sale — posted through ZB & SONS ERP automated sales workflow',
+          notes:paymentType==='CASH'?`Cash Sale — automatic receipt through ${cashDestination==='CASH'?'Cash on Hand':((liveBanks||[]).find(b=>'BANK:'+b.id===cashDestination)?.bank_name||'selected bank')}`:'Credit Sale — posted through ZB & SONS ERP automated sales workflow',
           lc_number:lc
         }]).select('id').single();
         if(e1) throw e1;
@@ -5107,7 +5137,13 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         if(ve||!valid) throw new Error(ve?.message||'Sales accounting entry is not balanced.');
 
         if(paymentType==='CASH'){
-          const {error:cashErr}=await db.rpc('record_invoice_cash_receipt_v156',{p_invoice_id:invoiceId});
+          const isBank=String(cashDestination||'').startsWith('BANK:');
+          const bankId=isBank?String(cashDestination).slice(5):null;
+          const {error:cashErr}=await db.rpc('record_invoice_cash_receipt_v161',{
+            p_invoice_id:invoiceId,
+            p_destination_type:isBank?'BANK':'CASH',
+            p_bank_account_id:bankId
+          });
           if(cashErr)throw new Error('Cash Sale receipt could not be posted: '+cashErr.message);
         }
 
@@ -5117,7 +5153,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         document.getElementById('invoiceDiscount').value=0;
         invoiceCharges=[];renderInvoiceCharges();
         document.getElementById('invLc').value='';
-        if(document.getElementById('invPaymentType'))document.getElementById('invPaymentType').value='CREDIT';
+        if(document.getElementById('invPaymentType'))document.getElementById('invPaymentType').value='CREDIT'; salesPaymentTypeChangedV161();
         document.getElementById('invNo').value=nextInvoiceNumber();
         addInvoiceRow();
         await fetchProducts();
@@ -5289,7 +5325,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.60: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.61.1: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -5362,7 +5398,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
 <div id="warehouseModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[110] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"><div class="p-5 border-b flex items-center justify-between"><div><h3 id="warehouseModalTitle" class="text-xl font-black">Add Warehouse</h3><p class="text-xs text-slate-400 mt-1">Create or update a stock location.</p></div><button type="button" onclick="closeWarehouseModal()" class="text-slate-400 text-2xl">&times;</button></div><form onsubmit="saveWarehouse(event)" class="p-5 space-y-4"><input type="hidden" id="warehouseEditId"><div><label class="block text-xs font-bold mb-1">Warehouse Name *</label><input id="warehouseName" required class="w-full border rounded-lg p-2.5" placeholder="Main Godown"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Warehouse Code</label><input id="warehouseCode" class="w-full border rounded-lg p-2.5" placeholder="WH-01"></div><div><label class="block text-xs font-bold mb-1">Location</label><input id="warehouseLocation" class="w-full border rounded-lg p-2.5" placeholder="Karachi"></div></div><div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="warehouseNotes" rows="3" class="w-full border rounded-lg p-2.5"></textarea></div><label class="flex items-center gap-2 text-sm font-semibold"><input id="warehouseActive" type="checkbox" checked> Active Warehouse</label><div class="flex justify-end gap-2"><button type="button" onclick="closeWarehouseModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Warehouse</button></div></form></div></div>
 
-<!-- v1.60 LC PAYMENT HISTORY -->
+<!-- v1.61.1 LC PAYMENT HISTORY -->
 <div id="lcPaymentHistoryModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[125] p-4">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] overflow-hidden flex flex-col">
     <div class="p-5 border-b flex items-start justify-between gap-4">
@@ -5487,10 +5523,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.60 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.61.1 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.60</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.61.1</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -5602,7 +5638,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.60: this MUST be a normal inline script; inline code in a script tag
+  // v1.61.1: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     await initERPAuth();
