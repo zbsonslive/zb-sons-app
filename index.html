@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZB & SONS ERP v1.57.2 | Secure Business ERP (Powered By: XaviSoft)</title>
+  <title>ZB & SONS ERP v1.60 | Secure Business ERP (Powered By: XaviSoft)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,7 +486,7 @@
       <div class="text-center mb-6"><div class="text-3xl font-black"><span class="text-orange-600">ZB</span> & SONS</div><p class="text-xs font-bold tracking-[.2em] text-slate-400 mt-1">SECURE ERP LOGIN</p>
         <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200">
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.57.2</span>
+          <span class="text-[11px] font-black text-slate-600 tracking-wide">ERP BUILD v1.60</span>
         </div></div>
       <div id="authMessage" class="hidden mb-3 p-3 rounded-xl text-sm"></div>
       <label class="text-xs font-bold text-slate-500">EMAIL</label><input id="loginEmail" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" class="mt-1 mb-3 w-full border rounded-xl px-4 py-3" placeholder="you@company.com">
@@ -599,7 +599,7 @@
 
     <!-- VIEW 1: EXECUTIVE COMMAND CENTER -->
     <div id="view-home" class="page-view max-w-7xl">
-      <!-- v1.57.2 CLEAN DASHBOARD HEADER -->
+      <!-- v1.60 CLEAN DASHBOARD HEADER -->
       <div class="dashboard-header-v1544">
         <div class="dashboard-title-v1544">
           <p class="text-xs font-bold uppercase tracking-[.18em] text-brand-600">Owner Command Center</p>
@@ -780,8 +780,8 @@
     <div id="view-investors" class="page-view hidden max-w-6xl">
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Investors & Cargo Profit Distribution</h1>
-          <p class="text-xs text-slate-500 mt-1">Manage investment partners and profit sharing</p>
+          <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Partner Fund Control</h1>
+          <p class="text-xs text-slate-500 mt-1">Manage partner balances, linked funding accounts, cargo allocation and direct utilization</p>
         </div>
         <div class="flex gap-2">
           <button onclick="openInvestorModal()" class="bg-slate-900 hover:bg-black text-white font-medium py-2 px-3 rounded-lg text-xs">+ Add Investor</button>
@@ -803,14 +803,16 @@
             <thead class="bg-slate-50">
               <tr>
                 <th class="p-3 text-left">Investor Name</th>
+                <th class="p-3 text-left">Linked Funding Account(s)</th>
                 <th class="p-3 text-right">Opening Balance</th>
-                <th class="p-3 text-right">Cargo Investment</th>
+                <th class="p-3 text-right">Cargo Allocation</th>
+                <th class="p-3 text-right">Direct Utilization</th>
                 <th class="p-3 text-right">Current Balance</th>
                 <th class="p-3 text-right">Action</th>
               </tr>
             </thead>
             <tbody id="investorMasterListBody">
-              <tr><td colspan="5" class="p-8 text-center text-slate-400">Loading investors...</td></tr>
+              <tr><td colspan="7" class="p-8 text-center text-slate-400">Loading partner fund control...</td></tr>
             </tbody>
           </table>
         </div>
@@ -866,6 +868,7 @@
           <button onclick="openMoneyModal('PAYMENT')" class="px-4 py-2.5 bg-slate-900 hover:bg-black text-white rounded-xl text-sm font-bold">+ Make Payment</button>
           <button onclick="openPayableSettlementModal()" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold">+ Settle Payable</button>
           <button onclick="openTransferModal()" class="px-4 py-2.5 bg-white border border-slate-300 hover:bg-slate-50 rounded-xl text-sm font-bold">Cash ↔ Bank Transfer</button>
+          <button onclick="openPartnerFundReconV159()" class="px-4 py-2.5 bg-indigo-50 border border-indigo-200 text-indigo-800 hover:bg-indigo-100 rounded-xl text-sm font-bold">Partner Fund Reconciliation</button>
         </div>
       </div>
       <div class="grid md:grid-cols-3 gap-4 mb-5">
@@ -1186,12 +1189,12 @@
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Database</div><div id="health146Db" class="font-bold text-sm mt-1">Checking...</div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Current User</div><div id="health146User" class="font-bold text-sm mt-1">Checking...</div><div id="health146Role" class="text-[10px] text-slate-400"></div></div>
 <div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Last Backup</div><div id="health146Backup" class="font-bold text-sm mt-1">Not recorded</div></div>
-<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.57.2</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
+<div class="bg-white border rounded-xl p-3"><div class="text-[10px] uppercase text-slate-400 font-bold">Build</div><div class="font-bold text-sm mt-1">v1.60</div><div class="text-[10px] text-slate-400">Powered By: XaviSoft</div></div>
 </div></div>
         <div class="grid md:grid-cols-4 gap-3 p-5 border-b"><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Checks</span><div id="health144Checks" class="text-xl font-black mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Passed</span><div id="health144Passed" class="text-xl font-black text-emerald-700 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Warnings</span><div id="health144Warnings" class="text-xl font-black text-amber-600 mt-1">0</div></div><div class="bg-slate-50 rounded-xl p-3"><span class="text-xs text-slate-400">Critical</span><div id="health144Critical" class="text-xl font-black text-red-600 mt-1">0</div></div></div>
         <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Status</th><th class="p-3 text-left">Check</th><th class="p-3 text-left">Result</th><th class="p-3 text-right">Count</th></tr></thead><tbody id="health144Body"></tbody></table></div>
       </div>
-      <div class="mt-4 text-xs text-slate-400">v1.57.2 hardening: integrity audit added without creating another daily-use module.</div>
+      <div class="mt-4 text-xs text-slate-400">v1.60 hardening: integrity audit added without creating another daily-use module.</div>
     </div>
 
     <div id="view-audit" class="page-view hidden max-w-7xl">
@@ -1424,7 +1427,7 @@
     </div>
 
 
-    <!-- v1.57.2 ITEM MASTER SAFE EDIT -->
+    <!-- v1.60 ITEM MASTER SAFE EDIT -->
     <div id="itemEditModalV150" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[120] p-4">
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
         <div class="p-5 border-b flex items-center justify-between">
@@ -2014,7 +2017,7 @@
       body.innerHTML=rows.map(r=>`<tr class="border-t hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td><td class="p-3 font-mono text-xs">${escapeHtml(r.voucher||'-')}</td><td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-xs">${escapeHtml(r.reference_number||r.narration||'-')}</td><td class="p-3">${r.mapping_type?`<span class="text-emerald-700 font-bold">${escapeHtml(r.mapping_type==='LC'?'LC / Cargo Payment':r.mapping_type==='GENERAL'?'General Supplier Payment':'Import / Other Charge')}</span>${r.cargo_ref?`<div class="text-xs font-bold">${escapeHtml(r.cargo_ref)}</div>`:''}${r.mapped_by_name?`<div class="text-[10px] text-slate-400 mt-1">Resolved by ${escapeHtml(r.mapped_by_name)}${r.mapped_at?' · '+escapeHtml(new Date(r.mapped_at).toLocaleString()):''}</div>`:''}`:'<span class="text-amber-700 font-bold">Pending</span>'}</td><td class="p-3 text-right"><button onclick="editPaymentMappingV153('${r.journal_entry_id}')" class="text-blue-700 font-bold text-xs">${r.mapping_type?'Change':'Map Payment'}</button></td></tr>`).join('')||`<tr><td colspan="7" class="p-8 text-center text-slate-400">${paymentRepairTabV154==='PENDING'?'No pending issues. All clear.':'No resolved history yet.'}</td></tr>`;
     }
 
-    // v1.57.2 Customer receipt attention: known real invoice requiring staff action.
+    // v1.60 Customer receipt attention: known real invoice requiring staff action.
     let customerReceiptIssueV156=null;
     function renderResolvedHistoryV1571(){
       const body=document.getElementById('acResolvedBodyV1571');if(!body)return;
@@ -2133,6 +2136,78 @@
     }
     document.addEventListener('click',e=>{if(e.target?.id==='paymentRepairV153Modal')closePaymentRepairV153();});
 
+
+    // v1.60 — Partner Fund Source Reconciliation
+    let partnerFundRowsV159=[];
+    async function openPartnerFundReconV159(){
+      const m=document.getElementById('partnerFundReconV159Modal');m.classList.remove('hidden');m.classList.add('flex');
+      await loadPartnerFundReconV159();
+    }
+    function closePartnerFundReconV159(){const m=document.getElementById('partnerFundReconV159Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    async function loadPartnerFundReconV159(){
+      const body=document.getElementById('pfr159Body');body.innerHTML='<tr><td colspan="8" class="p-8 text-center text-slate-400">Loading funding-source reconciliation...</td></tr>';
+      const [{data,error},{data:investors},{data:banks}]=await Promise.all([
+        db.rpc('partner_fund_reconciliation_list_v159'),
+        db.from('investors').select('id,name,is_active').eq('is_active',true).order('name'),
+        db.from('bank_accounts').select('id,bank_name,account_title').order('bank_name')
+      ]);
+      if(error){body.innerHTML=`<tr><td colspan="8" class="p-8 text-center text-red-600">${escapeHtml(error.message)}</td></tr>`;return;}
+      partnerFundRowsV159=data||[];
+      window.partnerFundInvestorsV159=investors||[];window.partnerFundBanksV159=banks||[];
+      const pending=partnerFundRowsV159.filter(r=>!r.source_type).length;
+      document.getElementById('pfr159Pending').textContent=pending;
+      document.getElementById('pfr159Resolved').textContent=partnerFundRowsV159.length-pending;
+      body.innerHTML=partnerFundRowsV159.map(r=>{
+        const src=r.source_type==='PARTNER_DIRECT'?`Partner · ${r.investor_name||'-'}`:r.source_type==='ZB_BANK'?`ZB Bank · ${r.bank_name||'-'}`:r.source_type==='CASH'?'Cash on Hand':'Pending';
+        return `<tr class="border-t hover:bg-slate-50">
+          <td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.entry_date))}</td>
+          <td class="p-3 font-mono text-xs">${escapeHtml(r.voucher||'-')}</td>
+          <td class="p-3 font-bold">${escapeHtml(r.supplier_name||'-')}</td>
+          <td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td>
+          <td class="p-3 text-xs"><div>${escapeHtml(r.reference_number||'-')}</div><div class="text-slate-400 mt-1">${escapeHtml(r.narration||'')}</div></td>
+          <td class="p-3 text-xs font-bold">${escapeHtml(r.lc_cargo||'-')}</td>
+          <td class="p-3"><div class="${r.source_type?'text-emerald-700':'text-amber-700'} font-bold">${escapeHtml(src)}</div><div class="text-[10px] text-slate-400 mt-1">${escapeHtml(r.current_source_account||'')}</div></td>
+          <td class="p-3 text-right"><button onclick="editPartnerFundReconV159('${r.journal_entry_id}')" class="text-indigo-700 font-black text-xs">${r.source_type?'Change':'Reconcile'}</button></td>
+        </tr>`;
+      }).join('')||'<tr><td colspan="8" class="p-8 text-center text-slate-400">No legacy funding-source issues found.</td></tr>';
+    }
+    function editPartnerFundReconV159(jid){
+      const r=partnerFundRowsV159.find(x=>String(x.journal_entry_id)===String(jid));if(!r)return;
+      document.getElementById('pfr159Journal').value=jid;
+      document.getElementById('pfr159Info').textContent=`${r.voucher} · ${r.supplier_name} · ${money(r.amount)}${r.lc_cargo?' · '+r.lc_cargo:''}`;
+      const type=document.getElementById('pfr159Type');type.value=r.source_type||'PARTNER_DIRECT';
+      const inv=document.getElementById('pfr159Investor');inv.innerHTML='<option value="">Select Partner / Investor</option>'+(window.partnerFundInvestorsV159||[]).map(x=>`<option value="${x.id}">${escapeHtml(x.name)}</option>`).join('');
+      const bank=document.getElementById('pfr159Bank');bank.innerHTML='<option value="">Select ZB Bank</option>'+(window.partnerFundBanksV159||[]).map(x=>`<option value="${x.id}">${escapeHtml([x.bank_name,x.account_title].filter(Boolean).join(' · '))}</option>`).join('');
+      if(r.investor_id)inv.value=r.investor_id;if(r.bank_account_id)bank.value=r.bank_account_id;
+      partnerFundTypeChangedV159();document.getElementById('pfr159Editor').classList.remove('hidden');
+    }
+    function partnerFundTypeChangedV159(){
+      const t=document.getElementById('pfr159Type').value;
+      document.getElementById('pfr159InvestorWrap').classList.toggle('hidden',t!=='PARTNER_DIRECT');
+      document.getElementById('pfr159BankWrap').classList.toggle('hidden',t!=='ZB_BANK');
+      const note=document.getElementById('pfr159AccountingNote');
+      note.textContent=t==='PARTNER_DIRECT'?'Accounting: Dr Supplier Payable / Cr Investor Payable (2200). ZB Bank will not be affected.':t==='ZB_BANK'?'Accounting remains Dr Supplier Payable / Cr Bank (1200), tagged to the selected bank.':'Accounting: Dr Supplier Payable / Cr Cash on Hand (1100).';
+    }
+    async function savePartnerFundReconV159(){
+      const jid=document.getElementById('pfr159Journal').value,type=document.getElementById('pfr159Type').value;
+      const investor=type==='PARTNER_DIRECT'?(document.getElementById('pfr159Investor').value||null):null;
+      const bank=type==='ZB_BANK'?(document.getElementById('pfr159Bank').value||null):null;
+      if(type==='PARTNER_DIRECT'&&!investor){showToast('Select the Partner / Investor who paid directly.','error');return;}
+      if(type==='ZB_BANK'&&!bank){showToast('Select the actual ZB bank account.','error');return;}
+      const r=partnerFundRowsV159.find(x=>String(x.journal_entry_id)===String(jid));
+      if(!confirm(`Reconcile ${r?.voucher||'this payment'} as ${type==='PARTNER_DIRECT'?'Partner Direct Payment':type==='ZB_BANK'?'ZB Bank Payment':'Cash Payment'}?\n\nSupplier payable amount and LC mapping will remain unchanged.`))return;
+      const btn=document.getElementById('pfr159Save');btn.disabled=true;btn.textContent='Saving...';
+      try{
+        const {data,error}=await db.rpc('save_partner_fund_source_v159',{p_journal_entry_id:jid,p_source_type:type,p_investor_id:investor,p_bank_account_id:bank});
+        if(error)throw error;
+        showToast(data||'Funding source reconciled.');
+        document.getElementById('pfr159Editor').classList.add('hidden');
+        await loadPartnerFundReconV159();await loadTrialBalance();await fetchBanks();refreshDashboardMetrics();
+      }catch(err){showToast(err.message||'Reconciliation failed.','error');}
+      finally{btn.disabled=false;btn.textContent='Save Reconciliation';}
+    }
+    document.addEventListener('click',e=>{if(e.target?.id==='partnerFundReconV159Modal')closePartnerFundReconV159();});
+
     function openNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.remove('hidden');m.classList.add('flex');loadNotificationCenterV148();}
     function closeNotificationCenterV148(){const m=document.getElementById('notificationCenterV148Modal');m.classList.add('hidden');m.classList.remove('flex');}
     function notificationIconV148(type){return ({RECEIVABLE:'Customer',PAYABLE:'Supplier',CARGO:'LC / Cargo',STOCK:'Inventory',BANK:'Bank',SYSTEM:'System',BACKUP:'Backup'})[type]||'Attention';}
@@ -2208,7 +2283,7 @@
     async function downloadFullBackupV145(){
       const btn=document.getElementById('bk145FullBtn');btn.disabled=true;btn.textContent='Preparing Backup...';
       try{
-        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.57.2',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
+        const payload={backup_format:'ZB_SONS_ERP_JSON_V1',powered_by:'XaviSoft',erp_version:'v1.60',created_at:new Date().toISOString(),note:'Read-only business data export. Restore is intentionally not automated.',record_counts:{},tables:{}};
         let total=0;
         for(const [area,table] of backupTablesV145){try{const rows=await fetchAllRowsV145(table);payload.tables[table]=rows;payload.record_counts[table]=rows.length;total+=rows.length;}catch(err){payload.record_counts[table]={error:err.message};}}
         const stamp=new Date().toISOString().replace(/[:.]/g,'-');downloadBlobV145(`ZB_SONS_ERP_FULL_BACKUP_${stamp}.json`,JSON.stringify(payload,null,2),'application/json;charset=utf-8');
@@ -2233,7 +2308,7 @@
             XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));exported++;
           }catch(err){console.warn('Excel export skipped',table,err);}
         }
-        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.57.2'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
+        const summary=XLSX.utils.aoa_to_sheet([['ZB & SONS ERP Backup / Export'],['Powered By','XaviSoft'],['ERP Version','v1.60'],['Created At',new Date().toLocaleString()],['Sheets Exported',exported],['Total Records',total],[],['Note','Read-only Excel export. This file is not an automated restore package.']]);
         XLSX.utils.book_append_sheet(wb,summary,'Export Summary');
         XLSX.writeFile(wb,`ZB_SONS_ERP_EXCEL_EXPORT_${new Date().toISOString().slice(0,10)}.xlsx`);
         showToast(`Excel workbook downloaded: ${exported} sheets, ${total.toLocaleString()} records.`);
@@ -2566,12 +2641,62 @@
     }
 
 
-    // v1.57.2 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
+    // v1.60 — Unified LC payment history (direct LC payments + repaired legacy LC mappings)
     function closeLcPaymentHistory(){
       const m=document.getElementById('lcPaymentHistoryModal');
       if(m){m.style.display='none';m.classList.add('hidden');m.classList.remove('flex');}
     }
+    let lc360CurrentCargoId=null;
+    function lc360SetTab(active){
+      const map={payments:'lc360PaymentsBtn',sales:'lc360SalesBtn',customers:'lc360CustomerPaymentsBtn'};
+      Object.entries(map).forEach(([k,id])=>{const b=document.getElementById(id);if(!b)return;b.className=k===active?'px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold':'px-3 py-1.5 rounded-lg border bg-white text-xs font-bold';});
+    }
+    function lc360Header(cols){
+      const head=document.querySelector('#lcPaymentHistoryModal thead tr');
+      if(head)head.innerHTML=cols.map(c=>`<th class="p-3 ${c.right?'text-right':'text-left'}">${escapeHtml(c.label)}</th>`).join('');
+    }
+    async function openLcSalesHistoryV158(cargoId){
+      lc360CurrentCargoId=cargoId;lc360SetTab('sales');
+      const cargo=liveLcs.find(v=>String(v.id)===String(cargoId));if(!cargo)return;
+      document.getElementById('lcPaymentHistoryTitle').textContent=(cargo.cargo_ref||'LC / Cargo')+' · Sales History';
+      document.getElementById('lcHistGoods').parentElement.querySelector('p').textContent='GOODS VALUE';
+      document.getElementById('lcHistPaid').parentElement.querySelector('p').textContent='TOTAL SALES';
+      document.getElementById('lcHistBalance').parentElement.querySelector('p').textContent='SALE INVOICES';
+      lc360Header([{label:'Date'},{label:'Invoice'},{label:'Customer'},{label:'Status'},{label:'Qty',right:true},{label:'Sale Amount',right:true}]);
+      const body=document.getElementById('lcPaymentHistoryBody');body.innerHTML='<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading LC-wise sales...</td></tr>';
+      try{
+        const {data,error}=await db.rpc('lc_sales_history_v158',{p_cargo_id:cargoId});if(error)throw error;
+        const rows=data||[],total=rows.reduce((a,r)=>a+Number(r.sale_amount||0),0);
+        document.getElementById('lcHistGoods').parentElement.querySelector('p').textContent='GOODS VALUE';
+      document.getElementById('lcHistPaid').parentElement.querySelector('p').textContent='TOTAL PAID';
+      document.getElementById('lcHistBalance').parentElement.querySelector('p').textContent='BALANCE';
+      document.getElementById('lcHistGoods').textContent=money(cargo.goods_value||0);
+        document.getElementById('lcHistPaid').textContent=money(total);
+        document.getElementById('lcHistBalance').textContent=String(rows.length);
+        body.innerHTML=rows.map(r=>`<tr class="border-b hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(r.invoice_date||'-')}</td><td class="p-3 font-semibold">${escapeHtml(r.invoice_number||'-')}</td><td class="p-3">${escapeHtml(r.customer_name||'-')}</td><td class="p-3">${escapeHtml(r.invoice_status||'-')}</td><td class="p-3 text-right font-mono">${Number(r.quantity||0).toLocaleString()}</td><td class="p-3 text-right font-mono font-bold">${money(r.sale_amount)}</td></tr>`).join('')||'<tr><td colspan="6" class="p-8 text-center text-slate-400">No sales found against this LC.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-600">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
+    async function openLcCustomerPaymentHistoryV158(cargoId){
+      lc360CurrentCargoId=cargoId;lc360SetTab('customers');
+      const cargo=liveLcs.find(v=>String(v.id)===String(cargoId));if(!cargo)return;
+      document.getElementById('lcPaymentHistoryTitle').textContent=(cargo.cargo_ref||'LC / Cargo')+' · Customer Payments';
+      document.getElementById('lcHistGoods').parentElement.querySelector('p').textContent='LC SALES';
+      document.getElementById('lcHistPaid').parentElement.querySelector('p').textContent='CUSTOMER RECEIPTS';
+      document.getElementById('lcHistBalance').parentElement.querySelector('p').textContent='SALE OUTSTANDING';
+      lc360Header([{label:'Date'},{label:'Receipt Voucher'},{label:'Customer'},{label:'Against Invoice'},{label:'Paid Through'},{label:'Amount',right:true}]);
+      const body=document.getElementById('lcPaymentHistoryBody');body.innerHTML='<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading LC-wise customer payments...</td></tr>';
+      try{
+        const {data,error}=await db.rpc('lc_customer_payment_history_v158',{p_cargo_id:cargoId});if(error)throw error;
+        const rows=data||[],received=rows.reduce((a,r)=>a+Number(r.amount||0),0),sales=rows.length?Number(rows[0].lc_sales_total||0):0;
+        document.getElementById('lcHistGoods').textContent=money(sales);
+        document.getElementById('lcHistPaid').textContent=money(received);
+        document.getElementById('lcHistBalance').textContent=money(Math.max(0,sales-received));
+        body.innerHTML=rows.map(r=>`<tr class="border-b hover:bg-slate-50"><td class="p-3 whitespace-nowrap">${escapeHtml(r.payment_date||'-')}</td><td class="p-3 font-semibold whitespace-nowrap">${escapeHtml(r.receipt_voucher||'-')}</td><td class="p-3">${escapeHtml(r.customer_name||'-')}</td><td class="p-3">${escapeHtml(r.invoice_number||'-')}</td><td class="p-3">${escapeHtml(r.paid_through||'-')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td></tr>`).join('')||'<tr><td colspan="6" class="p-8 text-center text-slate-400">No customer payments found against LC-linked sales.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-600">${escapeHtml(err.message||String(err))}</td></tr>`;}
+    }
     async function openLcPaymentHistory(cargoId){
+      lc360CurrentCargoId=cargoId;lc360SetTab('payments');
+      lc360Header([{label:'Date'},{label:'Voucher'},{label:'Reference'},{label:'Paid Through'},{label:'Source'},{label:'Amount',right:true}]);
       const cargo=liveLcs.find(v=>String(v.id)===String(cargoId));
       if(!cargo){showToast('LC / Cargo not found.','error');return;}
       const supplier=liveParties.find(p=>String(p.id)===String(cargo.supplier_id))?.name||'Supplier';
@@ -2601,6 +2726,9 @@
         document.getElementById('lcPaymentHistoryBody').innerHTML=`<tr><td colspan="6" class="p-8 text-center text-red-600"><b>Payment history could not load.</b><br><span class="text-xs">${escapeHtml(err.message||String(err))}</span></td></tr>`;
       }
     }
+    document.getElementById('lc360PaymentsBtn')?.addEventListener('click',()=>lc360CurrentCargoId&&openLcPaymentHistory(lc360CurrentCargoId));
+    document.getElementById('lc360SalesBtn')?.addEventListener('click',()=>lc360CurrentCargoId&&openLcSalesHistoryV158(lc360CurrentCargoId));
+    document.getElementById('lc360CustomerPaymentsBtn')?.addEventListener('click',()=>lc360CurrentCargoId&&openLcCustomerPaymentHistoryV158(lc360CurrentCargoId));
     document.addEventListener('click',e=>{const b=e.target.closest?.('[data-lc-payment-id]');if(b){e.preventDefault();e.stopPropagation();openLcPaymentHistory(b.dataset.lcPaymentId);return;}if(e.target?.id==='lcPaymentHistoryModal')closeLcPaymentHistory();});
 
     let lcPayOutstanding=0;
@@ -2995,35 +3123,62 @@
     }
 
 
+    let investorFundRowsV160=[];
     async function loadAllInvestorsPanel(){
       const body=document.getElementById('investorMasterListBody'); if(!body)return;
       try{
-        const [{data:investors,error:ie},{data:ci,error:ce},{data:po,error:pe}]=await Promise.all([
-          db.from('investors').select('*').order('name',{ascending:true}),
-          db.from('cargo_investments').select('investor_id,amount'),
-          db.from('investor_payouts').select('investor_id,amount')
-        ]);
-        if(ie)throw ie;
-        const invested={}, paid={};
-        (ci||[]).forEach(x=>invested[x.investor_id]=(invested[x.investor_id]||0)+Number(x.amount||0));
-        (po||[]).forEach(x=>paid[x.investor_id]=(paid[x.investor_id]||0)+Number(x.amount||0));
-        body.innerHTML=(investors||[]).map(i=>{
-          const opening=Number(i.opening_balance||0), capital=Number(invested[i.id]||0), payouts=Number(paid[i.id]||0);
-          const current=opening+capital-payouts;
-          const safeName=escapeHtml(i.name||'').replace(/'/g,"&#39;");
-          return `<tr class="border-t">
-            <td class="p-3 font-semibold">${escapeHtml(i.name||'')}</td>
-            <td class="p-3 text-right font-mono">${money(opening)}</td>
-            <td class="p-3 text-right font-mono">${money(capital)}</td>
-            <td class="p-3 text-right font-bold font-mono">${money(current)}</td>
+        const {data,error}=await db.rpc('investor_fund_control_v160');
+        if(error)throw error;
+        investorFundRowsV160=data||[];
+        body.innerHTML=investorFundRowsV160.map(i=>{
+          const safeName=escapeHtml(i.investor_name||'').replace(/'/g,"&#39;");
+          const banks=i.linked_banks||'Not linked';
+          return `<tr class="border-t hover:bg-slate-50">
+            <td class="p-3 font-semibold">${escapeHtml(i.investor_name||'')}</td>
+            <td class="p-3"><div class="${i.linked_banks?'text-slate-700':'text-amber-600'} text-xs font-semibold">${escapeHtml(banks)}</div><button onclick="openInvestorBankLinkV160('${i.investor_id}')" class="text-indigo-600 font-bold text-[11px] mt-1">${i.linked_banks?'Change Accounts':'Link Account'}</button></td>
+            <td class="p-3 text-right font-mono">${money(Number(i.opening_balance||0))}</td>
+            <td class="p-3 text-right font-mono">${money(Number(i.cargo_investment||0))}</td>
+            <td class="p-3 text-right font-mono text-indigo-700 font-bold">${money(Number(i.direct_utilization||0))}</td>
+            <td class="p-3 text-right font-bold font-mono">${money(Number(i.current_balance||0))}</td>
             <td class="p-3 text-right whitespace-nowrap">
-              <button onclick="setInvestorOpening('${i.id}','${safeName}',${opening})" class="text-violet-600 font-bold text-xs mr-3">Opening</button>
-              <button onclick="openInvestorEdit('${i.id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button>
-              <button onclick="deleteInvestorSafe('${i.id}','${safeName}')" class="text-red-600 font-bold text-xs">Delete</button>
+              <button onclick="setInvestorOpening('${i.investor_id}','${safeName}',${Number(i.opening_balance||0)})" class="text-violet-600 font-bold text-xs mr-3">Opening</button>
+              <button onclick="openInvestorEdit('${i.investor_id}')" class="text-blue-600 font-bold text-xs mr-3">Edit</button>
+              <button onclick="deleteInvestorSafe('${i.investor_id}','${safeName}')" class="text-red-600 font-bold text-xs">Delete</button>
             </td>
           </tr>`;
-        }).join('')||'<tr><td colspan="5" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
-      }catch(err){body.innerHTML=`<tr><td colspan="5" class="p-6 text-center text-red-500">${escapeHtml(err.message||'Could not load investors.')}</td></tr>`;}
+        }).join('')||'<tr><td colspan="7" class="p-8 text-center text-slate-400">No investors added.</td></tr>';
+      }catch(err){body.innerHTML=`<tr><td colspan="7" class="p-6 text-center text-red-500">${escapeHtml(err.message||'Could not load partner fund control.')}</td></tr>`;}
+    }
+
+    async function openInvestorBankLinkV160(investorId){
+      const row=investorFundRowsV160.find(x=>String(x.investor_id)===String(investorId)); if(!row)return;
+      const {data,error}=await db.rpc('investor_linkable_banks_v160');
+      if(error){showToast(error.message,'error');return;}
+      document.getElementById('ibl160InvestorId').value=investorId;
+      document.getElementById('ibl160InvestorName').textContent=row.investor_name||'Investor';
+      const selected=new Set((row.linked_bank_ids||[]).map(String));
+      document.getElementById('ibl160Accounts').innerHTML=(data||[]).map(b=>{
+        const checked=selected.has(String(b.bank_account_id));
+        const linkedOther=b.linked_investor_id&&String(b.linked_investor_id)!==String(investorId);
+        return `<label class="flex items-start gap-3 p-3 border rounded-xl ${linkedOther?'bg-slate-50 opacity-60':'bg-white'}">
+          <input type="checkbox" class="ibl160Check mt-1" value="${b.bank_account_id}" ${checked?'checked':''} ${linkedOther?'disabled':''}>
+          <span><b>${escapeHtml([b.bank_name,b.account_title].filter(Boolean).join(' · '))}</b>${linkedOther?`<small class="block text-amber-700 mt-1">Already linked to ${escapeHtml(b.linked_investor_name||'another investor')}</small>`:''}</span>
+        </label>`;
+      }).join('')||'<div class="text-slate-400">No bank/funding accounts found.</div>';
+      const m=document.getElementById('investorBankLinkV160Modal');m.classList.remove('hidden');m.classList.add('flex');
+    }
+    function closeInvestorBankLinkV160(){const m=document.getElementById('investorBankLinkV160Modal');m.classList.add('hidden');m.classList.remove('flex');}
+    async function saveInvestorBankLinkV160(){
+      const id=document.getElementById('ibl160InvestorId').value;
+      const ids=[...document.querySelectorAll('.ibl160Check:checked')].map(x=>x.value);
+      const btn=document.getElementById('ibl160Save');btn.disabled=true;btn.textContent='Saving...';
+      try{
+        const {data,error}=await db.rpc('save_investor_bank_links_v160',{p_investor_id:id,p_bank_account_ids:ids});
+        if(error)throw error;
+        showToast(data||'Funding accounts linked.');
+        closeInvestorBankLinkV160();await loadAllInvestorsPanel();
+      }catch(err){showToast(err.message||'Could not link funding account.','error');}
+      finally{btn.disabled=false;btn.textContent='Save Linked Accounts';}
     }
 
     async function openInvestorEdit(id){
@@ -4077,7 +4232,7 @@ async function loadAuditTrail(){
       return (ROLE_VIEWS[currentERPUser.role]||[]).includes(view);
     }
     async function initERPAuth(){
-      // v1.57.2 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
+      // v1.60 Persistent Secure Session: keep a valid Supabase login across refresh/build tests.
       currentERPUser=null;
       document.body.classList.add('erp-locked');
       const gate=document.getElementById('authGate');
@@ -4683,6 +4838,31 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
     }
 
 
+    let receiptControlInvoiceV1573=null;
+    function invoiceNoFromIdV1573(id){return salesRegisterData?.find(x=>String(x.id)===String(id))?.invoice_number||'Sales Invoice';}
+    function closeReceiptControlV1573(){const m=document.getElementById('receiptControlV1573Modal');m.classList.add('hidden');m.classList.remove('flex');receiptControlInvoiceV1573=null;}
+    async function openReceiptControlV1573(invoiceId,invoiceNo='Sales Invoice'){
+      receiptControlInvoiceV1573=invoiceId;
+      const m=document.getElementById('receiptControlV1573Modal'),body=document.getElementById('rc1573Body');
+      m.classList.remove('hidden');m.classList.add('flex');document.getElementById('rc1573Sub').textContent=`${invoiceNo} · Allocated customer receipts`;body.innerHTML='<tr><td colspan="5" class="p-8 text-center text-slate-400">Loading receipts...</td></tr>';
+      try{
+        const {data,error}=await db.from('customer_invoice_payments').select('id,amount,payment_date,reference,journal_entry_number').eq('invoice_id',invoiceId).order('payment_date',{ascending:true});if(error)throw error;
+        body.innerHTML=(data||[]).map(r=>`<tr class="border-t"><td class="p-3 whitespace-nowrap">${escapeHtml(formatLedgerDateV1513(r.payment_date||''))}</td><td class="p-3 font-mono font-bold">${escapeHtml(r.journal_entry_number||'—')}</td><td class="p-3">${escapeHtml(r.reference||'—')}</td><td class="p-3 text-right font-mono font-bold">${money(r.amount)}</td><td class="p-3 text-right"><button onclick="reverseCustomerReceiptV1573('${r.id}','${escapeHtml(r.journal_entry_number||'Receipt')}')" class="px-3 py-2 rounded-lg bg-red-50 text-red-700 border border-red-100 text-xs font-black">Reverse Receipt</button></td></tr>`).join('')||'<tr><td colspan="5" class="p-8 text-center text-slate-400">No active receipt allocations found.</td></tr>';
+      }catch(e){body.innerHTML=`<tr><td colspan="5" class="p-8 text-center text-red-600">${escapeHtml(e.message)}</td></tr>`;}
+    }
+    async function reverseCustomerReceiptV1573(allocationId,voucher){
+      if(!['MASTER','ADMIN','ACCOUNTS'].includes(currentERPUser?.role)){showToast('You do not have permission to reverse customer receipts.','error');return;}
+      const reason=prompt(`Reverse customer receipt ${voucher}?\n\nReason:`);
+      if(reason===null)return;if(String(reason).trim().length<3){showToast('Reversal reason is required.','error');return;}
+      if(!confirm(`Reverse ${voucher}?\n\nThis will reverse the receipt accounting and remove its invoice allocation. The sales invoice itself will remain unchanged.`))return;
+      try{
+        const {data,error}=await db.rpc('reverse_customer_receipt_v1573',{p_allocation_id:allocationId,p_reason:String(reason).trim()});if(error)throw error;
+        showToast(`Customer receipt reversed safely${data?' · '+data:''}.`);
+        const inv=receiptControlInvoiceV1573;await fetchRecentInvoices();await loadTrialBalance();await loadCashBook();await fetchBanks();await refreshDashboardMetrics();
+        if(inv)await openReceiptControlV1573(inv,invoiceNoFromIdV1573(inv));
+      }catch(e){showToast(e.message||'Customer receipt could not be reversed.','error');}
+    }
+
     let editingSalesInvoiceId=null;
 
     async function editSalesInvoice(invoiceId){
@@ -4694,7 +4874,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
         const {data:alloc,error:ae}=await db.from('customer_invoice_payments').select('amount').eq('invoice_id',invoiceId);
         if(ae)throw ae;
-        if((alloc||[]).some(x=>Number(x.amount||0)>0))throw new Error('This invoice already has a customer receipt allocation. Reverse/remove the receipt first.');
+        if((alloc||[]).some(x=>Number(x.amount||0)>0)){await openReceiptControlV1573(invoiceId,invoiceNoFromIdV1573(invoiceId));return;}
 
         const {data:lcAlloc,error:lae}=await db.from('lc_sales_allocations').select('cargo_id').eq('invoice_id',invoiceId).limit(1);
         if(lae)throw lae;
@@ -4772,6 +4952,11 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
     async function cancelSalesInvoice(invoiceId,invoiceNo){
       if(!['MASTER','ADMIN','ACCOUNTS'].includes(currentERPUser?.role)){showToast('You do not have permission to cancel posted sales invoices.','error');return;}
+      try{
+        const {data:alloc,error:ae}=await db.from('customer_invoice_payments').select('amount').eq('invoice_id',invoiceId);
+        if(ae)throw ae;
+        if((alloc||[]).some(x=>Number(x.amount||0)>0)){await openReceiptControlV1573(invoiceId,invoiceNo);return;}
+      }catch(e){showToast(e.message||'Receipt allocation could not be checked.','error');return;}
       const reason=prompt(`Cancel Sales Invoice ${invoiceNo}?\n\nReason:`);
       if(reason===null)return;
       if(String(reason).trim().length<3){showToast('Cancellation reason is required.','error');return;}
@@ -5104,7 +5289,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
       }catch(err){showToast('Reports could not be loaded: '+(err.message||err),'error');}
     }
 
-    // v1.57.2: business data loads ONLY after successful authentication + ERP authorization.
+    // v1.60: business data loads ONLY after successful authentication + ERP authorization.
     let erpDataInitializedV1496=false;
     async function initializeERPDataV1496(){
       if(!currentERPUser || erpDataInitializedV1496) return;
@@ -5177,7 +5362,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 
 <div id="warehouseModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[110] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"><div class="p-5 border-b flex items-center justify-between"><div><h3 id="warehouseModalTitle" class="text-xl font-black">Add Warehouse</h3><p class="text-xs text-slate-400 mt-1">Create or update a stock location.</p></div><button type="button" onclick="closeWarehouseModal()" class="text-slate-400 text-2xl">&times;</button></div><form onsubmit="saveWarehouse(event)" class="p-5 space-y-4"><input type="hidden" id="warehouseEditId"><div><label class="block text-xs font-bold mb-1">Warehouse Name *</label><input id="warehouseName" required class="w-full border rounded-lg p-2.5" placeholder="Main Godown"></div><div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-bold mb-1">Warehouse Code</label><input id="warehouseCode" class="w-full border rounded-lg p-2.5" placeholder="WH-01"></div><div><label class="block text-xs font-bold mb-1">Location</label><input id="warehouseLocation" class="w-full border rounded-lg p-2.5" placeholder="Karachi"></div></div><div><label class="block text-xs font-bold mb-1">Notes</label><textarea id="warehouseNotes" rows="3" class="w-full border rounded-lg p-2.5"></textarea></div><label class="flex items-center gap-2 text-sm font-semibold"><input id="warehouseActive" type="checkbox" checked> Active Warehouse</label><div class="flex justify-end gap-2"><button type="button" onclick="closeWarehouseModal()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button type="submit" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Warehouse</button></div></form></div></div>
 
-<!-- v1.57.2 LC PAYMENT HISTORY -->
+<!-- v1.60 LC PAYMENT HISTORY -->
 <div id="lcPaymentHistoryModal" class="fixed inset-0 bg-slate-950/45 hidden items-center justify-center z-[125] p-4">
   <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[88vh] overflow-hidden flex flex-col">
     <div class="p-5 border-b flex items-start justify-between gap-4">
@@ -5185,6 +5370,11 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
         <p class="text-xs font-bold uppercase tracking-[.16em] text-brand-600">LC / Cargo Payment History</p>
         <h3 id="lcPaymentHistoryTitle" class="text-xl font-extrabold text-slate-900 mt-1">Payments</h3>
         <p id="lcPaymentHistorySub" class="text-xs text-slate-500 mt-1"></p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <button id="lc360PaymentsBtn" type="button" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold">Supplier Payments</button>
+          <button id="lc360SalesBtn" type="button" class="px-3 py-1.5 rounded-lg border bg-white text-xs font-bold">LC Sales History</button>
+          <button id="lc360CustomerPaymentsBtn" type="button" class="px-3 py-1.5 rounded-lg border bg-white text-xs font-bold">Customer Payment History</button>
+        </div>
       </div>
       <button onclick="closeLcPaymentHistory()" class="w-9 h-9 rounded-xl border bg-white font-bold text-slate-500 hover:bg-slate-50">✕</button>
     </div>
@@ -5231,6 +5421,18 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div>
 <div class="overflow-x-auto border rounded-xl"><table class="w-full text-sm"><thead class="bg-slate-50 text-xs text-slate-500"><tr><th class="p-3 text-left">Invoice</th><th class="p-3 text-left">Date</th><th class="p-3 text-left">Customer</th><th class="p-3 text-left">Item</th><th class="p-3 text-right">Qty Sold</th><th class="p-3 text-right">Sale Rate</th><th class="p-3 text-right">Sale Amount</th><th class="p-3 text-right">COGS</th><th class="p-3 text-right">Gross Profit</th><th class="p-3 text-center">Status</th><th class="p-3 text-center">Action</th></tr></thead><tbody id="lcSalesDrillBody"></tbody></table></div>
 </div></div></div>
+<div id="receiptControlV1573Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[230] p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[88vh] overflow-hidden flex flex-col">
+    <div class="p-5 border-b flex justify-between items-start">
+      <div><h3 class="text-xl font-black">Customer Receipt Control</h3><p id="rc1573Sub" class="text-sm text-slate-500 mt-1">Allocated receipts must be reversed before editing/cancelling the invoice.</p></div>
+      <button onclick="closeReceiptControlV1573()" class="text-2xl text-slate-400">&times;</button>
+    </div>
+    <div class="p-5 overflow-y-auto">
+      <div class="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800 mb-4"><b>Safe control:</b> reversing a receipt posts a reversing journal and removes only that invoice allocation. The sales invoice, stock, sales revenue and COGS are not changed.</div>
+      <div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Receipt Voucher</th><th class="p-3 text-left">Reference</th><th class="p-3 text-right">Amount</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="rc1573Body"></tbody></table></div>
+    </div>
+  </div>
+</div>
 <div id="quickInvoiceReceiptModal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[140] p-4">
 <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden">
 <div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Receive Invoice Payment</h3><p id="qirSub" class="text-xs text-slate-400 mt-1"></p></div><button type="button" onclick="closeQuickInvoiceReceipt()" class="text-2xl text-slate-400">&times;</button></div>
@@ -5285,10 +5487,10 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 <div><div class="flex justify-between items-center mb-2"><h4 class="font-black">Backup Contents</h4><button onclick="previewBackupCountsV145()" class="px-3 py-2 border rounded-lg text-xs font-bold">Refresh Counts</button></div><div class="border rounded-xl overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Data Area</th><th class="p-3 text-left">Table</th><th class="p-3 text-right">Records</th></tr></thead><tbody id="bk145CountBody"><tr><td colspan="3" class="p-6 text-center text-slate-400">Open Backup Center to load counts.</td></tr></tbody></table></div></div>
 </div></div></div>
 <div id="goLiveStatusV146Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[190] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] overflow-y-auto">
-<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.57.2 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
+<div class="p-5 border-b flex justify-between"><div><h3 class="text-xl font-black">Go-Live Status</h3><p class="text-xs text-slate-400 mt-1">ZB & SONS ERP · v1.60 · Powered By: XaviSoft</p></div><button onclick="closeGoLiveStatusV146()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5 space-y-5">
 <div class="grid md:grid-cols-3 gap-3">
-<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.57.2</div></div>
+<div class="border rounded-xl p-4"><span class="text-xs text-slate-400">System</span><div class="font-black mt-1">ZB & SONS ERP</div><div class="text-xs text-slate-500">Build v1.60</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Database Connection</span><div id="gl146Db" class="font-black mt-1">Checking...</div></div>
 <div class="border rounded-xl p-4"><span class="text-xs text-slate-400">Current Access</span><div id="gl146User" class="font-black mt-1">Checking...</div><div id="gl146Role" class="text-xs text-slate-500"></div></div>
 </div>
@@ -5340,6 +5542,51 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
  <div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-right">Amount</th><th class="p-3 text-left">Mapped As</th><th class="p-3 text-left">LC / Cargo</th><th class="p-3 text-right">Action</th></tr></thead><tbody id="acResolvedBodyV1571"></tbody></table></div>
 </div></div>
 </div></div>
+
+<div id="investorBankLinkV160Modal" class="fixed inset-0 bg-slate-950/55 hidden items-center justify-center z-[218] p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto">
+    <div class="p-5 border-b flex justify-between items-start">
+      <div><h3 class="text-xl font-black">Link Partner Funding Accounts</h3><p id="ibl160InvestorName" class="font-bold text-indigo-700 mt-1"></p><p class="text-xs text-slate-500 mt-1">These accounts identify the partner's funding source. Linking does not make them ZB & Sons bank assets.</p></div>
+      <button onclick="closeInvestorBankLinkV160()" class="text-2xl text-slate-400">&times;</button>
+    </div>
+    <div class="p-5">
+      <input type="hidden" id="ibl160InvestorId">
+      <div id="ibl160Accounts" class="space-y-2"></div>
+      <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900"><b>Accounting rule:</b> when a linked partner account pays a supplier directly, use Partner Direct funding. The payment credits Investor Payable (2200), not ZB Bank (1200).</div>
+      <div class="mt-5 flex justify-end gap-2"><button onclick="closeInvestorBankLinkV160()" class="px-4 py-2 border rounded-lg font-bold">Cancel</button><button id="ibl160Save" onclick="saveInvestorBankLinkV160()" class="px-4 py-2 bg-slate-900 text-white rounded-lg font-bold">Save Linked Accounts</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="partnerFundReconV159Modal" class="fixed inset-0 bg-slate-950/55 hidden items-center justify-center z-[216] p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-7xl max-h-[92vh] overflow-y-auto">
+    <div class="p-5 border-b flex justify-between items-start">
+      <div><h3 class="text-xl font-black">Partner Fund Reconciliation</h3><p class="text-sm text-slate-500 mt-1">Identify who actually funded each legacy supplier payment.</p><p class="text-xs text-slate-400 mt-1">Supplier amount and LC allocation stay unchanged; only the funding-source accounting leg is corrected.</p></div>
+      <button onclick="closePartnerFundReconV159()" class="text-2xl text-slate-400">&times;</button>
+    </div>
+    <div class="p-5">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-4"><div class="text-xs font-bold text-slate-400">PENDING</div><div id="pfr159Pending" class="text-2xl font-black text-amber-700">—</div></div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4"><div class="text-xs font-bold text-slate-400">RESOLVED</div><div id="pfr159Resolved" class="text-2xl font-black text-emerald-700">—</div></div>
+        <div class="md:col-span-2 bg-slate-50 border rounded-xl p-4 text-xs text-slate-600"><b>Rule:</b> Partner paid supplier directly → use Partner Direct. Payment actually left a ZB bank → select ZB Bank. Physical cash paid → select Cash.</div>
+      </div>
+      <div id="pfr159Editor" class="hidden mb-5 rounded-2xl border border-indigo-200 bg-indigo-50 p-4">
+        <input type="hidden" id="pfr159Journal">
+        <div id="pfr159Info" class="font-black mb-3"></div>
+        <div class="grid md:grid-cols-4 gap-3">
+          <div><label class="text-xs font-bold">Actual Funding Source</label><select id="pfr159Type" onchange="partnerFundTypeChangedV159()" class="w-full border rounded-lg p-2.5 mt-1"><option value="PARTNER_DIRECT">Partner / Investor Paid Directly</option><option value="ZB_BANK">ZB Bank Account</option><option value="CASH">Cash on Hand</option></select></div>
+          <div id="pfr159InvestorWrap"><label class="text-xs font-bold">Partner / Investor</label><select id="pfr159Investor" class="w-full border rounded-lg p-2.5 mt-1"></select></div>
+          <div id="pfr159BankWrap" class="hidden"><label class="text-xs font-bold">Actual ZB Bank</label><select id="pfr159Bank" class="w-full border rounded-lg p-2.5 mt-1"></select></div>
+          <div class="flex items-end"><button id="pfr159Save" onclick="savePartnerFundReconV159()" class="w-full bg-slate-900 text-white rounded-lg p-2.5 font-bold">Save Reconciliation</button></div>
+        </div>
+        <div id="pfr159AccountingNote" class="mt-3 text-xs font-semibold text-indigo-800"></div>
+      </div>
+      <div class="flex justify-between items-center mb-3"><div><b>Legacy Supplier Payments</b><p class="text-xs text-slate-400">Review one by one. Do not guess the funding source.</p></div><button onclick="loadPartnerFundReconV159()" class="border rounded-lg px-3 py-2 text-xs font-bold">↻ Refresh</button></div>
+      <div class="border rounded-xl overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Date</th><th class="p-3 text-left">Voucher</th><th class="p-3 text-left">Supplier</th><th class="p-3 text-right">Amount</th><th class="p-3 text-left">Reference / Narration</th><th class="p-3 text-left">LC / Cargo</th><th class="p-3 text-left">Funding Source</th><th class="p-3"></th></tr></thead><tbody id="pfr159Body"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
 <div id="notificationCenterV148Modal" class="fixed inset-0 bg-slate-950/50 hidden items-center justify-center z-[210] p-4"><div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[92vh] overflow-y-auto">
 <div class="p-5 border-b flex justify-between items-start"><div><h3 class="text-xl font-black">Notification & Action Center</h3><p class="text-xs text-slate-400 mt-1">Items that may need attention · Powered By: XaviSoft</p></div><button onclick="closeNotificationCenterV148()" class="text-2xl text-slate-400">&times;</button></div>
 <div class="p-5">
@@ -5355,7 +5602,7 @@ document.getElementById('paExpenseBody').innerHTML=expRows.length?expRows.map(x=
 </div></div>
 
 <script>
-  // v1.57.2: this MUST be a normal inline script; inline code in a script tag
+  // v1.60: this MUST be a normal inline script; inline code in a script tag
   // that also has src= is ignored by browsers.
   window.addEventListener('DOMContentLoaded', async () => {
     await initERPAuth();
